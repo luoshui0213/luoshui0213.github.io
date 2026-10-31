@@ -181,20 +181,41 @@
         });
     }
 
-    // 倒计时跳转逻辑
+        // 倒计时跳转逻辑
     function startCountdown() {
-        let timeLeft = 5; // 这里修改倒计时秒数
-        autoJumpBtn.innerText = `[ 2 ] 自动前往哔哩哔哩网页版 (${timeLeft}秒后自动跳转)`;
-        
+        let timeLeft = 5; 
+        autoJumpBtn.innerText = `[ 2 ] 自动进入网站 (${timeLeft}秒后自动跳转)`;
+
         const timer = setInterval(() => {
             timeLeft--;
             if (timeLeft > 0) {
-                autoJumpBtn.innerText = `[ 2 ] 自动前往哔哩哔哩网页版 (${timeLeft}秒后自动跳转)`;
+                autoJumpBtn.innerText = `[ 2 ] 自动进入网站 (${timeLeft}秒后自动跳转)`;
             } else {
                 clearInterval(timer);
-                window.location.href = 'https://www.bilibili.com'; 
+                // 倒计时结束，直接执行进入主页的函数，不再跳转外部链接
+                enterSite(); 
             }
         }, 1000);
+    }
+
+    // 核心：进入主页的函数
+    function enterSite() {
+        const terminal = document.querySelector('.terminal');
+        const mainSite = document.getElementById('main-site');
+        
+        // 1. 让黑框渐渐消失 (利用CSS过渡效果)
+        terminal.style.transition = 'opacity 0.5s ease';
+        terminal.style.opacity = '0';
+        
+        // 2. 0.5秒后，彻底隐藏黑框，并显示主页
+        setTimeout(() => {
+            terminal.style.display = 'none';
+            mainSite.style.display = 'block';
+            // 给主页加个淡入效果
+            mainSite.style.opacity = '0';
+            mainSite.style.transition = 'opacity 1s ease';
+            setTimeout(() => { mainSite.style.opacity = '1'; }, 50);
+        }, 500);
     }
 
     // 执行主流程
@@ -206,35 +227,14 @@
         await typeText("系统已被完全控制...\n");
         await typeText("所有数据已备份到安全服务器\n");
         await typeText("请选择您的下一步操作：\n");
-        
+
         options.style.display = 'flex';
         startCountdown();
     }
 
+    // 网页加载后开始执行（注意这里必须是 playAnimation，而不是你原代码里的 typeWriter）
     window.onload = () => {
         setTimeout(playAnimation, 500);
-    };
-</script>
-
-    // 倒计时跳转逻辑
-    function startCountdown() {
-        let timeLeft = 5;
-        autoJumpBtn.innerText = `[ 2 ] 自动前往哔哩哔哩网页版 (${timeLeft}秒后自动跳转)`;
-        
-        const timer = setInterval(() => {
-            timeLeft--;
-            if (timeLeft > 0) {
-                autoJumpBtn.innerText = `[ 2 ] 自动前往哔哩哔哩网页版 (${timeLeft}秒后自动跳转)`;
-            } else {
-                clearInterval(timer);
-                window.location.href = 'https://www.bilibili.com'; 
-            }
-        }, 1000);
-    }
-
-    // 网页加载后开始执行
-    window.onload = () => {
-        setTimeout(typeWriter, 500);
     };
 </script>
 
