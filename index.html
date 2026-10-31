@@ -117,10 +117,18 @@
     </div>
 
     <div class="options" id="options">
-        <button class="option-btn" onclick="window.location.href='https://luoshui0213.github.io'">[ 1 ] 前往我的娱乐网站 (luoshui0213.github.io)</button>
-        <button class="option-btn" id="auto-jump-btn">[ 2 ] 自动前往哔哩哔哩网页版 (5秒后自动跳转)</button>
-        <button class="option-btn" onclick="window.location.href='https://github.com'">[ 3 ] 前往GitHub网页端 (github.com)</button>
+    <button class="option-btn" onclick="enterSite()">[ 1 ] 进入我的娱乐网站</button>
+    
+    <button class="option-btn" id="auto-jump-btn">[ 2 ] 自动前往哔哩哔哩网页版 (5秒后自动跳转)</button>
+    
+    <button class="option-btn" onclick="window.location.href='https://github.com'">[ 3 ] 前往GitHub网页端 (github.com)</button>
     </div>
+</div>
+
+<div id="main-site" style="display: none; width: 100%; height: 100%; text-align: center; color: #fff; background-color: #000; flex-direction: column; justify-content: center;">
+    <h1>欢迎来到洛水的个人网站！</h1>
+    <p>动画已结束，成功进入主页。</p>
+    <p>以后你可以把这里替换成真正的博客内容。</p>
 </div>
 
 <script>
@@ -182,21 +190,21 @@
     }
 
         // 倒计时跳转逻辑
-    function startCountdown() {
-        let timeLeft = 5; 
-        autoJumpBtn.innerText = `[ 2 ] 自动进入网站 (${timeLeft}秒后自动跳转)`;
+function startCountdown() {
+    let timeLeft = 5; 
+    autoJumpBtn.innerText = `[ 2 ] 自动前往哔哩哔哩网页版 (${timeLeft}秒后自动跳转)`;
 
-        const timer = setInterval(() => {
-            timeLeft--;
-            if (timeLeft > 0) {
-                autoJumpBtn.innerText = `[ 2 ] 自动进入网站 (${timeLeft}秒后自动跳转)`;
-            } else {
-                clearInterval(timer);
-                // 倒计时结束，直接执行进入主页的函数，不再跳转外部链接
-                enterSite(); 
-            }
-        }, 1000);
-    }
+    const timer = setInterval(() => {
+        timeLeft--;
+        if (timeLeft > 0) {
+            autoJumpBtn.innerText = `[ 2 ] 自动前往哔哩哔哩网页版 (${timeLeft}秒后自动跳转)`;
+        } else {
+            clearInterval(timer);
+            //倒计时结束，跳转到B站
+            window.location.href = 'https://www.bilibili.com'; 
+        }
+    }, 1000);
+}
 
     // 核心：进入主页的函数
     function enterSite() {
