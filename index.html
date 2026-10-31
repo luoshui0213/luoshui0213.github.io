@@ -94,7 +94,7 @@
             color: #000;
             box-shadow: 0 0 10px #00ff00;
         }
-        
+
         /* 闪烁光标 */
         .cursor {
             animation: blink 1s step-end infinite;
@@ -111,21 +111,19 @@
 <div class="terminal">
     <div class="header">root@system:~#</div>
     <div class="content" id="text-output"></div>
-    
+
     <div class="progress-bar-container" id="progress-container">
         <div class="progress-bar" id="progress-bar"></div>
     </div>
 
     <div class="options" id="options">
-    <button class="option-btn" onclick="enterSite()">[ 1 ] 进入我的娱乐网站</button>
-    
-    <button class="option-btn" id="auto-jump-btn">[ 2 ] 自动前往哔哩哔哩网页版 (5秒后自动跳转)</button>
-    
-    <button class="option-btn" onclick="window.location.href='https://github.com'">[ 3 ] 前往GitHub网页端 (github.com)</button>
+        <button class="option-btn" onclick="enterSite()">[ 1 ] 进入我的娱乐网站</button>
+        <button class="option-btn" id="auto-jump-btn">[ 2 ] 自动前往哔哩哔哩网页版 (5秒后自动跳转)</button>
+        <button class="option-btn" onclick="window.location.href='https://github.com'">[ 3 ] 前往GitHub网页端 (github.com)</button>
     </div>
 </div>
 
-<div id="main-site" style="display: none; width: 100%; height: 100%; text-align: center; color: #fff; background-color: #000; flex-direction: column; justify-content: center;">
+<div id="main-site" style="display: none; width: 100%; height: 100vh; text-align: center; color: #fff; background-color: #000; flex-direction: column; justify-content: center; align-items: center;">
     <h1>欢迎来到洛水的个人网站！</h1>
     <p>动画已结束，成功进入主页。</p>
     <p>以后你可以把这里替换成真正的博客内容。</p>
@@ -135,6 +133,8 @@
     const textOutput = document.getElementById('text-output');
     const options = document.getElementById('options');
     const autoJumpBtn = document.getElementById('auto-jump-btn');
+
+    let timer; // 将定时器提出来，方便随时取消
 
     // 逐字打印效果
     function typeText(text) {
@@ -162,12 +162,12 @@
 
             function updateBar() {
                 textOutput.innerHTML = textOutput.innerHTML.replace('<span class="cursor">|</span>', '');
-                
+
                 // 计算填充和空白
                 let filled = Math.floor((percentage / 100) * barLength);
                 let empty = barLength - filled;
                 let barStr = "[" + "█".repeat(filled) + " ".repeat(empty) + "] " + percentage + "%";
-                
+
                 // 替换最后一行进度条
                 let lines = textOutput.innerHTML.split('\n');
                 if (lines[lines.length - 1].startsWith("[")) {
@@ -176,7 +176,7 @@
                 } else {
                      textOutput.innerHTML += barStr;
                 }
-                
+
                 if (percentage < 100) {
                     percentage += 5;
                     textOutput.innerHTML += '<span class="cursor">|</span>';
@@ -189,37 +189,41 @@
         });
     }
 
-        // 倒计时跳转逻辑
-function startCountdown() {
-    let timeLeft = 5; 
-    autoJumpBtn.innerText = `[ 2 ] 自动前往哔哩哔哩网页版 (${timeLeft}秒后自动跳转)`;
+    // 倒计时跳转逻辑
+    function startCountdown() {
+        let timeLeft = 5; 
+        autoJumpBtn.innerText = `[ 2 ] 自动前往哔哩哔哩网页版 (${timeLeft}秒后自动跳转)`;
 
-    const timer = setInterval(() => {
-        timeLeft--;
-        if (timeLeft > 0) {
-            autoJumpBtn.innerText = `[ 2 ] 自动前往哔哩哔哩网页版 (${timeLeft}秒后自动跳转)`;
-        } else {
-            clearInterval(timer);
-            //倒计时结束，跳转到B站
-            window.location.href = 'https://www.bilibili.com'; 
-        }
-    }, 1000);
-}
+        timer = setInterval(() => {
+            timeLeft--;
+            if (timeLeft > 0) {
+                autoJumpBtn.innerText = `[ 2 ] 自动前往哔哩哔哩网页版 (${timeLeft}秒后自动跳转)`;
+            } else {
+                clearInterval(timer);
+                // 倒计时结束，跳转到B站
+                window.location.href = 'https://www.bilibili.com'; 
+            }
+        }, 1000);
+    }
 
     // 核心：进入主页的函数
     function enterSite() {
+        
+        clearInterval(timer); 
+
         const terminal = document.querySelector('.terminal');
         const mainSite = document.getElementById('main-site');
-        
-        // 1. 让黑框渐渐消失 (利用CSS过渡效果)
+
+        // 1. 黑框渐渐消失
         terminal.style.transition = 'opacity 0.5s ease';
         terminal.style.opacity = '0';
-        
+
         // 2. 0.5秒后，彻底隐藏黑框，并显示主页
         setTimeout(() => {
             terminal.style.display = 'none';
-            mainSite.style.display = 'block';
-            // 给主页加个淡入效果
+            
+            mainSite.style.display = 'flex'; 
+            // 主页淡入效果
             mainSite.style.opacity = '0';
             mainSite.style.transition = 'opacity 1s ease';
             setTimeout(() => { mainSite.style.opacity = '1'; }, 50);
@@ -240,7 +244,7 @@ function startCountdown() {
         startCountdown();
     }
 
-    // 网页加载后开始执行（注意这里必须是 playAnimation，而不是你原代码里的 typeWriter）
+    // 网页加载后开始执行
     window.onload = () => {
         setTimeout(playAnimation, 500);
     };
