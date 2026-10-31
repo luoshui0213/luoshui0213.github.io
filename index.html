@@ -125,66 +125,96 @@
 
 <script>
     const textOutput = document.getElementById('text-output');
-    const progressContainer = document.getElementById('progress-container');
-    const progressBar = document.getElementById('progress-bar');
     const options = document.getElementById('options');
     const autoJumpBtn = document.getElementById('auto-jump-btn');
 
-    // 你想要显示的文字，按顺序
-    const messages = [
-        "正在入侵系统...\n",
-        "[PROGRESS]", // 进度条占位
-        "\n访问已被劫持！\n\n",
-        "Hacked by Luo_Shui洛水！\n\n",
-        "系统已被完全控制...\n",
-        "所有数据已备份到安全服务器\n",
-        "请选择您的下一步操作：\n"
-    ];
-
-    let currentMessageIndex = 0;
-    let charIndex = 0;
-
-    // 打字机效果核心代码
-    function typeWriter() {
-        if (currentMessageIndex < messages.length) {
-            const msg = messages[currentMessageIndex];
-            
-            // 遇到进度条标记
-            if (msg === "[PROGRESS]") {
-                progressContainer.style.display = 'block';
-                let width = 0;
-                const interval = setInterval(() => {
-                    if (width >= 100) {
-                        clearInterval(interval);
-                        currentMessageIndex++;
-                        typeWriter(); 
-                    } else {
-                        width++;
-                        progressBar.style.width = width + '%';
-                    }
-                }, 20);
-                return;
+    // 逐字打印效果
+    function typeText(text) {
+        return new Promise(resolve => {
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    textOutput.innerHTML = textOutput.innerHTML.replace('<span class="cursor">|</span>', '');
+                    textOutput.innerHTML += text.charAt(i) + '<span class="cursor">|</span>';
+                    i++;
+                    setTimeout(type, 50); // 50毫秒打一个字
+                } else {
+                    resolve();
+                }
             }
-
-            // 逐个字符打印
-            if (charIndex < msg.length) {
-                textOutput.innerHTML = textOutput.innerHTML.replace('<span class="cursor">|</span>', '');
-                textOutput.innerHTML = textOutput.innerHTML.replace('<span class="cursor">|</span>', '');
-                textOutput.innerHTML += msg.charAt(charIndex) + '<span class="cursor">|</span>';
-                charIndex++;
-                setTimeout(typeWriter, 60); // 60毫秒打一个字，可以自己改
-            } else {
-                currentMessageIndex++;
-                charIndex = 0;
-                setTimeout(typeWriter, 300);
-            }
-        } else {
-            // 全部打完，显示按钮
-            textOutput.innerHTML = textOutput.innerHTML.replace('<span class="cursor">|</span>', '');
-            options.style.display = 'flex';
-            startCountdown();
-        }
+            type();
+        });
     }
+
+    // 纯文本动态进度条
+    function drawProgressBar() {
+        return new Promise(resolve => {
+            let percentage = 0;
+            const barLength = 15; // 进度条的长度（方块数量）
+
+            function updateBar() {
+                textOutput.innerHTML = textOutput.innerHTML.replace('<span class="cursor">|</span>', '');
+                
+                // 计算填充和空白
+                let filled = Math.floor((percentage / 100) * barLength);
+                let empty = barLength - filled;
+                let barStr = "[" + "█".repeat(filled) + " ".repeat(empty) + "] " + percentage + "%";
+                
+                // 替换最后一行进度条
+                let lines = textOutput.innerHTML.split('\n');
+                if (lines[lines.length - 1].startsWith("[")) {
+                     lines[lines.length - 1] = barStr;
+                     textOutput.innerHTML = lines.join('\n');
+                } else {
+                     textOutput.innerHTML += barStr;
+                }
+                
+                if (percentage < 100) {
+                    percentage += 5;
+                    textOutput.innerHTML += '<span class="cursor">|</span>';
+                    setTimeout(updateBar, 40); // 进度条速度
+                } else {
+                    resolve();
+                }
+            }
+            updateBar();
+        });
+    }
+
+    // 倒计时跳转逻辑
+    function startCountdown() {
+        let timeLeft = 5; // 这里修改倒计时秒数
+        autoJumpBtn.innerText = `[ 2 ] 自动前往哔哩哔哩网页版 (${timeLeft}秒后自动跳转)`;
+        
+        const timer = setInterval(() => {
+            timeLeft--;
+            if (timeLeft > 0) {
+                autoJumpBtn.innerText = `[ 2 ] 自动前往哔哩哔哩网页版 (${timeLeft}秒后自动跳转)`;
+            } else {
+                clearInterval(timer);
+                window.location.href = 'https://www.bilibili.com'; 
+            }
+        }, 1000);
+    }
+
+    // 执行主流程
+    async function playAnimation() {
+        await typeText("正在入侵系统...\n");
+        await drawProgressBar(); 
+        await typeText("\n访问已被劫持！\n\n");
+        await typeText("Hacked by Luo_Shui洛水！\n\n");
+        await typeText("系统已被完全控制...\n");
+        await typeText("所有数据已备份到安全服务器\n");
+        await typeText("请选择您的下一步操作：\n");
+        
+        options.style.display = 'flex';
+        startCountdown();
+    }
+
+    window.onload = () => {
+        setTimeout(playAnimation, 500);
+    };
+</script>
 
     // 倒计时跳转逻辑
     function startCountdown() {
