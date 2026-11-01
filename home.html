@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>洛水的个人网站</title>
+    <style>
+        /* ================= 基础全局样式 ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #0f0f0f; /* 深灰背景，呼应动画 */
+            color: #e0e0e0; /* 浅灰文字，保护眼睛 */
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ================= 顶部导航栏 ================= */
+        .navbar {
+            background-color: #1a1a1a;
+            border-bottom: 2px solid #00ff00; /* 保留一点黑客绿的元素 */
+            padding: 15px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-btn {
+            background: transparent;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        /* 鼠标悬浮或手机点击时的效果 */
+        .nav-btn:hover, .nav-btn.active {
+            color: #000;
+            background-color: #00ff00;
+            border-color: #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+        }
+
+        /* ================= 主体内容区 ================= */
+        .main-content {
+            flex: 1;
+            padding: 30px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* 内容区块的样式（默认隐藏） */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        /* 激活的区块显示 */
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 卡片样式，用来包裹你的内容 */
+        .card {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.1);
+        }
+        .card h2 {
+            color: #00ff00;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        .card p {
+            margin-bottom: 10px;
+            color: #aaa;
+        }
+
+        /* ================= 底部版权 ================= */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid #222;
+        }
+
+        /* ================= 手机端适配 ================= */
+        @media (max-width: 600px) {
+            .navbar {
+                gap: 10px;
+                padding: 10px;
+            }
+            .nav-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+            .main-content {
+                padding: 20px 10px;
+            }
+            .card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. 顶部导航栏 -->
+    <nav class="navbar">
+        <!-- onclick 触发切换，data-target 指向要显示的区块 ID -->
+        <button class="nav-btn active" onclick="switchTab('home', this)">首页</button>
+        <button class="nav-btn" onclick="switchTab('resources', this)">资源库</button>
+        <button class="nav-btn" onclick="switchTab('about', this)">关于我</button>
+    </nav>
+
+    <!-- 2. 主体内容 -->
+    <main class="main-content">
+
+        <!-- =============== 区块 1：首页 =============== -->
+        <div id="home" class="tab-content active">
+            <div class="card">
+                <h2>欢迎来到我的主页</h2>
+                <p>这里是首页内容。你可以把这段文字替换成你的博客文章列表、最新动态等。</p>
+                <p>比如：这里是我分享日常和资源的地方。</p>
+            </div>
+            
+            <!-- 你可以随时添加更多的卡片 -->
+            <div class="card">
+                <h2>最新公告</h2>
+                <p>网站刚刚建立，还在完善中...</p>
+            </div>
+        </div>
+
+        <!-- =============== 区块 2：资源库 =============== -->
+        <div id="resources" class="tab-content">
+            <div class="card">
+                <h2>资源下载中心</h2>
+                <p>你可以在这里放一些文件的下载链接，或者图片。</p>
+                <br>
+                <!-- 一个简单的按钮示例，你可以改成自己的链接 -->
+                <a href="https://github.com" target="_blank" style="display:inline-block; padding:10px 20px; background:#00ff00; color:#000; text-decoration:none; border-radius:5px; font-weight:bold;">前往我的 GitHub</a>
+            </div>
+        </div>
+
+        <!-- =============== 区块 3：关于我 =============== -->
+        <div id="about" class="tab-content">
+            <div class="card">
+                <h2>关于我</h2>
+                <p>你好，我是洛水！</p>
+                <p>这是一个用 GitHub Pages 搭建的静态网站。</p>
+                <p>喜欢折腾代码和搞一些有趣的创意。</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 3. 底部 -->
+    <footer class="footer">
+        &copy; 2024 Luo_Shui 洛水. All Rights Reserved.
+    </footer>
+
+    <!-- 4. 切换逻辑 -->
+    <script>
+        function switchTab(tabId, btn) {
+            // 1. 把所有带 tab-content 类的区块隐藏
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // 2. 把所有的导航按钮的 active 样式去掉
+            const btns = document.querySelectorAll('.nav-btn');
+            btns.forEach(b => {
+                b.classList.remove('active');
+            });
+
+            // 3. 显示你点击的目标区块，并给当前按钮加上激活样式
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
