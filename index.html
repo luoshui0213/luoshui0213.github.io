@@ -294,8 +294,11 @@
         <div id="options-container" class="options-container hidden">
             <div class="option-item" id="official-site">
                 <span class="option-number">[1]</span>
-                <span class="option-text">前往Luo_Shui洛水的娱乐网站 (luoshui0213.github.io)</span>
-            </div>
+                <span 
+<div class="option-item" id="official-site">
+    <span class="option-number">[1]</span>
+    <span class="option-text">进入Luo_Shui洛水的娱乐网站</span>
+</div>
             <div class="option-item" id="unofficial-site">
                 <span class="option-number">[2]</span>
                 <span class="option-text">自动前往哔哩哔哩网页版 <span id="countdown"></span></span>
@@ -432,14 +435,14 @@ Hacked by Luo_Shui洛水！
         }
 
         /**
-         * 娱乐网站
-         */
+        * 个人主页*/
         function goToOfficialSite() {
-            // 清除倒计时
-            stopCountdown();
-            
-            showTransition('正在跳转到Luo_Shui洛水的娱乐网站...', () => {
-                window.location.href = 'https://luoshui0213.github.io';
+        // 清除倒计时
+        stopCountdown();
+    
+        showTransition('正在进入个人主页...',() => {
+            // 跳转到同目录下的 home.html
+            window.location.href = 'home.html';
             });
         }
 
