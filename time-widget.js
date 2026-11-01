@@ -38,8 +38,8 @@
     }
 
     // 格式化时间（补零）
-    function pad(num) {
-        return String(num).padStart(2, '0');
+    function pad(num, len = 2) {
+        return String(num).padStart(len, '0');
     }
 
     // 渲染指定时区时间
@@ -50,7 +50,7 @@
         const h = pad(isUTC ? date.getUTCHours() : date.getHours());
         const mi = pad(isUTC ? date.getUTCMinutes() : date.getMinutes());
         const s = pad(isUTC ? date.getUTCSeconds() : date.getSeconds());
-        const ms = pad(date.getMilliseconds());
+        const ms = pad(date.getMilliseconds(), 3);
         return `${y}-${mo}-${d} ${h}:${mi}:${s}.${ms}`;
     }
 
@@ -59,13 +59,11 @@
         const clockEl = document.getElementById('sync-clock-panel');
         if (!clockEl) return;
 
-        // 使用本地时间戳 + 校准偏差生成标准基准
         const now = new Date(Date.now() + timeOffset);
-        // 北京时间 = UTC 时间 + 8 小时
         const beijingTime = new Date(now.getTime() + 8 * 3600 * 1000);
 
         clockEl.innerHTML = `
-            <div style="display:flex; justify-content:space-between; gap:15px; font-size:13px; font-family:monospace; color:#aaa; text-align:left;">
+            <div style="display:flex; justify-content:space-between; gap:8px; font-size:13px; font-family:'Courier New', monospace; color:#aaa; text-align:left; white-space: nowrap;">
                 <div>
                     <span style="color:#00ff00; font-weight:bold;">UTC:</span> 
                     ${formatTime(now, true)}
