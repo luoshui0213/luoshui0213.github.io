@@ -10,7 +10,7 @@
         const start = performance.now();
         try {
             // 使用 RFC 868 兼容标准时间接口
-            const response = await fetch('https://t.189.cn/api/ntp?format=json', { cache: 'no-store' });
+            const response = await fetch('http://quan.suning.com/getSysTime.do', { cache: 'no-store' });
             if (!response.ok) throw new Error('网络请求异常');
             
             const end = performance.now();
