@@ -142,6 +142,12 @@
 
         <!-- =============== 区块 1：首页 =============== -->
         <div id="home" class="tab-content active">
+            <!-- 使用 flex 布局让面板靠右 -->
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
+                <div id="sync-clock-panel" style="background: #141414; border: 1px solid #00ff00; border-radius: 6px; padding: 8px 12px; box-shadow: 0 0 10px rgba(0,255,0,0.1); font-size: 13px;">
+                    正在与授时中心同步时间...
+                </div>
+            </div>
             <div class="card">
                 <h2>欢迎来到我的娱乐网站</h2>
                 <p class="tags">欢迎<br><span style="color:#39c5bb;">Lui_Yichen,<br>Mao_Xiangyu,<br>Song_Qifan,<br>Wang_Xichen,<br>Zhu_Junyi</span><br>以及<br>
@@ -209,6 +215,7 @@
             btn.classList.add('active');
         }
     </script>
-
+    <!-- 引入时间校准脚本 -->
+    <script src="time-widget.js"></script>
 </body>
 </html>
