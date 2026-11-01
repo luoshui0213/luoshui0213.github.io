@@ -7,27 +7,18 @@
     <style>
         /* ================= 基础全局样式 ================= */
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
+            overflow-wrap: break-word;
             word-wrap: break-word;
-            word-break: break-all;
+            word-break: break-word;
+            white-space: normal;
         }
-        body {
-            background-color: #0f0f0f;
-            color: #e0e0e0;
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            line-height: 1.6;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        img {
+        div, p, span, a {
             max-width: 100%;
-            height: auto;
         }
-
+        .card, .main-content {
+            flex-wrap: wrap;
+        }
         /* ================= 顶部导航栏 ================= */
         .navbar {
             background-color: #1a1a1a;
