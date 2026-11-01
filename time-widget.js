@@ -54,13 +54,17 @@
         return `${y}-${mo}-${d} ${h}:${mi}:${s}.${ms}`;
     }
 
-    // 实时更新面板
+        // 实时更新面板
     function updateClock() {
         const clockEl = document.getElementById('sync-clock-panel');
         if (!clockEl) return;
 
-        const now = new Date(Date.now() + timeOffset);
-        const beijingTime = new Date(now.getTime() + 8 * 3600 * 1000);
+        const nowTimestamp = Date.now() + timeOffset;
+    
+        const now = new Date(nowTimestamp);
+
+        const beijingTimestamp = nowTimestamp + 8 * 3600 * 1000;
+        const beijingTime = new Date(beijingTimestamp);
 
         clockEl.innerHTML = `
             <div style="display:flex; justify-content:space-between; gap:8px; font-size:13px; font-family:'Courier New', monospace; color:#aaa; text-align:left; white-space: nowrap;">
@@ -70,7 +74,7 @@
                 </div>
                 <div>
                     <span style="color:#00ff00; font-weight:bold;">北京时间:</span> 
-                    ${formatTime(beijingTime, false)}
+                    ${formatTime(beijingTime, true)} 
                 </div>
                 <div style="color:#666;">
                     误差: ±${rttDelay} ms
