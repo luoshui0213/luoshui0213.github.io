@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOCALOID 钢琴（88键全键盘）</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;}
+body{background:#0d0f14;color:#e9edf5;padding:14px;height:100%;overflow:hidden;}
+.app{height:100%;display:flex;flex-direction:column;gap:12px;}
+.panel{background:#161a22;border:1px solid #262c38;border-radius:14px;padding:14px;flex-shrink:0;}
+.panel-header{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.dot{width:10px;height:10px;border-radius:50%;background:#4dd6c1;box-shadow:0 0 12px #4dd6c1;}
+.panel-header h1{font-size:15px;font-weight:600;color:#e9edf5;}
+.slider-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;}
+.slider-item{flex:1;min-width:130px;}
+.slider-item label{display:block;margin-bottom:5px;color:#8892a6;font-size:12px;}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:#2d3442;outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#4dd6c1;cursor:pointer;}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border:none;border-radius:50%;background:#4dd6c1;cursor:pointer;}
+.ctrl-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
+.btn{background:#212734;border:1px solid #262c38;color:#e9edf5;padding:7px 13px;border-radius:9px;font-size:12px;cursor:pointer;transition:.15s;}
+.btn:hover{background:#2a3140;}
+.btn.on{background:rgba(77,214,193,.16);border-color:#4dd6c1;color:#4dd6c1;}
+.btn.warn{background:rgba(220,80,80,0.18);border-color:#dd5050;color:#ff8888;}
+.btn.down{background:rgba(80,160,220,0.18);border-color:#4894dd;color:#72b8ff;}
+.oct-box{display:flex;align-items:center;gap:6px;background:#212734;border:1px solid #262c38;border-radius:9px;padding:4px 6px;}
+.oct-btn{background:transparent;border:none;color:#fff;font-size:18px;width:28px;height:28px;cursor:pointer;}
+.oct-text{min-width:72px;text-align:center;color:#4dd6c1;font-size:12px;font-weight:600;}
+
+.scroll-tip{text-align:center;font-size:12px;color:#8892a6;margin:4px 0 8px;flex-shrink:0;}
+.piano-wrap{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding-bottom:6px;flex-shrink:0;}
+.piano-wrap::-webkit-scrollbar{height:8px;}
+.piano-wrap::-webkit-scrollbar-track{background:transparent;}
+.piano-wrap::-webkit-scrollbar-thumb{background:#2b3342;border-radius:4px;}
+.piano{position:relative;height:160px;width:fit-content;user-select:none;touch-action:pan-x;display:flex;}
+
+.white{width:44px;height:160px;background:linear-gradient(to bottom,#fbfbfb 0%,#f0f1f3 55%,#dfe2e7 100%);border:1px solid #b6bac2;border-top:none;border-radius:0 0 5px 5px;box-shadow:inset 0 -4px 6px rgba(0,0,0,.09);cursor:pointer;position:relative;transition:background .06s;flex-shrink:0;}
+.white.active{background:linear-gradient(to bottom,#ffefb8 0%,#ffd964 55%,#efb31c 100%);box-shadow:inset 0 -3px 8px rgba(160,110,0,.35);}
+.white>.key-label{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:9px;color:#444;pointer-events:none;transition:opacity 0.2s;}
+.white.active>.key-label{color:#604400;}
+
+.black{position:absolute;top:0;width:26px;height:100px;background:linear-gradient(to bottom,#4b515c 0%,#22262e 55%,#0a0c10 100%);border-radius:0 0 4px 4px;box-shadow:0 4px 7px rgba(0,0,0,.55),inset 0 -2px 3px rgba(255,255,255,.07);z-index:2;cursor:pointer;transition:background .06s;}
+.black.active{background:linear-gradient(to bottom,#d4a53a 0%,#a87e14 55%,#6d5006 100%);box-shadow:0 1px 3px rgba(0,0,0,.6);}
+.black>.key-label{position:absolute;bottom:3px;left:0;right:0;text-align:center;font-size:7px;color:#aaa;pointer-events:none;transition:opacity 0.2s;}
+.black.active>.key-label{color:#ffdd88;}
+
+.label-hide .key-label{opacity:0 !important;pointer-events:none;}
+
+.record-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid #262c38;}
+.record-status{font-size:12px;color:#8892a6;}
+
+.key-hint{margin-top:auto;background:#161a22;border:1px solid #262c38;border-radius:12px;padding:12px;font-size:11.5px;color:#8892a6;line-height:1.6;flex-shrink:0;overflow-y:auto;max-height:140px;}
+kbd{display:inline-block;background:#212734;border:1px solid #333b4a;border-bottom-width:2px;border-radius:4px;padding:1px 5px;font-size:10.5px;color:#c3cbd9;margin:0 1px;}
+
+@media (max-height:620px){
+  .panel{padding:10px;}
+  .piano{height:130px;}
+  .white{height:130px;}
+  .black{height:82px;}
+  .white>.key-label{font-size:8px;bottom:2px;}
+  .black>.key-label{font-size:6px;bottom:2px;}
+  .key-hint{display:none;}
+  .scroll-tip{display:none;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="panel">
+    <div class="panel-header">
+      <span class="dot"></span>
+      <h1>VOCALOID 钢琴（88键全键盘）</h1>
+    </div>
+    <div class="slider-row">
+      <div class="slider-item">
+        <label>音量</label>
+        <input type="range" id="vol" min="0" max="100" value="78">
+      </div>
+      <div class="slider-item">
+        <label>混响</label>
+        <input type="range" id="rev" min="0" max="100" value="42">
+      </div>
+    </div>
+    <div class="ctrl-row">
+      <button class="btn" id="toggleLabelBtn">隐藏音名标签</button>
+      <button class="btn" id="gotoMiddleC">定位中央C(C4)</button>
+      <div class="oct-box">
+        <button class="oct-btn" id="octDown">−</button>
+        <span class="oct-text" id="octLabel">C4 – B5</span>
+        <button class="oct-btn" id="octUp">+</button>
+      </div>
+    </div>
+    <div class="record-row">
+      <button class="btn warn" id="recStart">开始录音</button>
+      <button class="btn" id="recStop">停止录音</button>
+      <button class="btn" id="playRec">回放录音</button>
+      <button class="btn" id="clearRec">清空录音</button>
+      <button class="btn down" id="exportRec">导出录音JSON</button>
+      <span class="record-status" id="recStatus">就绪，等待录制</span>
+    </div>
+  </div>
+
+  <div class="scroll-tip">← 手指左右滑动滚动完整88键键盘 →</div>
+  <div class="piano-wrap" id="pianoWrap">
+    <div class="piano" id="piano"></div>
+  </div>
+
+  <div class="key-hint">
+    <div><kbd>Z</kbd><kbd>S</kbd><kbd>X</kbd><kbd>D</kbd><kbd>C</kbd><kbd>V</kbd><kbd>G</kbd><kbd>B</kbd><kbd>H</kbd><kbd>N</kbd><kbd>J</kbd><kbd>M</kbd> 低八度</div>
+    <div><kbd>Q</kbd><kbd>2</kbd><kbd>W</kbd><kbd>3</kbd><kbd>E</kbd><kbd>R</kbd><kbd>5</kbd><kbd>T</kbd><kbd>6</kbd><kbd>Y</kbd><kbd>7</kbd><kbd>U</kbd> 高八度</div>
+    <div><kbd>[</kbd> <kbd>]</kbd> 切换八度</div>
+    <div>鼠标 / 触屏可直接弹奏，支持滑奏；完整88键A0‑C8横向滚动；琴键底部显示音名组别；自动开启延音效果</div>
+  </div>
+</div>
+
+<script>
+const LOW_MIDI = 21;
+const HIGH_MIDI = 108;
+const MIDDLE_C_MIDI = 60;
+const NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const mtof = m => 440 * Math.pow(2, (m - 69) / 12);
+const mname = m => NAMES[((m % 12) + 12) % 12] + (Math.floor(m / 12) - 1);
+const isBlack = midi => {
+  const n = midi % 12;
+  return [1,3,6,8,10].includes(n);
+};
+
+const A = { ctx:null, dry:null, wet:null, master:null, conv:null };
+function makeIR(ctx, seconds, decay){
+  const rate = ctx.sampleRate;
+  const len = Math.floor(rate * seconds);
+  const buf = ctx.createBuffer(2, len, rate);
+  const fadeIn = rate * 0.012;
+  for(let c=0;c<2;c++){
+    const d = buf.getChannelData(c);
+    for(let i=0;i<len;i++){
+      const t = i / len;
+      const atk = Math.min(1, i / fadeIn);
+      d[i] = (Math.random()*2-1) * Math.pow(1-t, decay) * atk;
+    }
+  }
+  return buf;
+}
+function ensureAudio(){
+  if(A.ctx){
+    if(A.ctx.state === 'suspended') A.ctx.resume();
+    return A.ctx;
+  }
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  A.ctx = ctx;
+  const master = ctx.createGain();
+  master.gain.value = 0.78;
+  const comp = ctx.createDynamicsCompressor();
+  comp.threshold.value = -14; comp.knee.value =24; comp.ratio.value=4;
+  comp.attack.value=0.004; comp.release.value=0.25;
+  const conv = ctx.createConvolver();
+  conv.buffer = makeIR(ctx,2.6,2.8);
+  const dry = ctx.createGain(); dry.gain.value =1.0;
+  const wet = ctx.createGain(); wet.gain.value =0.42;
+  dry.connect(comp); wet.connect(conv); conv.connect(comp);
+  comp.connect(master); master.connect(ctx.destination);
+  A.dry = dry; A.wet = wet; A.master = master; A.conv = conv;
+  return ctx;
+}
+
+const PARTIALS = [
+  [1,1.000,1.00],[2,0.400,0.68],[3,0.200,0.50],
+  [4,0.110,0.38],[5,0.065,0.30],[6,0.038,0.24],[8,0.018,0.17]
+];
+function noteOn(freq, velocity=0.55){
+  const ctx = ensureAudio();
+  const t = ctx.currentTime;
+  const out = ctx.createGain();
+  out.gain.value = velocity;
+  out.connect(A.dry); out.connect(A.wet);
+  const baseDecay = 6.0 / (1 + Math.pow(freq / 150, 0.62));
+  const nyq = ctx.sampleRate * 0.5;
+  const oscs = [];
+  for(const [ratio, amp, dscale] of PARTIALS){
+    const f = freq * ratio;
+    if(f >= nyq * 0.9) continue;
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = f;
+    osc.detune.value = (Math.random()-0.5)*4;
+    const g = ctx.createGain();
+    const d = Math.max(0.2, baseDecay * dscale);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(amp, t+0.004);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+d);
+    osc.connect(g); g.connect(out);
+    osc.start(t); osc.stop(t+d+0.05);
+    oscs.push(osc);
+  }
+  let released = false;
+  return {
+    release(time=1.1){
+      if(released) return;
+      released = true;
+      const now = ctx.currentTime;
+      const g = out.gain;
+      g.cancelScheduledValues(now);
+      g.setValueAtTime(g.value, now);
+      g.exponentialRampToValueAtTime(0.0001, now+time);
+      const stopAt = now + time + 0.03;
+      for(const o of oscs) try{o.stop(stopAt);}catch(e){}
+    }
+  };
+}
+
+const pianoEl = document.getElementById('piano');
+const pianoWrap = document.getElementById('pianoWrap');
+const keyEls = new Map();
+let whiteOffset = 0;
+for(let m=LOW_MIDI;m<=HIGH_MIDI;m++){
+  const name = mname(m);
+  if(isBlack(m)){
+    const div = document.createElement('div');
+    div.className = 'black';
+    div.dataset.midi = m;
+    div.style.left = (whiteOffset - 13) + 'px';
+    const labelSpan = document.createElement('span');
+    labelSpan.className="key-label";
+    labelSpan.textContent=name;
+    div.appendChild(labelSpan);
+    pianoEl.appendChild(div);
+    keyEls.set(m, div);
+  }else{
+    const div = document.createElement('div');
+    div.className = 'white';
+    div.dataset.midi = m;
+    const labelSpan = document.createElement('span');
+    labelSpan.className="key-label";
+    labelSpan.textContent=name;
+    div.appendChild(labelSpan);
+    pianoEl.appendChild(div);
+    keyEls.set(m, div);
+    whiteOffset += 44;
+  }
+}
+
+let labelVisible = true;
+const toggleLabelBtn = document.getElementById('toggleLabelBtn');
+toggleLabelBtn.onclick = ()=>{
+  labelVisible = !labelVisible;
+  if(labelVisible){
+    pianoEl.classList.remove('label-hide');
+    toggleLabelBtn.textContent = "隐藏音名标签";
+  }else{
+    pianoEl.classList.add('label-hide');
+    toggleLabelBtn.textContent = "显示音名标签";
+  }
+};
+
+function scrollToMiddleC(){
+  const el = keyEls.get(MIDDLE_C_MIDI);
+  if(!el) return;
+  const wrapWidth = pianoWrap.clientWidth;
+  const elLeft = el.offsetLeft;
+  pianoWrap.scrollLeft = elLeft - wrapWidth / 2 + el.offsetWidth / 2;
+}
+document.getElementById('gotoMiddleC').addEventListener('click',scrollToMiddleC);
+window.addEventListener('load',()=>setTimeout(scrollToMiddleC,120));
+
+const keyVoices = new Map();
+const held = new Set();
+
+function startNote(midi){
+  ensureAudio();
+  held.add(midi);
+  const prev = keyVoices.get(midi);
+  if(prev) prev.release(0.06);
+  const voice = noteOn(mtof(midi), 0.55);
+  keyVoices.set(midi, voice);
+  const el = keyEls.get(midi);
+  if(el) el.classList.add('active');
+  if(isRecording){
+    const now = performance.now() - recordStartTime;
+    recordEvents.push({t:now,type:"on",midi:midi});
+  }
+}
+function stopNote(midi){
+  held.delete(midi);
+  const el = keyEls.get(midi);
+  if(el) el.classList.remove('active');
+  const v = keyVoices.get(midi);
+  if(v){
+    v.release(1.1);
+    keyVoices.delete(midi);
+    if(isRecording){
+      const now = performance.now() - recordStartTime;
+      recordEvents.push({t:now,type:"off",midi:midi});
+    }
+  }
+}
+
+const pointerNotes = new Map();
+function midiFromPoint(x,y){
+  const el = document.elementFromPoint(x,y);
+  if(!el) return null;
+  const k = el.closest('.white,.black');
+  if(!k || !pianoEl.contains(k)) return null;
+  return Number(k.dataset.midi);
+}
+pianoEl.addEventListener('pointerdown',e=>{
+  const midi = midiFromPoint(e.clientX,e.clientY);
+  if(midi===null) return;
+  e.preventDefault();
+  try{pianoEl.setPointerCapture(e.pointerId);}catch(e){}
+  pointerNotes.set(e.pointerId, midi);
+  startNote(midi);
+});
+pianoEl.addEventListener('pointermove',e=>{
+  if(!pointerNotes.has(e.pointerId)) return;
+  const midi = midiFromPoint(e.clientX,e.clientY);
+  const prev = pointerNotes.get(e.pointerId);
+  if(midi === prev) return;
+  if(prev!==null) stopNote(prev);
+  pointerNotes.set(e.pointerId, midi);
+  if(midi!==null) startNote(midi);
+});
+function endPointer(e){
+  if(!pointerNotes.has(e.pointerId)) return;
+  const midi = pointerNotes.get(e.pointerId);
+  if(midi!==null) stopNote(midi);
+  pointerNotes.delete(e.pointerId);
+}
+pianoEl.addEventListener('pointerup',endPointer);
+pianoEl.addEventListener('pointercancel',endPointer);
+pianoEl.addEventListener('contextmenu',e=>e.preventDefault());
+
+const KEYMAP = {
+  z:0,s:1,x:2,d:3,c:4,v:5,g:6,b:7,h:8,n:9,j:10,m:11,
+  q:12,'2':13,w:14,'3':15,e:16,r:17,'5':18,t:19,'6':20,y:21,'7':22,u:23
+};
+const kbNotes = new Map();
+let oct = 0;
+const octLabel = document.getElementById('octLabel');
+function setOctave(v){
+  oct = Math.max(-2, Math.min(1, v));
+  const lo = 60 + oct *12;
+  const hi = lo +23;
+  octLabel.textContent = mname(lo) + ' – ' + mname(hi);
+}
+document.addEventListener('keydown',e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey) return;
+  const k = e.key.toLowerCase();
+  if(k === '[' || k === '-'){ e.preventDefault(); if(!e.repeat) setOctave(oct-1); return; }
+  if(k === ']' || k === '='){ e.preventDefault(); if(!e.repeat) setOctave(oct+1); return; }
+  if(e.repeat) return;
+  if(Object.prototype.hasOwnProperty.call(KEYMAP, k)){
+    e.preventDefault();
+    const midi = 60 + oct*12 + KEYMAP[k];
+    if(midi >= LOW_MIDI && midi <= HIGH_MIDI){
+      kbNotes.set(k, midi);
+      startNote(midi);
+    }
+  }
+});
+document.addEventListener('keyup',e=>{
+  const k = e.key.toLowerCase();
+  if(kbNotes.has(k)){
+    stopNote(kbNotes.get(k));
+    kbNotes.delete(k);
+  }
+});
+window.addEventListener('blur',()=>{
+  for(const midi of kbNotes.values()) stopNote(midi);
+  kbNotes.clear();
+});
+
+let isRecording = false;
+let recordStartTime = 0;
+let recordEvents = [];
+let playTimeoutList = [];
+const recStatus = document.getElementById("recStatus");
+
+document.getElementById("recStart").onclick=()=>{
+  if(isRecording) return;
+  isRecording = true;
+  recordEvents = [];
+  recordStartTime = performance.now();
+  recStatus.textContent="🔴 正在录制弹奏...";
+};
+document.getElementById("recStop").onclick=()=>{
+  isRecording = false;
+  recStatus.textContent="录制完成，可回放/导出";
+};
+document.getElementById("clearRec").onclick=()=>{
+  isRecording = false;
+  recordEvents = [];
+  playTimeoutList.forEach(t=>clearTimeout(t));
+  playTimeoutList = [];
+  recStatus.textContent="就绪，等待录制";
+};
+document.getElementById("playRec").onclick=()=>{
+  if(recordEvents.length===0){
+    recStatus.textContent="⚠无录音数据，请先录制";
+    return;
+  }
+  playTimeoutList.forEach(t=>clearTimeout(t));
+  playTimeoutList = [];
+  recStatus.textContent="▶正在回放录音";
+  recordEvents.forEach(ev=>{
+    const tid = setTimeout(()=>{
+      if(ev.type === "on") startNote(ev.midi);
+      else stopNote(ev.midi);
+    }, ev.t);
+    playTimeoutList.push(tid);
+  });
+  const endTimer = setTimeout(()=>{
+    recStatus.textContent="回放结束，就绪";
+  }, recordEvents[recordEvents.length-1].t + 600);
+  playTimeoutList.push(endTimer);
+};
+document.getElementById("exportRec").onclick=()=>{
+  if(recordEvents.length===0){
+    recStatus.textContent="⚠没有录音可以导出";
+    return;
+  }
+  const jsonStr = JSON.stringify(recordEvents,null,2);
+  const blob = new Blob([jsonStr],{type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `piano_record_${new Date().getTime()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  recStatus.textContent="✅录音文件已下载";
+};
+
+document.getElementById('vol').addEventListener('input',e=>{
+  if(A.master) A.master.gain.value = e.target.value /100;
+});
+document.getElementById('rev').addEventListener('input',e=>{
+  if(A.wet) A.wet.gain.value = (e.target.value/100)*0.75;
+});
+document.getElementById('octDown').addEventListener('click',()=>setOctave(oct-1));
+document.getElementById('octUp').addEventListener('click',()=>setOctave(oct+1));
+setOctave(0);
+</script>
+</body>
+</html>
