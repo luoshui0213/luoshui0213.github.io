@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0b0b14">
+<title>自定义音游 · PJSK风格复刻版</title>
+<style>
+:root{
+--bg:#0b0b14;
+--bg2:#101020;
+--gold:#f8d078;
+--purple:#b084ff;
+--blue:#64a8ff;
+--pink:#ff74b8;
+--green:#60e8a8;
+--red:#ff6868;
+--gray:#888899;
+--panel:#141424;
+--panel2:#1c1c34;
+--border:#2c2c50;
+--text:#e0e0f0;
+--theme:#39c5bb;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;overflow:hidden;overscroll-behavior:none}
+button{font-family:inherit;cursor:pointer;border:none;border-radius:10px;transition:0.24s ease;}
+button:hover{filter:brightness(1.08);}
+.gamearea.block{-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;touch-action:none}
+.gamearea{-webkit-touch-callout:default;-webkit-user-select:text;user-select:text}
+#selectPage{position:fixed;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 16px 140px;background:radial-gradient(120% 80% at 50% 0%,var(--bg2),var(--bg))}
+#selectPage h1{color:var(--gold);font-size:20px;margin:6px 0 4px;font-weight:600}
+#selectPage .sub{color:var(--gray);font-size:12px;margin-bottom:16px;line-height:1.6}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:0 4px 14px rgba(0,0,0,0.35);}
+.card .ct{color:var(--gold);font-size:13px;margin-bottom:10px;font-weight:600}
+.frow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.fbtn{background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:11px 14px;font-size:13px;flex:1;min-width:130px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+.fbtn.done{border-color:var(--gold);color:var(--gold)}
+.fbtn.wide{flex-basis:100%}
+.setrow{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;gap:8px}
+.setrow:last-child{border-bottom:none}
+.setrow label{color:var(--text);white-space:nowrap}
+.seg{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.seg button{background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 12px;font-size:12px}
+.seg button.on{background:var(--theme);color:#111;border-color:var(--theme);font-weight:600;box-shadow:0 0 8px rgba(57,197,187,0.35);}
+input[type=range]{width:130px;accent-color:var(--theme)}
+.sw{position:relative;width:44px;height:24px;flex-shrink:0}
+.sw input{opacity:0;width:0;height:0;position:absolute}
+.slider{position:absolute;inset:0;background:var(--panel2);border:1px solid var(--border);border-radius:24px;transition:.2s}
+.slider:before{content:"";position:absolute;width:18px;height:18px;left:2px;top:2px;background:var(--gray);border-radius:50%;transition:.2s}
+.sw input:checked+.slider{background:var(--theme);border-color:var(--theme)}
+.sw input:checked+.slider:before{transform:translateX(20px);background:#fff}
+.val{color:var(--gold);min-width:52px;text-align:right;font-size:12px}
+#startBtn{position:fixed;left:16px;right:16px;bottom:18px;z-index:9000;height:52px;background:linear-gradient(90deg,var(--purple),var(--theme));color:#fff;font-size:16px;font-weight:600;border-radius:14px;box-shadow:0 6px 20px rgba(57,197,187,.35)}
+#startBtn small{display:block;font-size:11px;font-weight:400;opacity:.85;margin-top:1px}
+#gamePage{position:fixed;inset:0;display:none;background:#000}
+#bgVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:0;pointer-events:none;display:none;background:#000;opacity:1;}
+#gameCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+#topProg{position:absolute;top:0;left:0;right:0;height:4px;z-index:860;background:rgba(255,255,255,.12);pointer-events:none}
+#topFill{height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--gold));box-shadow:0 0 12px rgba(248,208,120,.8);transition:width .06s linear}
+#hudScore{position:absolute;top:14px;left:14px;z-index:800;color:#ffffff;font-size:26px;font-weight:700;pointer-events:none;text-shadow:0 3px 10px rgba(0,0,0,0.92);font-variant-numeric:tabular-nums;letter-spacing:1px}
+#hudScore .scLabel{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:3px;display:block;margin-bottom:-4px}
+#hudLife{position:absolute;top:14px;right:80px;z-index:800;display:flex;align-items:center;gap:8px;pointer-events:none}
+#hudLife .lfLabel{font-size:11px;color:var(--green);font-weight:600;letter-spacing:2px}
+#hudLife .lfBar{width:130px;height:11px;background:rgba(0,0,0,0.6);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,0.22)}
+#hudLife .lfFill{height:100%;width:100%;background:linear-gradient(90deg,#48d088,#94ffc8);border-radius:5px;transition:width .22s}
+#hudCombo{position:absolute;top:42%;right:18px;z-index:800;text-align:right;pointer-events:none;opacity:0;transition:opacity .2s ease;text-shadow:0 4px 20px rgba(0,0,0,0.95)}
+#hudCombo #comboNum{font-size:72px;font-weight:800;color:#fff;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-3px}
+#hudCombo .cb{font-size:14px;letter-spacing:8px;color:var(--gold);font-weight:600;margin-top:4px}
+#pauseBtn{position:absolute;top:14px;right:14px;z-index:9500;background:rgba(20,20,36,.88);border:1px solid var(--border);color:var(--text);border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:19px;pointer-events:auto;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(0,0,0,0.45);}
+#seekBar{position:absolute;left:18px;right:18px;bottom:24px;z-index:800;height:7px;background:rgba(255,255,255,.12);border-radius:7px;pointer-events:none}
+#seekFill{height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--gold));border-radius:7px;box-shadow:0 0 10px rgba(248,208,120,.55)}
+#timeLbl{position:absolute;right:18px;bottom:18px;z-index:800;color:rgba(255,255,255,.55);font-size:12px;font-variant-numeric:tabular-nums}
+#pauseLayer{position:fixed;inset:0;z-index:8800;display:none;align-items:center;justify-content:center;background:rgba(4,4,8,.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+#pauseLayer .box{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:22px;width:min(72vw,280px);text-align:center;box-shadow:0 10px 32px rgba(0,0,0,0.55);}
+#pauseLayer h3{color:var(--gold);margin:0 0 18px;font-weight:600;font-size:18px;}
+#pauseLayer button{display:block;width:100%;margin:9px 0;padding:13px;border-radius:12px;background:var(--panel2);border:1px solid var(--border);color:var(--text);font-size:15px}
+#pauseLayer button.go{background:var(--theme);color:#111;border-color:var(--theme);font-weight:600;}
+#resumeOverlay{position:fixed;inset:0;z-index:8900;display:none;align-items:center;justify-content:center;flex-direction:column;background:rgba(0,0,0,.65);pointer-events:none;color:#fff;backdrop-filter:blur(3px);}
+#resumeOverlay.show{display:flex}
+#resumeOverlay .num{font-size:120px;font-weight:800;color:#fff;text-shadow:0 6px 36px rgba(176,132,255,1),0 0 70px rgba(248,208,120,.7);line-height:1;animation:cntPulse .6s ease-out}
+#resumeOverlay .tip{margin-top:20px;font-size:16px;letter-spacing:7px;color:var(--gold);text-shadow:0 3px 14px rgba(0,0,0,.92)}
+@keyframes cntPulse{0%{transform:scale(1.9);opacity:.25}100%{transform:scale(1);opacity:1}}
+#resultLayer{position:fixed;inset:0;z-index:8950;display:none;align-items:center;justify-content:center;background:rgba(5,5,10,.92);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
+#resultLayer.show{display:flex;animation:rFade .35s ease-out}
+@keyframes rFade{0%{opacity:0}100%{opacity:1}}
+#resultLayer .rbox{background:linear-gradient(160deg,#1a1a2e,#0d0d18);border:1px solid var(--border);border-radius:20px;padding:26px 22px;width:min(86vw,360px);text-align:center;box-shadow:0 20px 60px rgba(57,197,187,.3);}
+#resultLayer .rgrade{font-size:96px;font-weight:800;line-height:1;background:linear-gradient(180deg,#fff,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 4px 30px rgba(248,208,120,.6);margin-bottom:6px}
+#resultLayer .rtitle{font-size:17px;font-weight:600;color:var(--gold);letter-spacing:3px;margin-bottom:18px;min-height:22px}
+#resultLayer .rscore{font-size:11px;color:var(--gray);margin-bottom:14px;letter-spacing:2px}
+#resultLayer .rscore b{display:block;font-size:26px;color:#fff;font-weight:700;letter-spacing:1px;margin-top:2px;font-variant-numeric:tabular-nums}
+#resultLayer .rstats{display:flex;justify-content:space-around;padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:16px}
+#resultLayer .rstats div{text-align:center;font-size:10px;color:var(--gray);letter-spacing:1px}
+#resultLayer .rstats b{display:block;font-size:18px;color:#fff;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+#resultLayer .rbtns button{display:block;width:100%;margin:8px 0;padding:12px;border-radius:11px;background:var(--panel2);border:1px solid var(--border);color:var(--text);font-size:14px}
+#resultLayer .rbtns button.go{background:var(--theme);color:#111;border-color:var(--theme);font-weight:600;}
+#typesPanel{position:fixed;inset:0;z-index:9720;display:none;align-items:center;justify-content:center;background:rgba(5,5,10,.85);padding:12px;backdrop-filter:blur(4px);}
+#typesPanel.show{display:flex}
+#typesPanel .box{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;width:min(94vw,420px);max-height:86vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 8px 28px rgba(0,0,0,0.5);}
+#typesPanel h3{color:var(--gold);margin:0 0 6px;font-size:16px;font-weight:600;}
+#typesPanel .lead{color:var(--gray);font-size:12px;margin-bottom:12px;line-height:1.5}
+#typesPanel .trow{display:flex;gap:12px;align-items:center;padding:12px 6px;border-bottom:1px solid var(--border)}
+#typesPanel .trow:last-of-type{border-bottom:none}
+#typesPanel .tn{width:46px;height:16px;border-radius:8px;flex-shrink:0;box-shadow:0 0 12px rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.6)}
+#typesPanel .td{flex:1;font-size:12px}
+#typesPanel .td b{display:block;color:#fff;font-size:13px;margin-bottom:3px}
+#typesPanel .td span{color:var(--gray);line-height:1.5}
+#typesPanel .close{margin-top:14px;width:100%;padding:12px;background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:10px;font-size:13px}
+.hidden-input{display:none}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);z-index:9999;background:rgba(20,20,35,.95);border:1px solid var(--theme);color:var(--text);padding:10px 16px;border-radius:12px;font-size:12.5px;max-width:86vw;text-align:center;pointer-events:none;opacity:0;transition:opacity .25s;box-shadow:0 4px 14px rgba(0,0,0,0.4);}
+.toast.show{opacity:1}
+@media (max-width:600px){
+#hudScore{font-size:22px}
+#hudCombo #comboNum{font-size:60px}
+}
+</style>
+</head>
+<body>
+<div id="selectPage">
+  <h1>自定义音游 · PJSK风格复刻版</h1>
+  <div class="sub">选择音源即可开玩。mp4 会自动作为背景 MV 并提取音轨。</div>
+  
+  <div class="card">
+    <div class="ct">☁️ 在线曲库（多节点自动回退）</div>
+    <div class="frow" id="onlineLib">
+      <button class="fbtn wide" data-file="为什么夏天总是属于离别.mp4">☀️ 为什么夏天总是属于离别</button>
+      <button class="fbtn" data-file="千本樱纯音乐版.mp4">🌸 千本樱纯音乐版</button>
+      <button class="fbtn" data-file="夏至又至.mp4">🌻 夏至又至</button>
+      <button class="fbtn wide" data-file="蝴蝶.mp4">🦋 蝴蝶</button>
+    </div>
+    <div class="sub" style="margin:0;font-size:11px;text-align:center;">点击后自动从 jsDelivr 多节点及 GitHub 官方寻找最快路径。</div>
+  </div>
+
+  <div class="card">
+    <div class="ct">1. 选择本地素材</div>
+    <div class="frow">
+      <button class="fbtn wide" id="pickAny">📁 选择任意文件（音频 / 视频 / 全部类型）</button>
+    </div>
+    <div class="frow">
+      <button class="fbtn" id="pickAudio">选择音频文件</button>
+      <button class="fbtn" id="pickBg">选择背景视频（仅画面）</button>
+    </div>
+    <div class="frow">
+      <button class="fbtn wide" id="pickLrc">选择歌词 .lrc（可选）</button>
+    </div>
+    <div class="frow">
+      <button class="fbtn wide" id="openTypes">📖 查看音符种类说明</button>
+    </div>
+    <input type="file" id="inAudio" class="hidden-input">
+    <input type="file" id="inAny" class="hidden-input">
+    <input type="file" id="inLrc" class="hidden-input">
+    <input type="file" id="inBg" class="hidden-input">
+  </div>
+  <div class="card">
+    <div class="ct">2. 游戏设置</div>
+    <div class="setrow"><label>轨道数量</label>
+      <div class="seg" id="segLane">
+        <button data-v="3">3</button><button data-v="4" class="on">4</button>
+        <button data-v="5">5</button><button data-v="6">6</button>
+      </div>
+    </div>
+    <div class="setrow"><label>难度</label>
+      <div class="seg" id="segDiff">
+        <button data-v="easy">简单</button><button data-v="normal" class="on">普通</button>
+        <button data-v="hard">困难</button><button data-v="insane">地狱</button>
+      </div>
+    </div>
+    <div class="setrow"><label>判定窗口</label>
+      <input type="range" id="rngJudge" min="40" max="300" step="5" value="130">
+      <span class="val" id="vJudge">130ms</span>
+    </div>
+    <div class="setrow"><label>整体偏移</label>
+      <input type="range" id="rngOffset" min="-200" max="200" step="5" value="0">
+      <span class="val" id="vOffset">0ms</span>
+    </div>
+    <div class="setrow"><label>音符缩放</label>
+      <input type="range" id="rngScale" min="60" max="160" step="5" value="100">
+      <span class="val" id="vScale">100%</span>
+    </div>
+    <div class="setrow"><label>判定文字</label>
+      <label class="sw"><input type="checkbox" id="swJudgeText" checked><span class="slider"></span></label>
+    </div>
+    <div class="setrow"><label>粒子特效</label>
+      <label class="sw"><input type="checkbox" id="swParticle" checked><span class="slider"></span></label>
+    </div>
+    <div class="setrow"><label>长按屏蔽（仅游戏区）</label>
+      <label class="sw"><input type="checkbox" id="swBlock" checked><span class="slider"></span></label>
+    </div>
+  </div>
+</div>
+<button id="startBtn">开始游戏<small id="startStatus">等待选择音源...</small></button>
+<div id="gamePage" class="gamearea block">
+  <video id="bgVideo" playsinline muted webkit-playsinline></video>
+  <canvas id="gameCanvas"></canvas>
+  <div id="topProg"><div id="topFill"></div></div>
+  <div id="hudScore"><span class="scLabel">SCORE</span>0</div>
+  <div id="hudLife"><span class="lfLabel">LIFE</span><div class="lfBar"><div class="lfFill" id="lfFill"></div></div></div>
+  <div id="hudCombo"><div id="comboNum">0</div><div class="cb">COMBO</div></div>
+  <button id="pauseBtn">⏸</button>
+  <div id="seekBar"><div id="seekFill"></div></div>
+  <div id="timeLbl">0:00 / 0:00</div>
+</div>
+<div id="pauseLayer"><div class="box">
+  <h3>已暂停</h3>
+  <button class="go" id="resumeBtn">继续</button>
+  <button id="rebaseBtn">重算时间基准（偏移归零）</button>
+  <button id="quitBtn">退出重选</button>
+</div></div>
+<div id="resumeOverlay"><div class="num" id="resumeNum">3</div><div class="tip">即将开始 · 请准备</div></div>
+<div id="resultLayer"><div class="rbox">
+  <div class="rgrade" id="rGrade">S</div>
+  <div class="rtitle" id="rTitle">FULL COMBO!</div>
+  <div class="rscore"><span>SCORE</span><b id="rScore">00000000</b></div>
+  <div class="rstats">
+    <div><span>最大连击</span><b id="rCombo">0</b></div>
+    <div><span>命中</span><b id="rHit">0</b></div>
+    <div><span>MISS</span><b id="rMiss">0</b></div>
+  </div>
+  <div class="rbtns">
+    <button class="go" id="rAgain">再玩一次</button>
+    <button id="rQuit">退出重选</button>
+  </div>
+</div></div>
+<div id="typesPanel"><div class="box">
+  <h3>🎵 PJSK复刻版 音符种类说明</h3>
+  <div class="lead">支持：普通Tap、Critical暴击、上划Flick、下划Flick、Hold长按音符。所有音符固定在单个轨道，无跨轨道滑动。</div>
+  <div class="trow">
+    <div class="tn" style="background:linear-gradient(180deg,#ffffff,#4a88dd)"></div>
+    <div class="td"><b>Tap 普通点击</b><span>蓝色方块音符，到达判定线点击。</span></div>
+  </div>
+  <div class="trow">
+    <div class="tn" style="background:linear-gradient(180deg,#fff,#ffbc42)"></div>
+    <div class="td"><b>Critical Tap 暴击音符</b><span>金色，判定成功会产生大量粒子，分数更高。</span></div>
+  </div>
+  <div class="trow">
+    <div class="tn" style="background:linear-gradient(180deg,#ffffff,#ff72a4);position:relative">
+      <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:11px">↑</span>
+    </div>
+    <div class="td"><b>Flick↑上划</b><span>粉色向上箭头，按下后向上滑动。</span></div>
+  </div>
+  <div class="trow">
+    <div class="tn" style="background:linear-gradient(180deg,#ffffff,#ff72a4);position:relative">
+      <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:11px">↓</span>
+    </div>
+    <div class="td"><b>Flick↓下划</b><span>粉色向下箭头，按下后向下滑动。</span></div>
+  </div>
+  <div class="trow">
+    <div class="tn" style="background:linear-gradient(180deg,#ffffff,#52d896)"></div>
+    <div class="td"><b>Hold 长按音符</b><span>绿色长条，按住直到音符尾部结束，只在本轨道。</span></div>
+  </div>
+  <button class="close" id="typesClose">关闭</button>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>
+"use strict";
+function $(id){return document.getElementById(id)}
+function deepCopy(o){return JSON.parse(JSON.stringify(o))}
+function clampInt(v,a,b){v=parseInt(v,10);if(isNaN(v))return a;return Math.max(a,Math.min(b,v))}
+function extOf(n){var m=/\.([a-z0-9]+)$/i.exec(n||"");return m?m[1].toLowerCase():""}
+var toastEl=$("toast"),toastTimer=null;
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(function(){toastEl.classList.remove("show")},1800)}
+var DEFAULTS={
+  noteColor:"#64a8dd",criticalColor:"#ffbc42",flickColor:"#ff72a4",holdColor:"#52d896",
+  particleCount:22,particleLife:520,
+  judgmentColors:{PERFECT:"#f8d078",GREAT:"#b084ff",GOOD:"#64a8ff",MISS:"#7a7a85",CRITICAL:"#ffbc42"},
+  fallSeconds:1.45,perspectiveTop:0.26,nearFarRatio:2.4
+};
+var CFG=deepCopy(DEFAULTS);
+var S={
+  lanes:4,difficulty:"normal",judgeMs:130,offsetMs:0,scale:1.0,
+  showJudgeText:true,showParticle:true,blockLongPress:true,
+  mode:"audio",duration:0,bpm:120,notes:[],
+  score:0,combo:0,maxCombo:0,hit:0,miss:0,life:1000,
+  playing:false,paused:false,ready:false,
+  audioCtx:null,audioBuf:null,audioSrc:null,
+  playStartCtx:0,playStartOffset:0,lrc:[],curLrc:-1,
+  activeHolds:[],lanePressed:[false,false,false,false,false,false]
+};
+var KEYMAPS={3:["D","F","J"],4:["D","F","J","K"],5:["S","D","F","J","K"],6:["S","D","F","J","K","L"]};
+var DIFF_DEFAULT={easy:230,normal:190,hard:150,insane:110};
+var DIFF_DENSITY={easy:0.20,normal:0.34,hard:0.50,insane:0.70};
+var VIDEO_EXT=["mp4","webm","mkv","mov","m4v","ogv","avi"];
+var AUDIO_EXT=["mp3","wav","ogg","m4a","aac","flac","opus","weba","mp4","webm","mkv","mov"];
+
+function bindPick(btnId,inputId,handler){
+  var btn=$(btnId),inp=$(inputId);
+  if(!btn||!inp)return;
+  btn.addEventListener("click",function(){inp.click()});
+  inp.addEventListener("change",function(){
+    var f=this.files&&this.files[0];if(!f)return;
+    btn.classList.add("done");
+    try{handler(f)}catch(err){toast("导入异常:"+err.message)}
+    this.value="";
+  });
+}
+bindPick("pickAudio","inAudio",function(f){loadAudioFile(f,false)});
+bindPick("pickAny","inAny",function(f){
+  var ext=extOf(f.name);
+  var isVideo=/^video\//.test(f.type)||VIDEO_EXT.indexOf(ext)>=0;
+  if(isVideo){setBgVideo(f);loadAudioFile(f,true)}
+  else if(AUDIO_EXT.indexOf(ext)>=0||/^audio\//.test(f.type)){loadAudioFile(f,false)}
+  else{loadAudioFile(f,false)}
+});
+bindPick("pickLrc","inLrc",function(f){
+  var r=new FileReader();
+  r.onload=function(){parseLrc(r.result);toast("歌词已载入")};
+  r.onerror=function(){toast("歌词读取失败")};
+  r.readAsText(f);
+});
+bindPick("pickBg","inBg",function(f){
+  setBgVideo(f);
+  toast("背景视频已切换");
+});
+
+var onlineLib=$("onlineLib");
+onlineLib.addEventListener("click", function(e){
+  var btn = e.target.closest("button");
+  if(!btn) return;
+  var fileName = btn.dataset.file;
+  if(!fileName) return;
+  Array.from(onlineLib.children).forEach(x=>x.classList.remove("done"));
+  btn.classList.add("done");
+  loadWithFallback(fileName, btn);
+});
+
+var bgVideo=$("bgVideo");
+function setBgVideo(f){
+  try{
+    var url=URL.createObjectURL(f);
+    applyBgVideo(url);
+  }catch(e){toast("背景视频设置失败");bgVideo.style.display="none"}
+}
+function applyBgVideo(url){
+  bgVideo.src=url;bgVideo.style.display="block";bgVideo.loop=true;bgVideo.muted=true;
+  bgVideo.setAttribute("playsinline","");bgVideo.setAttribute("webkit-playsinline","");
+  bgVideo.load();
+}
+function ensureCtx(){
+  if(S.audioCtx)return S.audioCtx;
+  try{var AC=window.AudioContext||window.webkitAudioContext;if(AC)S.audioCtx=new AC()}catch(e){}
+  return S.audioCtx;
+}
+function clearPlayState(){
+  if(S.audioSrc){try{S.audioSrc.stop()}catch(e){}S.audioSrc=null}
+  if(S.audioCtx&&S.audioCtx.state==="running"){try{S.audioCtx.suspend()}catch(e){}}
+  try{bgVideo.pause()}catch(e){}
+  S.playing=false;S.paused=false;S.ready=false;
+}
+
+async function loadWithFallback(fileName, btnElement) {
+  clearPlayState();
+  const encodedName = encodeURIComponent(fileName);
+  
+  const urls = [
+    `https://cdn.jsdelivr.net/gh/luoshui0213/resources@main/${encodedName}`,
+    `https://fastly.jsdelivr.net/gh/luoshui0213/resources@main/${encodedName}`,
+    `https://gcore.jsdelivr.net/gh/luoshui0213/resources@main/${encodedName}`,
+    `https://testingcf.jsdelivr.net/gh/luoshui0213/resources@main/${encodedName}`,
+    `https://raw.githubusercontent.com/luoshui0213/resources/main/${encodedName}`
+  ];
+
+  let success = false;
+
+  for (let i = 0; i < urls.length; i++) {
+    setStatus(`正在尝试节点 ${i + 1} 加载...`);
+    try {
+      const res = await fetch(urls[i]);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      
+      const arrayBuffer = await res.arrayBuffer();
+      
+      const blob = new Blob([arrayBuffer], { type: 'video/mp4' });
+      const blobUrl = URL.createObjectURL(blob);
+      
+      applyBgVideo(blobUrl);
+      setStatus("解码音频中...");
+
+      const ac = ensureCtx();
+      if (!ac) {
+        S.mode = "rhythm";
+        afterDecode();
+        success = true;
+        break;
+      }
+
+      try {
+        const buf = await new Promise((resolve, reject) => {
+          ac.decodeAudioData(arrayBuffer.slice(0), resolve, reject);
+        });
+        
+        if (buf && buf.duration && isFinite(buf.duration)) {
+          S.audioBuf = buf;
+          S.duration = buf.duration;
+          S.mode = "audio";
+        } else {
+          S.audioBuf = null;
+          S.mode = "rhythm";
+        }
+      } catch (err) {
+        console.warn("音频解码失败:", err);
+        S.audioBuf = null;
+        S.mode = "rhythm";
+        toast("音频解码失败，已切换为无声演示模式");
+      }
+      
+      afterDecode();
+      success = true;
+      break; 
+      
+    } catch (err) {
+      console.warn(`节点 ${i + 1} 加载失败:`, err);
+    }
+  }
+
+  if (!success) {
+    toast("所有节点均加载失败，请检查网络或文件是否存在");
+    setStatus("加载失败，请重试...");
+    if (btnElement) btnElement.classList.remove("done");
+  }
+}
+
+function loadAudioFile(f,fromVideo){
+  clearPlayState();
+  setStatus("读取中...");
+  var r=new FileReader();
+  r.onload=function(){
+    setStatus("解码音频中...");
+    var ac=ensureCtx();
+    if(!ac){S.mode="rhythm";afterDecode();return}
+    try {
+      ac.decodeAudioData(r.result.slice(0),
+        function(buf){
+          if(buf && buf.duration && isFinite(buf.duration)){
+            S.audioBuf=buf;
+            S.duration=buf.duration;
+            S.mode="audio";
+          }else{
+            S.audioBuf=null;S.mode="rhythm";
+          }
+          afterDecode();
+        },
+        function(err){
+          console.warn("Audio decode error:",err);
+          S.audioBuf=null;S.mode="rhythm";
+          toast("音频解码失败或格式不支持，已切换为无声演示模式");
+          afterDecode();
+        });
+    } catch(err) {
+      console.warn("Decode throw:",err);
+      S.audioBuf=null;S.mode="rhythm";
+      toast("音频解码崩溃，已切换为无声演示模式");
+      afterDecode();
+    }
+  };
+  r.onerror=function(){setStatus("读取失败，请重选")};
+  try{r.readAsArrayBuffer(f)}catch(e){toast("文件读取异常，可能文件过大");setStatus("读取失败");}
+}
+function afterDecode(){
+  if(!S.duration||!isFinite(S.duration)||S.duration<=0){
+    if(bgVideo.duration&&isFinite(bgVideo.duration))S.duration=bgVideo.duration;
+    else S.duration=60;
+  }
+  estimateBpm();
+  buildChart();
+  initRender();
+  S.ready=true;
+  setStatus("就绪，点下方开始");
+}
+function estimateBpm(){
+  if(S.mode!=="audio"||!S.audioBuf||S.audioBuf.numberOfChannels===0){S.bpm=120;return}
+  var d=S.audioBuf.getChannelData(0),sr=S.audioBuf.sampleRate;
+  var win=Math.floor(sr*0.05),peaks=[],prev=0,step=Math.floor(sr*0.02),len=d.length;
+  for(var i=0;i+win<len&&peaks.length<2000;i+=step){
+    var e=0;for(var j=0;j<win;j+=4){var v=d[i+j];e+=v*v}
+    e/=win;if(e>prev*1.6&&e>0.002)peaks.push(i/sr);prev=e;
+  }
+  if(peaks.length<4){S.bpm=120;return}
+  var gaps=[];
+  for(var k=1;k<peaks.length;k++){var g=peaks[k]-peaks[k-1];if(g>0.25&&g<1.5)gaps.push(g)}
+  if(!gaps.length){S.bpm=120;return}
+  gaps.sort(function(a,b){return a-b});
+  var med=gaps[Math.floor(gaps.length/2)],bpm=60/med;
+  if(!isFinite(bpm)||bpm<=0){S.bpm=120;return}
+  while(bpm<70)bpm*=2;while(bpm>190)bpm/=2;
+  S.bpm=Math.round(bpm);
+  if(!S.bpm||!isFinite(S.bpm)||S.bpm<=0)S.bpm=120;
+}
+function estimateVocalPeaks(){
+  if(S.mode!=="audio"||!S.audioBuf||S.audioBuf.numberOfChannels===0)return null;
+  var d=S.audioBuf.getChannelData(0),sr=S.audioBuf.sampleRate;
+  var win=Math.floor(sr*0.04),peaks=[],i=0,len=d.length;
+  for(;i+win<len;i+=Math.floor(sr*0.025)){
+    var e=0;for(var j=0;j<win;j++)e+=Math.abs(d[i+j]);
+    e/=win;if(e>0.018)peaks.push(i/sr);
+  }
+  return peaks;
+}
+function buildChart(){
+  S.notes=[];
+  if(S.duration<=0)S.duration=60;
+  if(!S.bpm||!isFinite(S.bpm)||S.bpm<=0)S.bpm=120;
+  var density=DIFF_DENSITY[S.difficulty]||0.34;
+  var beat=60/S.bpm;
+  var laneRot=Math.floor(Math.random()*S.lanes);
+  var peaks=estimateVocalPeaks();
+  var useVocal=peaks&&peaks.length>8;
+
+  var laneFree=[],lastGlobalT=-99;
+  for(var l=0;l<S.lanes;l++)laneFree.push(0);
+  var MIN_LANE_GAP=0.26;
+  var MIN_GLOBAL_GAP=0.13;
+
+  function makeNote(t){
+    if(t<lastGlobalT+MIN_GLOBAL_GAP)return false;
+    var cand=[];
+    for(var l=0;l<S.lanes;l++)if(t>=laneFree[l])cand.push(l);
+    if(!cand.length)return false;
+    var lane=-1;
+    var pref=[(laneRot+1)%S.lanes,(laneRot-1+S.lanes)%S.lanes,laneRot];
+    for(var p=0;p<pref.length;p++){if(cand.indexOf(pref[p])>=0){lane=pref[p];break;}}
+    if(lane<0)lane=cand[Math.floor(Math.random()*cand.length)];
+
+    var r=Math.random(),type="tap",dur=0;
+    if(r<0.12){type="critical";}
+    else if(r<0.24){type="flick_up";}
+    else if(r<0.34){type="flick_down";}
+    else if(r<0.52){type="hold";dur=beat*(1+Math.floor(Math.random()*2));}
+
+    S.notes.push({t:t,lane:lane,dur:dur,type:type,hit:false,missed:false,holding:false,judged:false});
+    laneRot=lane;
+    laneFree[lane]=t+dur+MIN_LANE_GAP;
+    lastGlobalT=t;
+    return true;
+  }
+
+  if(useVocal){
+    for(var i=0;i<peaks.length;i++){
+      var t=peaks[i];
+      if(t<1.2||t>S.duration-1.0)continue;
+      if(Math.random()>density*0.58)continue;
+      makeNote(t);
+    }
+  }else{
+    var tt=2.0;
+    var loopSafety=0;
+    while(tt<S.duration-1.5){
+      if(++loopSafety>5000)break;
+      if(Math.random()<density)makeNote(tt);
+      tt+=beat*(Math.random()<0.3?0.5:1);
+    }
+  }
+
+  S.notes.sort(function(a,b){return a.t-b.t});
+  S.score=0;S.combo=0;S.maxCombo=0;S.hit=0;S.miss=0;S.life=1000;S.curLrc=-1;
+  updateHud();
+}
+function parseLrc(text){
+  S.lrc=[];
+  var lines=(text||"").split(/\r?\n/);
+  var re=/\[(\d+):(\d+)(?:[.:](\d+))?\]/g;
+  for(var i=0;i<lines.length;i++){
+    var m,starts=[],line=lines[i];
+    re.lastIndex=0;
+    while((m=re.exec(line))!==null)starts.push(parseInt(m[1],10)*60+parseInt(m[2],10)+(m[3]?parseFloat("0."+m[3]):0));
+    if(!starts.length)continue;
+    var content=line.replace(/\[[^\]]*\]/g,"").trim();
+    for(var s=0;s<starts.length;s++)if(content)S.lrc.push({t:starts[s],text:content});
+  }
+  S.lrc.sort(function(a,b){return a.t-b.t});
+}
+var canvas=$("gameCanvas"),ctx=canvas.getContext("2d");
+var particles=[],judgAnims=[],rafId=null;
+var fpsCounter=0,fpsLast=performance.now(),fpsValue=0;
+function initRender(){resizeCanvas();if(!rafId)loop()}
+function resizeCanvas(){
+  if(!canvas.clientWidth||!canvas.clientHeight)return;
+  var dpr=Math.min(window.devicePixelRatio||1,2);
+  canvas.width=Math.floor(canvas.clientWidth*dpr);
+  canvas.height=Math.floor(canvas.clientHeight*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+window.addEventListener("resize",resizeCanvas);
+window.addEventListener("orientationchange",function(){setTimeout(resizeCanvas,220)});
+function laneX(lane,prog){
+  var W=canvas.clientWidth,H=canvas.clientHeight,cx=W*0.5;
+  var vpY=H*CFG.perspectiveTop,judgeY=H*0.84;
+  var nearHalf=W*0.44*S.scale,farHalf=W*0.06*S.scale;
+  var half=farHalf+(nearHalf-farHalf)*prog;
+  var slot=(half*2)/S.lanes;
+  return{cx:cx,half:half,slot:slot,judgeY:judgeY,vpY:vpY};
+}
+function loop(){rafId=requestAnimationFrame(loop);fpsCounter++;var now=performance.now();if(now-fpsLast>=1000){fpsValue=fpsCounter;fpsCounter=0;fpsLast=now}try{draw(getPlayTime())}catch(e){}}
+function getPlayTime(){
+  if(S.paused)return S.playStartOffset;
+  if(!S.playing&&!S.paused)return S.playStartOffset;
+  if(S.mode==="audio"&&S.audioCtx)return(S.audioCtx.currentTime-S.playStartCtx)+S.playStartOffset;
+  return(performance.now()/1000-S.playStartCtx)+S.playStartOffset;
+}
+function roundRect(x,y,w,h,r){
+  r=Math.min(r,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+
+// ===== 核心修改：等比完整显示（Contain） =====
+function drawBgContain(W,H){
+  var vw=bgVideo.videoWidth,vh=bgVideo.videoHeight;
+  if(!vw||!vh){ctx.drawImage(bgVideo,0,0,W,H);return}
+  // 使用 min 确保视频完整缩放进屏幕，不被裁剪
+  var scale=Math.min(W/vw, H/vh); 
+  var dw=vw*scale, dh=vh*scale;
+  
+  // 填充全黑底色防止露底，然后再居中绘制完整的视频
+  ctx.fillStyle="#000";
+  ctx.fillRect(0,0,W,H);
+  ctx.drawImage(bgVideo,(W-dw)/2,(H-dh)/2,dw,dh);
+}
+
+function draw(now){
+  var W=canvas.clientWidth,H=canvas.clientHeight;
+  if(!W||!H)return;
+  if(bgVideo.src&&bgVideo.style.display!=="none"&&bgVideo.readyState>=2){
+    drawBgContain(W,H); // 调用完整显示逻辑
+    // 适量遮罩，保证轨道和音符清晰
+    ctx.fillStyle="rgba(4,4,12,0.45)";ctx.fillRect(0,0,W,H);
+  }else{
+    var gradBg=ctx.createRadialGradient(W/2,0,W*0.1,W/2,H,W*0.75);
+    gradBg.addColorStop(0,"#181830");gradBg.addColorStop(1,"#07070e");
+    ctx.fillStyle=gradBg;ctx.fillRect(0,0,W,H);
+  }
+  var info=laneX(0,1),jY=info.judgeY,vY=info.vpY,cx=info.cx;
+  var nH=W*0.44*S.scale,fH=W*0.06*S.scale;
+  var off=S.offsetMs/1000;
+  var slotN=(nH*2)/S.lanes,slotF=(fH*2)/S.lanes;
+  for(var li=0;li<S.lanes;li++){
+    var f1=cx-fH+slotF*li,f2=cx-fH+slotF*(li+1);
+    var n1=cx-nH+slotN*li,n2=cx-nH+slotN*(li+1);
+    var lg=ctx.createLinearGradient(0,vY,0,jY);
+    lg.addColorStop(0,"rgba(80,90,140,0.04)");lg.addColorStop(1,"rgba(100,110,180,0.22)");
+    ctx.beginPath();ctx.moveTo(f1,vY);ctx.lineTo(f2,vY);ctx.lineTo(n2,jY);ctx.lineTo(n1,jY);ctx.closePath();ctx.fillStyle=lg;ctx.fill();
+    ctx.strokeStyle="rgba(140,150,220,0.28)";ctx.lineWidth=1.4;ctx.stroke();
+  }
+  for(var i=0;i<=S.lanes;i++){
+    var nx=cx-nH+slotN*i,fx=cx-fH+slotF*i;
+    ctx.strokeStyle=(i===0||i===S.lanes)?"rgba(180,160,255,0.55)":"rgba(110,120,190,0.32)";
+    ctx.lineWidth=(i===0||i===S.lanes)?2.2:1.2;
+    ctx.beginPath();ctx.moveTo(fx,vY);ctx.lineTo(nx,jY);ctx.stroke();
+  }
+  ctx.save();
+  var pulse=1+Math.sin(now*0.0075)*0.07;
+  ctx.shadowColor="rgba(248,208,120,0.65)";ctx.shadowBlur=10*pulse;
+  var jg=ctx.createLinearGradient(cx-nH,0,cx+nH,0);
+  jg.addColorStop(0,"rgba(248,208,120,0.04)");jg.addColorStop(.5,"rgba(255,238,200,0.92)");jg.addColorStop(1,"rgba(248,208,120,0.04)");
+  ctx.strokeStyle=jg;ctx.lineWidth=2.4;
+  ctx.beginPath();ctx.moveTo(cx-nH-4,jY);ctx.lineTo(cx+nH+4,jY);ctx.stroke();
+  ctx.restore();
+  for(var n=S.notes.length-1;n>=0;n--){
+    var note=S.notes[n];
+    var lead=note.t+off-getPlayTime();
+    var prog=1-(lead/CFG.fallSeconds);
+    if(prog<-0.12)continue;
+    if(note.judged&&prog>1.20)continue;
+    drawNote(note,prog,jY,vY,nH,fH,cx);
+  }
+  drawParticles();drawJudgeAnims();
+  updateProgress(getPlayTime());
+}
+function drawNote(note,prog,jY,vY,nH,fH,cx){
+  var p=Math.max(0,Math.min(1.18,prog));
+  var h=fH+(nH-fH)*p;
+  var y=vY+(jY-vY)*p;
+  var sl=(h*2)/S.lanes;
+  var sx=cx-h+sl*note.lane+sl/2;
+
+  var type=note.type||"tap";
+  var isHold=(type==="hold");
+
+  var w=isHold ? sl : sl*0.82;                 
+  var nh=Math.max(8,18*p*S.scale);
+
+  ctx.save();
+  if(note.hit)ctx.globalAlpha=Math.max(0,1-(p-1)*4.2);
+  if(note.missed)ctx.globalAlpha=0.28;
+
+  if(isHold){
+    var off=S.offsetMs/1000;
+    var endT=note.t+note.dur+off;
+    var now=getPlayTime();
+    if(now<=endT+0.05){
+      var pe=Math.max(0,Math.min(1.18,1-((endT-now)/CFG.fallSeconds)));
+      var he=fH+(nH-fH)*pe,ye=vY+(jY-vY)*pe;
+      var se=(he*2)/S.lanes;
+      var xe=cx-he+se*note.lane+se/2;
+      var baseColor=CFG.holdColor;
+      
+      var isPressed = S.lanePressed[note.lane];
+
+      ctx.fillStyle=baseColor;
+      ctx.shadowColor=baseColor;
+      ctx.shadowBlur=isPressed ? 30 : 20*p; 
+
+      ctx.beginPath();
+      ctx.moveTo(sx - sl/2 - 0.5, y);
+      ctx.lineTo(sx + sl/2 + 0.5, y);
+      ctx.lineTo(xe + se/2 + 0.5, ye);
+      ctx.lineTo(xe - se/2 - 0.5, ye);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.shadowBlur=0;
+      var hlw = isPressed ? 0.40 : 0.25;
+      ctx.beginPath();
+      ctx.moveTo(sx - sl*hlw, y);
+      ctx.lineTo(sx + sl*hlw, y);
+      ctx.lineTo(xe + se*hlw, ye);
+      ctx.lineTo(xe - se*hlw, ye);
+      ctx.closePath();
+      ctx.fillStyle="rgba(255,255,255,"+(isPressed?0.6:0.3)+")";
+      ctx.fill();
+
+      ctx.fillStyle="rgba(255,255,255,0.85)";
+      ctx.fillRect(xe-se/2, ye-1, se, 3);
+    }
+  }
+
+  var nc;
+  if(type==="critical")nc=CFG.criticalColor;
+  else if(type==="flick_up"||type==="flick_down")nc=CFG.flickColor;
+  else if(type==="hold")nc=CFG.holdColor;
+  else nc=CFG.noteColor;
+
+  ctx.fillStyle=nc;
+  ctx.shadowColor=nc;ctx.shadowBlur=14*p;
+  roundRect(sx-w/2,y-nh/2,w,nh, isHold?0:4*p);
+  ctx.fill();
+  ctx.shadowBlur=0;
+
+  if(type==="flick_up"||type==="flick_down"){
+    ctx.fillStyle="#fff";
+    ctx.font="bold "+(nh*0.75)+"px sans-serif";
+    ctx.textAlign="center";ctx.textBaseline="middle";
+    ctx.fillText(type==="flick_up"?"↑":"↓",sx,y);
+  }
+  ctx.restore();
+}
+function drawParticles(){
+  var now=performance.now();
+  for(var i=particles.length-1;i>=0;i--){
+    var pt=particles[i];
+    var elap=now-pt.t0;
+    if(elap>CFG.particleLife){particles.splice(i,1);continue}
+    var a=1-elap/CFG.particleLife;
+    ctx.fillStyle=pt.c;ctx.globalAlpha=a;
+    ctx.beginPath();
+    ctx.arc(pt.x+pt.vx*elap*0.06,pt.y+pt.vy*elap*0.06,pt.s,0,Math.PI*2);ctx.fill();
+  }
+  ctx.globalAlpha=1;
+}
+function spawnParticle(x,y,color){
+  if(!S.showParticle)return;
+  for(var i=0;i<4;i++){
+    particles.push({
+      x:x,y:y,c:color,s:2+Math.random()*3,
+      vx:(Math.random()-0.5)*2.2,vy:(Math.random()-0.5)*2.2-1.2,
+      t0:performance.now()
+    });
+  }
+}
+function drawJudgeAnims(){
+  var now=performance.now();
+  for(var i=judgAnims.length-1;i>=0;i--){
+    var j=judgAnims[i];
+    var d=now-j.t0;
+    if(d>650){judgAnims.splice(i,1);continue}
+    var a=1-d/650;
+    ctx.fillStyle=j.c;ctx.globalAlpha=a;
+    ctx.font="bold 22px sans-serif";ctx.textAlign="center";
+    ctx.fillText(j.txt,j.x,j.y-d*0.045);
+  }
+  ctx.globalAlpha=1;
+}
+function addJudge(text,x,y,color){
+  if(!S.showJudgeText)return;
+  judgAnims.push({txt:text,x:x,y:y,c:color,t0:performance.now()});
+}
+function updateProgress(t){
+  var fill=$("topFill"),seekFill=$("seekFill"),tl=$("timeLbl");
+  if(S.duration>0){
+    var r=Math.min(1,t/S.duration);
+    fill.style.width=(r*100).toFixed(2)+"%";
+    seekFill.style.width=(r*100).toFixed(2)+"%";
+    var mm=Math.floor(t/60),ss=Math.floor(t%60);
+    var dmm=Math.floor(S.duration/60),dss=Math.floor(S.duration%60);
+    tl.textContent=(mm<10?"0":"")+mm+":"+(ss<10?"0":"")+ss+" / "+(dmm<10?"0":"")+dmm+":"+(dss<10?"0":"")+dss;
+  }
+}
+function updateHud(){
+  $("hudScore").innerHTML='<span class="scLabel">SCORE</span>'+String(S.score).padStart(8,"0");
+  $("comboNum").textContent=S.combo;
+  $("lfFill").style.width=Math.max(0,S.life/1000*100)+"%";
+  $("hudCombo").style.opacity=(S.combo>=5)?1:0;
+}
+var canvasEl=$("gameCanvas");
+var pointerMap=new Map();
+function getLaneFromX(clientX){
+  var rect=canvasEl.getBoundingClientRect();
+  var x=clientX-rect.left;
+  var W=rect.width;
+  var cx=W*0.5;
+  var nearHalf=W*0.44*S.scale;
+  var slot=(nearHalf*2)/S.lanes;
+  var rel=x-(cx-nearHalf);
+  var idx=Math.floor(rel/slot);
+  return clampInt(idx,0,S.lanes-1);
+}
+canvasEl.addEventListener("pointerdown",function(e){
+  if(!S.playing||S.paused)return;
+  var lid=e.pointerId;
+  var lane=getLaneFromX(e.clientX);
+  pointerMap.set(lid,{lane:lane,holdStart:performance.now()});
+  S.lanePressed[lane]=true;
+  checkTapJudge(lane,getPlayTime());
+});
+canvasEl.addEventListener("pointermove",function(e){
+  if(!S.playing||S.paused)return;
+  if(!pointerMap.has(e.pointerId))return;
+  var newLane=getLaneFromX(e.clientX);
+  var old=pointerMap.get(e.pointerId);
+  if(old.lane!==newLane){
+    S.lanePressed[old.lane]=false;
+    old.lane=newLane;
+    S.lanePressed[newLane]=true;
+  }
+});
+canvasEl.addEventListener("pointerup",handlePointerEnd);
+canvasEl.addEventListener("pointercancel",handlePointerEnd);
+function handlePointerEnd(e){
+  var lid=e.pointerId;
+  if(!pointerMap.has(lid))return;
+  var d=pointerMap.get(lid);
+  S.lanePressed[d.lane]=false;
+  pointerMap.delete(lid);
+}
+function checkTapJudge(lane,now){
+  var off=S.offsetMs/1000;
+  var jSec=S.judgeMs/1000;
+  for(var i=0;i<S.notes.length;i++){
+    var nt=S.notes[i];
+    if(nt.judged||nt.lane!==lane)continue;
+    var delta=Math.abs((nt.t+off)-now);
+    if(delta>jSec)continue;
+    nt.judged=true;
+    nt.hit=true;
+    S.hit++;
+    S.combo++;
+    if(S.combo>S.maxCombo)S.maxCombo=S.combo;
+    var pts;
+    if(delta<0.045){pts=1000;addJudge("PERFECT",canvasEl.clientWidth*0.5,canvasEl.clientHeight*0.84,CFG.judgmentColors.PERFECT);}
+    else if(delta<0.095){pts=700;addJudge("GREAT",canvasEl.clientWidth*0.5,canvasEl.clientHeight*0.84,CFG.judgmentColors.GREAT);}
+    else {pts=300;addJudge("GOOD",canvasEl.clientWidth*0.5,canvasEl.clientHeight*0.84,CFG.judgmentColors.GOOD);}
+    if(nt.type==="critical"){pts=1500;addJudge("CRITICAL",canvasEl.clientWidth*0.5,canvasEl.clientHeight*0.84,CFG.judgmentColors.CRITICAL);}
+    S.score+=pts;
+    spawnParticle(canvasEl.clientWidth*0.5,canvasEl.clientHeight*0.84,CFG.judgmentColors.PERFECT);
+    updateHud();
+    return;
+  }
+}
+function checkMiss(tNow){
+  var off=S.offsetMs/1000;
+  var jSec=S.judgeMs/1000;
+  for(var i=0;i<S.notes.length;i++){
+    var nt=S.notes[i];
+    if(nt.judged)continue;
+    var lead=(nt.t+off)-tNow;
+    if(lead<-jSec-0.08){
+      nt.judged=true;nt.missed=true;
+      S.miss++;S.combo=0;S.life=Math.max(0,S.life-120);
+      addJudge("MISS",canvasEl.clientWidth*0.5,canvasEl.clientHeight*0.84,CFG.judgmentColors.MISS);
+      updateHud();
+    }
+  }
+}
+var oldTime=null;
+(function tickGame(){
+  requestAnimationFrame(tickGame);
+  if(!S.playing||S.paused)return;
+  var t=getPlayTime();
+  if(oldTime!==t){checkMiss(t);oldTime=t;}
+  if(S.duration>0&&t>=S.duration+0.4){showResult();}
+})();
+function showResult(){
+  S.playing=false;
+  $("gamePage").style.display="none";
+  $("resultLayer").classList.add("show");
+  var grade="C";
+  var rate=S.hit/(Math.max(1,S.hit+S.miss));
+  if(rate>=0.97)grade="S";
+  else if(rate>=0.90)grade="A";
+  else if(rate>=0.80)grade="B";
+  var title="";
+  if(S.miss===0)title="FULL COMBO!";
+  else if(S.combo>=S.maxCombo&&S.maxCombo>0)title="CLEAR";
+  $("rGrade").textContent=grade;
+  $("rTitle").textContent=title;
+  $("rScore").textContent=String(S.score).padStart(8,"0");
+  $("rCombo").textContent=S.maxCombo;
+  $("rHit").textContent=S.hit;
+  $("rMiss").textContent=S.miss;
+}
+function setStatus(s){$("startStatus").textContent=s}
+var segLane=$("segLane");
+segLane.addEventListener("click",function(e){
+  var b=e.target.closest("button");if(!b)return;
+  Array.from(segLane.children).forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");
+  S.lanes=Number(b.dataset.v);
+  buildChart();
+});
+var segDiff=$("segDiff");
+segDiff.addEventListener("click",function(e){
+  var b=e.target.closest("button");if(!b)return;
+  Array.from(segDiff.children).forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");
+  S.difficulty=b.dataset.v;
+  buildChart();
+});
+$("rngJudge").addEventListener("input",function(){
+  S.judgeMs=Number(this.value);
+  $("vJudge").textContent=S.judgeMs+"ms";
+});
+$("rngOffset").addEventListener("input",function(){
+  S.offsetMs=Number(this.value);
+  $("vOffset").textContent=S.offsetMs+"ms";
+});
+$("rngScale").addEventListener("input",function(){
+  S.scale=Number(this.value)/100;
+  $("vScale").textContent=this.value+"%";
+});
+$("swJudgeText").addEventListener("change",function(){S.showJudgeText=this.checked});
+$("swParticle").addEventListener("change",function(){S.showParticle=this.checked});
+$("swBlock").addEventListener("change",function(){S.blockLongPress=this.checked});
+$("openTypes").addEventListener("click",function(){$("typesPanel").classList.add("show")});
+$("typesClose").addEventListener("click",function(){$("typesPanel").classList.remove("show")});
+$("startBtn").addEventListener("click",function(){
+  if(!S.ready){toast("请先选择音频/视频文件");return}
+  $("selectPage").style.display="none";
+  $("gamePage").style.display="block";
+  resizeCanvas();
+  doCountdown();
+});
+var countTimer=null;
+function doCountdown(){
+  var ov=$("resumeOverlay");
+  var num=$("resumeNum");
+  ov.classList.add("show");
+  var c=3;num.textContent=String(c);
+  countTimer=setInterval(function(){
+    c--;
+    if(c>0){num.textContent=String(c);}
+    else{
+      clearInterval(countTimer);
+      ov.classList.remove("show");
+      startPlay();
+    }
+  },1000);
+}
+function startPlay(){
+  particles.length=0;judgAnims.length=0;pointerMap.clear();
+  S.playing=true;S.paused=false;
+  S.playStartOffset=0;
+  if(S.mode==="audio"&&S.audioBuf){
+    var ac=ensureCtx();
+    if(ac){
+      if(ac.state==="suspended") ac.resume();
+      S.playStartCtx=ac.currentTime;
+      S.audioSrc=ac.createBufferSource();
+      S.audioSrc.buffer=S.audioBuf;
+      S.audioSrc.connect(ac.destination);
+      try{S.audioSrc.start()}catch(e){}
+    }
+    try{bgVideo.play()}catch(e){}
+  }else{
+    S.playStartCtx=performance.now()/1000;
+    try{bgVideo.play()}catch(e){}
+  }
+  updateHud();
+}
+$("pauseBtn").addEventListener("click",togglePause);
+function togglePause(){
+  if(!S.playing)return;
+  S.paused=!S.paused;
+  if(S.paused){
+    $("pauseLayer").style.display="flex";
+    if(S.mode==="audio"&&S.audioCtx){S.playStartOffset += S.audioCtx.currentTime - S.playStartCtx;S.audioCtx.suspend();bgVideo.pause();}
+    else{bgVideo.pause();}
+  }else{
+    $("pauseLayer").style.display="none";
+    if(S.mode==="audio"&&S.audioCtx){
+      S.audioCtx.resume();
+      S.playStartCtx=S.audioCtx.currentTime;
+      bgVideo.play();
+    }else{
+      S.playStartCtx=performance.now()/1000 - S.playStartOffset;
+      bgVideo.play();
+    }
+  }
+}
+$("resumeBtn").addEventListener("click",togglePause);
+$("rebaseBtn").addEventListener("click",function(){S.playStartOffset=0;toast("时间基准已归零")});
+$("quitBtn").addEventListener("click",quitToSelect);
+function quitToSelect(){
+  S.playing=false;S.paused=false;
+  if(S.audioSrc){try{S.audioSrc.stop()}catch(e){}}
+  try{bgVideo.pause()}catch(e){}
+  $("pauseLayer").style.display="none";
+  $("gamePage").style.display="none";
+  $("selectPage").style.display="block";
+}
+$("rQuit").addEventListener("click",function(){
+  $("resultLayer").classList.remove("show");
+  quitToSelect();
+});
+$("rAgain").addEventListener("click",function(){
+  $("resultLayer").classList.remove("show");
+  buildChart();
+  $("selectPage").style.display="none";
+  $("gamePage").style.display="block";
+  resizeCanvas();
+  doCountdown();
+});
+window.addEventListener("load",function(){
+  resizeCanvas();
+  setStatus("等待选择音源...");
+});
+</script>
+</body>
+</html>
