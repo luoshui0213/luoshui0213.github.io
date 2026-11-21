@@ -38,6 +38,67 @@ img{max-width:100%;height:auto;display:block;margin:0 auto;loading:lazy;border-r
 .modal-close{background:#2b2d31;color:#cccccc;border:1px solid #44484f;border-radius:9px;padding:5px 12px;cursor:pointer;font-size:14px;transition:0.25s;}
 .modal-close:hover{background:#39c5bb;color:#000;border-color:#39c5bb;}
 .modal-iframe{flex:1;border:none;width:100%;background:#0d0f14;}
+
+/* ========== 背景音乐播放器面板 ========== */
+#music-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #2b2d31;
+    border: 1px solid #39c5bb;
+    color: #39c5bb;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+}
+#music-toggle:hover { background: #39c5bb; color: #000; transform: scale(1.1); }
+#music-toggle.paused { color: #888; border-color: #444; }
+
+#music-panel {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    z-index: 9998;
+    width: 280px;
+    background: #2b2d31;
+    border: 1px solid #39c5bb;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    transform-origin: bottom right;
+    animation: popIn 0.25s ease-out;
+}
+@keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+#music-panel.show { display: flex; }
+
+.music-header { padding: 12px 14px; border-bottom: 1px solid #3c3f46; background: #1e2024; }
+.music-header h4 { margin: 0; color: #39c5bb; font-size: 14px; font-weight: 400; }
+.music-controls { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #222428; }
+.music-controls button { background: transparent; border: none; color: #39c5bb; font-size: 18px; cursor: pointer; transition: 0.2s; }
+.music-controls button:hover { color: #fff; }
+.music-controls .now-playing { color: #e0e0e0; font-size: 12px; flex: 1; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 10px; }
+
+.music-list { max-height: 250px; overflow-y: auto; }
+.music-item { padding: 10px 14px; font-size: 13px; color: #bbbbbb; cursor: pointer; display: flex; justify-content: space-between; transition: 0.2s; border-bottom: 1px solid #33363b; }
+.music-item:hover { background: #36393f; color: #fff; }
+.music-item.active { color: #39c5bb; font-weight: bold; background: rgba(57,197,187,0.1); }
+.music-item .playing-icon { font-size: 10px; color: #39c5bb; display: none; }
+.music-item.active .playing-icon { display: block; }
+
+.music-list::-webkit-scrollbar { width: 6px; }
+.music-list::-webkit-scrollbar-thumb { background: #44484f; border-radius: 3px; }
+.music-list::-webkit-scrollbar-track { background: transparent; }
+
 @media (max-width:600px){
 .navbar{gap:8px;padding:10px;flex-wrap:wrap;}
 .nav-btn{padding:6px 12px;font-size:14px;}
@@ -45,10 +106,26 @@ img{max-width:100%;height:auto;display:block;margin:0 auto;loading:lazy;border-r
 .card{padding:18px;}
 .image-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;}
 .modal-box{height:min(90vh,620px);}
+#music-panel { width: 250px; bottom: 75px; }
 }
 </style>
 </head>
 <body>
+<audio id="bgm" loop></audio>
+<button id="music-toggle" title="点击打开/关闭音乐面板">🎵</button>
+
+<div id="music-panel">
+    <div class="music-header">
+        <h4>🎶 背景音乐 (官方优先+多节点)</h4>
+    </div>
+    <div class="music-controls">
+        <button id="prev-btn" title="上一首">⏮</button>
+        <div class="now-playing" id="current-title">加载中...</div>
+        <button id="next-btn" title="下一首">⏭</button>
+    </div>
+    <div class="music-list" id="playlist"></div>
+</div>
+
 <nav class="navbar">
 <button class="nav-btn active" onclick="switchTab('home', this)">首页</button>
 <button class="nav-btn" onclick="switchTab('resources', this)">音乐推荐</button>
@@ -85,10 +162,9 @@ loopzlx(<a href="https://github.com/loopzlx" style="color:#66ccff; text-decorati
 </div>
 <div class="card"><h2>最新公告</h2><p>网站刚刚建立，还在完善中...</p></div>
 
-<!-- ========= 新增娱乐小工具卡片 ========= -->
 <div class="card">
     <h2>🎮 娱乐小工具</h2>
-    <p>点击按钮弹出窗口运行工具，工具为独立页面。</p>
+    <p>点击按钮弹出窗口运行工具，工具为独立页面，关闭弹窗仅退出游戏，不影响网页浏览。</p>
     <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;">
         <button class="nav-btn" onclick="openModal('musicGame.html','自定义音游 · 终端整合版')">🎮 打开音游</button>
         <button class="nav-btn" onclick="openModal('VOCALOIDpiano.html','VOCALOID全88键钢琴')">🎹 打开88键钢琴</button>
@@ -179,7 +255,6 @@ int main()
 &copy; 2024 Luo_Shui . All Rights Reserved.
 </footer>
 
-<!-- ========== 弹窗iframe DOM ========== -->
 <div id="modalWrap" class="modal-wrap">
   <div class="modal-box">
     <div class="modal-head">
@@ -191,16 +266,17 @@ int main()
 </div>
 
 <script>
+// === 选项卡切换逻辑 ===
 function switchTab(tabId, btn){
-const contents=document.querySelectorAll('.tab-content');
-contents.forEach(content=>{content.classList.remove('active');});
-const btns=document.querySelectorAll('.nav-btn');
-btns.forEach(b=>{b.classList.remove('active');});
-document.getElementById(tabId).classList.add('active');
-btn.classList.add('active');
+    const contents=document.querySelectorAll('.tab-content');
+    contents.forEach(content=>{content.classList.remove('active');});
+    const btns=document.querySelectorAll('.nav-btn');
+    btns.forEach(b=>{b.classList.remove('active');});
+    document.getElementById(tabId).classList.add('active');
+    btn.classList.add('active');
 }
 
-//弹窗iframe逻辑
+// === 弹窗iframe逻辑 ===
 function openModal(pageSrc,titleText){
   const wrap=document.getElementById("modalWrap");
   const iframe=document.getElementById("modalIframe");
@@ -209,15 +285,228 @@ function openModal(pageSrc,titleText){
   iframe.src=pageSrc;
   wrap.classList.add("show");
 }
+
 function closeModal(){
   const wrap=document.getElementById("modalWrap");
   const iframe=document.getElementById("modalIframe");
   wrap.classList.remove("show");
-  iframe.src="";
+  iframe.src=""; 
 }
+
 document.getElementById("modalWrap").addEventListener("click",function(e){
   if(e.target===this) closeModal();
-})
+});
+
+window.addEventListener("message", function(e) {
+    if (e.data === 'closeGame') {
+        closeModal();
+    }
+});
+
+// ==========================================
+// ======== 原生流式音乐播放器逻辑 ==========
+// ==========================================
+const REPO_OWNER = "luoshui0213";
+const REPO_NAME = "resources";
+const BRANCH = "main";
+
+// 加速节点列表（官方优先，后跟镜像）
+const URL_PREFIXES = [
+    `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/`,
+    `https://cdn.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${BRANCH}/`,
+    `https://fastly.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${BRANCH}/`,
+    `https://gcore.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${BRANCH}/`,
+    `https://testingcf.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${BRANCH}/`
+];
+
+// 移除《大哉乾元》，保留《鲁高校歌》
+const playlistData = [
+    { title: "为什么夏天总是属于离别", file: "为什么夏天总是属于离别.mp4" },
+    { title: "千本樱纯音乐版", file: "千本樱纯音乐版.mp4" },
+    { title: "夏至又至", file: "夏至又至.mp4" },
+    { title: "蝴蝶", file: "蝴蝶.mp4" },
+    { title: "你好世界", file: "你好世界.mp4" },
+    { title: "刀剑春秋", file: "刀剑春秋.mp4" },
+    { title: "勾指起誓", file: "勾指起誓.mp4" },
+    { title: "星降之海", file: "星降之海.mp4" },
+    { title: "鲁高校歌", file: "鲁高校歌.mp4" }
+];
+
+const bgm = document.getElementById('bgm');
+const musicToggle = document.getElementById('music-toggle');
+const musicPanel = document.getElementById('music-panel');
+const playlistContainer = document.getElementById('playlist');
+const currentTitleEl = document.getElementById('current-title');
+
+let currentIndex = 0;
+let currentNodeIndex = 0; // 当前使用的加速节点索引
+let isMusicPlaying = false;
+let isUserPaused = false;
+let retryTimeout = null; // 节点加载超时定时器
+
+// 渲染列表
+function renderPlaylist() {
+    playlistContainer.innerHTML = '';
+    playlistData.forEach((song, index) => {
+        const item = document.createElement('div');
+        item.className = `music-item ${index === currentIndex ? 'active' : ''}`;
+        item.innerHTML = `<span>${song.title}</span><span class="playing-icon">▶</span>`;
+        item.onclick = () => {
+            if (currentIndex === index && !bgm.paused) return; // 如果点的是当前正在播放的，则忽略
+            currentIndex = index;
+            loadTrack(currentIndex, true);
+        };
+        playlistContainer.appendChild(item);
+    });
+}
+
+// 核心：直接赋 URL 给 audio，边下边播
+function loadTrack(index, shouldPlay) {
+    const song = playlistData[index];
+    currentNodeIndex = 0;
+    
+    currentTitleEl.textContent = `${song.title} (连接中)`;
+    
+    // 更新 UI 高亮
+    const items = document.querySelectorAll('.music-item');
+    items.forEach((item, i) => {
+        if(i === index) item.classList.add('active');
+        else item.classList.remove('active');
+    });
+
+    // 强制暂停当前
+    bgm.pause();
+    isUserPaused = false;
+
+    // 开始播放逻辑
+    playCurrentNode(shouldPlay);
+}
+
+function playCurrentNode(shouldPlay) {
+    clearTimeout(retryTimeout);
+    
+    const song = playlistData[currentIndex];
+    const url = URL_PREFIXES[currentNodeIndex] + encodeURIComponent(song.file);
+    
+    bgm.src = url;
+
+    if (shouldPlay) {
+        bgm.play().then(() => {
+            isMusicPlaying = true;
+            musicToggle.classList.remove('paused');
+            musicToggle.textContent = '🎵';
+            currentTitleEl.textContent = song.title;
+        }).catch(err => {
+            // 处理浏览器自动播放拦截，或者加载失败
+            if (err.name === 'NotAllowedError') {
+                isMusicPlaying = false;
+                musicToggle.classList.add('paused');
+                musicToggle.textContent = '🔇';
+            }
+        });
+    }
+
+    // 超时保护：如果 8 秒后仍然无法播放或没缓冲出数据，直接切节点
+    retryTimeout = setTimeout(() => {
+        if (bgm.readyState < 2) { // HAVE_CURRENT_DATA 以下说明没拉到数据
+            handleNodeError("超时");
+        }
+    }, 8000);
+}
+
+// 节点失败处理
+function handleNodeError(reason) {
+    clearTimeout(retryTimeout);
+    const song = playlistData[currentIndex];
+
+    if (currentNodeIndex < URL_PREFIXES.length - 1) {
+        // 还有下一个备用节点，自动重试
+        currentNodeIndex++;
+        currentTitleEl.textContent = `${song.title} (节点${currentNodeIndex + 1})`;
+        playCurrentNode(!bgm.paused); // 维持原本的播放状态
+    } else {
+        // 所有节点全挂，延时切下一首
+        currentTitleEl.textContent = `${song.title} (播放失败)`;
+        setTimeout(() => {
+            nextTrack();
+        }, 1500);
+    }
+}
+
+// 监听 audio 自带的事件
+bgm.addEventListener('error', () => {
+    handleNodeError("报错");
+});
+
+bgm.addEventListener('canplay', () => {
+    // 成功拿到数据可以播放了，清除超时定时器
+    clearTimeout(retryTimeout);
+    currentTitleEl.textContent = playlistData[currentIndex].title;
+});
+
+bgm.addEventListener('playing', () => {
+    isMusicPlaying = true;
+    isUserPaused = false;
+    musicToggle.classList.remove('paused');
+    musicToggle.textContent = '🎵';
+});
+
+bgm.addEventListener('pause', () => {
+    if (!bgm.ended) {
+        isMusicPlaying = false;
+        musicToggle.classList.add('paused');
+        musicToggle.textContent = '🔇';
+    }
+});
+
+bgm.addEventListener('ended', () => {
+    nextTrack();
+});
+
+// 控制函数
+function nextTrack() {
+    currentIndex = (currentIndex + 1) % playlistData.length;
+    loadTrack(currentIndex, true);
+}
+
+function prevTrack() {
+    currentIndex = (currentIndex - 1 + playlistData.length) % playlistData.length;
+    loadTrack(currentIndex, true);
+}
+
+// 按钮点击事件
+document.getElementById('prev-btn').addEventListener('click', prevTrack);
+document.getElementById('next-btn').addEventListener('click', nextTrack);
+
+// 悬浮球点击
+musicToggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    musicPanel.classList.toggle('show');
+    
+    // 如果当前没在播放（且不是用户主动暂停），或者加载失败了，尝试点击即可播放
+    if (!isMusicPlaying && !isUserPaused) {
+        bgm.play().catch(() => {});
+    }
+});
+
+// 点击空白关闭面板
+document.addEventListener('click', function(e) {
+    if (!musicPanel.contains(e.target) && e.target !== musicToggle) {
+        musicPanel.classList.remove('show');
+    }
+});
+
+// 初始化列表，并提前加载第一首（不自动播放，等待用户交互）
+renderPlaylist();
+loadTrack(0, false);
+
+// 首次交互自动播放
+document.addEventListener('click', function firstInteraction() {
+    if (!isMusicPlaying && !isUserPaused) {
+        bgm.play().catch(() => {});
+    }
+}, { once: true });
+
 </script>
 <script src="time-widget.js"></script>
 </body>
