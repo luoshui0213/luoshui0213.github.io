@@ -341,8 +341,8 @@ SCP-LS-001
 请选择您的下一步操作：`;
 
         // 打字速度配置（毫秒）
-        const TYPING_SPEED = 25; // 每个字符的打字速度
-        const LINE_DELAY = 100; // 每行之间的延迟
+        const TYPING_SPEED = 15; // 每个字符的打字速度
+        const LINE_DELAY = 50; // 每行之间的延迟
 
         // DOM元素
         let terminalContent;
@@ -356,7 +356,7 @@ SCP-LS-001
 
         // 倒计时相关
         let countdownTimer = null;
-        let countdownSeconds = 9;
+        let countdownSeconds = 10;
 
         /**
          * 初始化函数
