@@ -138,7 +138,7 @@ img{max-width:100%;height:auto;display:block;margin:0 auto;loading:lazy;border-r
 <div style="display:flex;justify-content:flex-end;margin-bottom:18px;">
 <div id="sync-clock-panel" style="background:#1e2024;border:1px solid #39c5bb;border-radius:8px;padding:9px 14px;box-shadow:0 0 12px rgba(57,197,187,0.12);font-size:13px;color:#ccc;">正在与授时中心同步时间...</div>
 </div>
-<div class="card"><h2>版本号Version1.4.4</h2></div>
+<div class="card"><h2>版本号Version1.5.1</h2></div>
 <div class="card">
 <h2>声明：本网站入站动画来自于Vsinger官网的中转梗页面
 <a href="https://thstars.com" style="color:#39c5bb;text-decoration:underline;"><i>https://thstars.com</i></a>
@@ -321,15 +321,18 @@ const URL_PREFIXES = [
     `https://testingcf.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${BRANCH}/`
 ];
 const playlistData = [
-    { title: "为什么夏天总是属于离别", file: "为什么夏天总是属于离别.mp4" },
-    { title: "千本樱纯音乐版", file: "千本樱纯音乐版.mp4" },
-    { title: "夏至又至", file: "夏至又至.mp4" },
-    { title: "蝴蝶", file: "蝴蝶.mp4" },
-    { title: "你好世界", file: "你好世界.mp4" },
-    { title: "刀剑春秋", file: "刀剑春秋.mp4" },
-    { title: "勾指起誓", file: "勾指起誓.mp4" },
-    { title: "星降之海", file: "星降之海.mp4" },
-    { title: "鲁高校歌", file: "鲁高校歌.mp4" }
+    { title: "【洛天依】毕业季歌曲《夏至又至》", file: "https://pdf3.webgetstore.com/564020c7d742e0d5487894840b21e3af/6b098494/2026/11/27/2f2a98b65fc8992bf6e6b993bcc99e30.mp4?fn=xiazhiyouzhi.mp4" },
+    { title: "【洛天依】毕业季歌曲《为什么夏天总是属于离别》", file: "https://pdf3.webgetstore.com/c2ca784719338ed3dc0be50813ab7b6f/6b0984c3/2026/11/27/8c2eb35489ba60305f67a0b88dbb48d3.mp4?fn=xiatianzongshi.mp4" },
+    { title: "【初音未来】《神的随波逐流》", file: "https://pdf3.webgetstore.com/47d8f3231bf64f56dc8c0e7b9b04b5ed/6b0984ce/2026/11/27/0f13432f0b91e0dfa7f598607ad25c13.mp4?fn=shensui.mp4" },
+    { title: "【初音未来】《甩葱歌》", file: "https://pdf3.webgetstore.com/1239ee5516845890bebd4ca9fcb18945/6b0984e8/2026/11/27/a7699c397a95ff7fcb2be90f487d5753.mp4?fn=shuaicongge.mp4" },
+    { title: "【洛天依】治愈系《蝴蝶》", file: "https://pdf3.webgetstore.com/136fd0f60f942eaa5b4be7dd5dc58be8/6b098510/2026/11/27/a99bcea735b2655f8d74afcf7a4de1c4.mp4?fn=hudie.mp4" },
+    { title: "【言和】《刀剑春秋》", file: "https://pdf3.webgetstore.com/44eb195cbb348406772431bdbb77ed52/6b09851c/2026/11/27/7fce86df54e14625d3d802ab91b3b9a2.mp4?fn=daojianchunqiu.mp4" },
+    { title: "【洛天依】《勾指起誓》", file: "https://pdf3.webgetstore.com/d0c1926e0d155253a6c48fdc2e5e0a5a/6b098528/2026/11/27/a111f3d024ca1f0647a057dbd1e23759.mp4?fn=gouzhiqishi.mp4" },
+    { title: "【初音未来】《千本樱(纯音乐版)》", file: "https://pdf3.webgetstore.com/2a99722e5d28afbf0d4b15e53fbb352d/6b098541/2026/11/27/13abda4c41d5a2c8c61bc05540ed9f5f.mp4?fn=senbonzakurachunyinye.mp4" },
+    { title: "【乐正绫】《繁华唱遍》", file: "https://pdf3.webgetstore.com/04f58d9c638d425af48b802e70ef7d74/6b098538/2026/11/27/ef2a0f947c0b0ec1f32ac172b43834a6.mp4?fn=fanhuachangbian.mp4" },
+    { title: "【徵羽摩柯】《你好世界》", file: "https://pdf3.webgetstore.com/fe878e413a76883fd019dea7f1aee8e5/6b0984f6/2026/11/27/175c74ee52942905971dc811452a3168.mp4?fn=nihaoshijie.mp4" },
+    { title: "《星降之海》（电影《超时空辉夜姬！》月见八千代（早见沙织配音）演唱）", file: "https://pdf3.webgetstore.com/66f2e12334618c9116fdba2a859b0f1c/6b0984a4/2026/11/27/9db07c60e37ff148f4c2c7723b2a868b.mp4?fn=xingjiangzhihai.mp4" },
+    { title: "《校歌》（鲁高）", file: "https://pdf3.webgetstore.com/604ac8e87d9c2b56c8aa29e2e0cd6431/6b098462/2026/11/27/eb7ef3664ab5b81a0722d091f847b0b0.mp4?fn=xiaoge.mp4" }
 ];
 
 const bgm = document.getElementById('bgm');
@@ -386,7 +389,7 @@ function playCurrentNode(shouldPlay) {
     clearTimeout(retryTimeout);
     
     const song = playlistData[currentIndex];
-    const url = URL_PREFIXES[currentNodeIndex] + encodeURIComponent(song.file);
+    const url = song.file;
     
     bgm.src = url;
 
