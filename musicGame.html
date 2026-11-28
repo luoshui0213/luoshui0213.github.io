@@ -26,16 +26,18 @@
 --theme:#39c5bb;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none}
-html,body{margin:0;padding:0;height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;overflow:hidden;overscroll-behavior:none;touch-action:manipulation}
+html,body{margin:0;padding:0;height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;overflow:hidden;overscroll-behavior:none;touch-action:manipulation}
 button{font-family:inherit;cursor:pointer;border:none;border-radius:10px;transition:.24s ease;color:inherit}
 button:hover{filter:brightness(1.08)}
 button:active{transform:scale(.985)}
 
 /* ---------- 选曲页 ---------- */
 #selectPage{
-  position:fixed;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  position:fixed;top:0;right:0;bottom:0;left:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
   padding:18px 16px calc(150px + env(safe-area-inset-bottom));
-  padding-top:calc(18px + env(safe-area-inset-top));
+  padding-top:18px;padding-top:calc(18px + env(safe-area-inset-top));
+  padding-bottom:150px;padding-bottom:calc(150px + env(safe-area-inset-bottom));
+  padding-left:16px;padding-left:calc(16px + env(safe-area-inset-left));padding-right:16px;padding-right:calc(16px + env(safe-area-inset-right));
   background:radial-gradient(120% 80% at 50% 0%,var(--bg2),var(--bg));
 }
 #selectPage h1{color:var(--gold);font-size:20px;margin:6px auto 4px;font-weight:600;max-width:880px}
@@ -43,7 +45,7 @@ button:active{transform:scale(.985)}
 .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;margin:0 auto 14px;box-shadow:0 4px 14px rgba(0,0,0,.35);max-width:880px}
 .libwrap{position:relative}
 .libwrap.scrollable::after{content:"";position:absolute;left:0;right:0;bottom:0;height:30px;border-radius:0 0 12px 12px;background:linear-gradient(to top,rgba(20,20,36,.98),rgba(20,20,36,.55) 55%,rgba(20,20,36,0));pointer-events:none}
-.libgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;max-height:min(58vh,480px);overflow-y:auto;overscroll-behavior:contain;padding:1px 3px 1px 1px;scrollbar-width:thin;scrollbar-color:#3b3b66 transparent}
+.libgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;max-height:min(58vh,480px);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:1px 3px 1px 1px;scrollbar-width:thin;scrollbar-color:#3b3b66 transparent}
 .libgrid::-webkit-scrollbar{width:6px}
 .libgrid::-webkit-scrollbar-thumb{background:#3b3b66;border-radius:8px}
 .libgrid::-webkit-scrollbar-track{background:transparent}
@@ -62,6 +64,18 @@ button:active{transform:scale(.985)}
 .fbtn.loading::after{content:"";position:absolute;right:12px;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;border:2px solid rgba(57,197,187,.35);border-top-color:var(--theme);animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .fbtn.wide{flex-basis:100%}
+
+/* 返回主页（仅选曲页显示） */
+.backhome{
+  position:fixed;top:12px;top:calc(12px + env(safe-area-inset-top));right:12px;right:calc(12px + env(safe-area-inset-right));
+  z-index:9300;display:inline-flex;align-items:center;gap:2px;
+  padding:7px 11px;border-radius:99px;border:1px solid var(--border);
+  background:rgba(18,18,28,.72);color:var(--text);
+  font-size:11.5px;line-height:1;text-decoration:none;letter-spacing:.02em;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.backhome:active{background:rgba(30,30,46,.9)}
+.backhome::after{content:"";position:absolute;top:-7px;right:-7px;bottom:-7px;left:-7px}
 .setrow{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;gap:8px}
 .setrow:last-child{border-bottom:none}
 .setrow label{color:var(--text);white-space:nowrap}
@@ -71,7 +85,7 @@ button:active{transform:scale(.985)}
 input[type=range]{width:130px;accent-color:var(--theme)}
 .sw{position:relative;width:44px;height:24px;flex-shrink:0}
 .sw input{opacity:0;width:0;height:0;position:absolute}
-.slider{position:absolute;inset:0;background:var(--panel2);border:1px solid var(--border);border-radius:24px;transition:.2s}
+.slider{position:absolute;top:0;right:0;bottom:0;left:0;background:var(--panel2);border:1px solid var(--border);border-radius:24px;transition:.2s}
 .slider:before{content:"";position:absolute;width:18px;height:18px;left:2px;top:2px;background:var(--gray);border-radius:50%;transition:.2s}
 .sw input:checked+.slider{background:var(--theme);border-color:var(--theme)}
 .sw input:checked+.slider:before{transform:translateX(20px);background:#fff}
@@ -80,7 +94,7 @@ input[type=range]{width:130px;accent-color:var(--theme)}
 
 /* ---------- 开始按钮 ---------- */
 #startBtn{
-  position:fixed;left:16px;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));
+  position:fixed;left:16px;left:calc(16px + env(safe-area-inset-left));right:16px;right:calc(16px + env(safe-area-inset-right));bottom:18px;bottom:calc(18px + env(safe-area-inset-bottom));
   z-index:9000;height:52px;max-width:820px;margin:0 auto;
   background:linear-gradient(90deg,var(--purple),var(--theme));color:#fff;
   font-size:16px;font-weight:600;border-radius:14px;
@@ -91,33 +105,33 @@ input[type=range]{width:130px;accent-color:var(--theme)}
 #startBtn.hide{transform:translateY(160%);opacity:0;pointer-events:none}
 
 /* ---------- 游戏页 ---------- */
-#gamePage{position:fixed;inset:0;display:none;background:#000;overflow:hidden}
+#gamePage{position:fixed;top:0;right:0;bottom:0;left:0;display:none;background:#000;overflow:hidden}
 #gamePage.show{display:block}
 #gamePage.block{touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 #bgVideo,#mediaEl{
-  position:absolute;inset:0;width:100%;height:100%;
+  position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;
   object-fit:contain;background:#000;z-index:0;pointer-events:none;
   opacity:0;transition:opacity .25s ease;filter:brightness(.82) saturate(1.02);
 }
 #bgVideo.on,#mediaEl.on{opacity:1}
 #videoVeil{
-  position:absolute;inset:0;z-index:0;pointer-events:none;
+  position:absolute;top:0;right:0;bottom:0;left:0;z-index:0;pointer-events:none;
   background:radial-gradient(115% 82% at 50% 52%,rgba(3,3,9,0) 28%,rgba(3,3,9,.34) 68%,rgba(3,3,9,.8) 100%);
   transition:background .25s ease;
 }
 #gameCanvas{
-  position:absolute;inset:0;width:100%;height:100%;z-index:1;
+  position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;z-index:1;
   touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;
 }
 #topProg{position:absolute;top:0;left:0;right:0;height:4px;z-index:860;background:rgba(255,255,255,.12);pointer-events:none}
 #topFill{height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--gold));box-shadow:0 0 12px rgba(248,208,120,.8)}
 #hudScore{
-  position:absolute;top:calc(16px + env(safe-area-inset-top));left:16px;z-index:800;
+  position:absolute;top:16px;top:calc(16px + env(safe-area-inset-top));left:16px;left:calc(16px + env(safe-area-inset-left));z-index:800;
   color:#fff;font-size:26px;font-weight:700;pointer-events:none;
   text-shadow:0 3px 10px rgba(0,0,0,.92);font-variant-numeric:tabular-nums;letter-spacing:1px;
 }
 #hudScore .scLabel{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:3px;display:block;margin-bottom:-4px}
-#hudLife{position:absolute;top:calc(20px + env(safe-area-inset-top));right:72px;z-index:800;display:flex;align-items:center;gap:8px;pointer-events:none}
+#hudLife{position:absolute;top:20px;top:calc(20px + env(safe-area-inset-top));right:72px;right:calc(72px + env(safe-area-inset-right));z-index:800;display:flex;align-items:center;gap:8px;pointer-events:none}
 #hudLife .lfLabel{font-size:11px;color:var(--green);font-weight:600;letter-spacing:2px}
 #hudLife .lfBar{width:120px;height:11px;background:rgba(0,0,0,.6);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.22)}
 #hudLife .lfFill{height:100%;width:100%;background:linear-gradient(90deg,#48d088,#94ffc8);border-radius:5px;transition:width .22s}
@@ -128,38 +142,38 @@ input[type=range]{width:130px;accent-color:var(--theme)}
 @keyframes comboPop{from{transform:scale(1.28)}to{transform:scale(1)}}
 #hudCombo .cb{font-size:14px;letter-spacing:8px;color:var(--gold);font-weight:600;margin-top:4px}
 #hudTitle{
-  position:absolute;top:calc(62px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);
+  position:absolute;top:62px;top:calc(62px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);
   z-index:800;width:min(68vw,420px);text-align:center;pointer-events:none;
 }
 #songTitle{display:block;font-size:12px;color:rgba(255,255,255,.72);letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 2px 8px rgba(0,0,0,.9)}
 #lyricLine{display:block;margin-top:5px;font-size:13px;color:var(--gold);min-height:18px;line-height:1.4;opacity:0;transition:opacity .25s;text-shadow:0 2px 10px rgba(0,0,0,.95)}
 #lyricLine.on{opacity:.92}
 #pauseBtn{
-  position:absolute;top:calc(14px + env(safe-area-inset-top));right:14px;z-index:9500;
+  position:absolute;top:14px;top:calc(14px + env(safe-area-inset-top));right:14px;right:calc(14px + env(safe-area-inset-right));z-index:9500;
   background:rgba(20,20,36,.88);border:1px solid var(--border);color:var(--text);
   border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center;
   font-size:19px;pointer-events:auto;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   box-shadow:0 4px 14px rgba(0,0,0,.45);
 }
-#seekBar{position:absolute;left:18px;right:18px;bottom:calc(30px + env(safe-area-inset-bottom));z-index:800;height:6px;background:rgba(255,255,255,.12);border-radius:6px;pointer-events:none}
+#seekBar{position:absolute;left:18px;left:calc(18px + env(safe-area-inset-left));right:18px;right:calc(18px + env(safe-area-inset-right));bottom:30px;bottom:calc(30px + env(safe-area-inset-bottom));z-index:800;height:6px;background:rgba(255,255,255,.12);border-radius:6px;pointer-events:none}
 #seekFill{height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--gold));border-radius:6px;box-shadow:0 0 10px rgba(248,208,120,.55)}
-#timeLbl{position:absolute;right:18px;bottom:calc(42px + env(safe-area-inset-bottom));z-index:800;color:rgba(255,255,255,.55);font-size:11px;font-variant-numeric:tabular-nums;pointer-events:none}
+#timeLbl{position:absolute;right:18px;right:calc(18px + env(safe-area-inset-right));bottom:42px;bottom:calc(42px + env(safe-area-inset-bottom));z-index:800;color:rgba(255,255,255,.55);font-size:11px;font-variant-numeric:tabular-nums;pointer-events:none}
 
 /* ---------- 遮罩层 ---------- */
-#pauseLayer{position:fixed;inset:0;z-index:8800;display:none;align-items:center;justify-content:center;background:rgba(4,4,8,.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#pauseLayer{position:fixed;top:0;right:0;bottom:0;left:0;z-index:8800;display:none;align-items:center;justify-content:center;background:rgba(4,4,8,.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 #pauseLayer.show{display:flex}
 #pauseLayer .box{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:22px;width:min(72vw,290px);text-align:center;box-shadow:0 10px 32px rgba(0,0,0,.55)}
 #pauseLayer h3{color:var(--gold);margin:0 0 18px;font-weight:600;font-size:18px}
 #pauseLayer button{display:block;width:100%;margin:9px 0;padding:13px;border-radius:12px;background:var(--panel2);border:1px solid var(--border);color:var(--text);font-size:15px}
 #pauseLayer button.go{background:var(--theme);color:#111;border-color:var(--theme);font-weight:600}
 
-#resumeOverlay{position:fixed;inset:0;z-index:8900;display:none;align-items:center;justify-content:center;flex-direction:column;background:rgba(0,0,0,.58);pointer-events:none;color:#fff;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+#resumeOverlay{position:fixed;top:0;right:0;bottom:0;left:0;z-index:8900;display:none;align-items:center;justify-content:center;flex-direction:column;background:rgba(0,0,0,.58);pointer-events:none;color:#fff;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 #resumeOverlay.show{display:flex}
 #resumeOverlay .num{font-size:120px;font-weight:800;color:#fff;text-shadow:0 6px 36px rgba(176,132,255,1),0 0 70px rgba(248,208,120,.7);line-height:1;animation:cntPulse .5s ease-out}
 #resumeOverlay .tip{margin-top:20px;font-size:15px;letter-spacing:7px;color:var(--gold);text-shadow:0 3px 14px rgba(0,0,0,.92)}
 @keyframes cntPulse{0%{transform:scale(1.9);opacity:.25}100%{transform:scale(1);opacity:1}}
 
-#resultLayer{position:fixed;inset:0;z-index:8950;display:none;align-items:center;justify-content:center;background:rgba(5,5,10,.92);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);padding:16px}
+#resultLayer{position:fixed;top:0;right:0;bottom:0;left:0;z-index:8950;display:none;align-items:center;justify-content:center;background:rgba(5,5,10,.92);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);padding:16px}
 #resultLayer.show{display:flex;animation:rFade .35s ease-out}
 @keyframes rFade{from{opacity:0}to{opacity:1}}
 #resultLayer .rbox{
@@ -184,7 +198,7 @@ input[type=range]{width:130px;accent-color:var(--theme)}
 #resultLayer .rbtns button{display:block;width:100%;margin:8px 0;padding:12px;border-radius:11px;background:var(--panel2);border:1px solid var(--border);color:var(--text);font-size:14px}
 #resultLayer .rbtns button.go{background:var(--theme);color:#111;border-color:var(--theme);font-weight:600}
 
-#typesPanel{position:fixed;inset:0;z-index:9720;display:none;align-items:center;justify-content:center;background:rgba(5,5,10,.85);padding:12px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+#typesPanel{position:fixed;top:0;right:0;bottom:0;left:0;z-index:9720;display:none;align-items:center;justify-content:center;background:rgba(5,5,10,.85);padding:12px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 #typesPanel.show{display:flex}
 #typesPanel .box{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;width:min(94vw,420px);max-height:86vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 8px 28px rgba(0,0,0,.5)}
 #typesPanel h3{color:var(--gold);margin:0 0 6px;font-size:16px;font-weight:600}
@@ -199,7 +213,7 @@ input[type=range]{width:130px;accent-color:var(--theme)}
 
 .hidden-input{display:none}
 .toast{
-  position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;
+  position:fixed;left:50%;bottom:84px;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;
   background:rgba(20,20,35,.95);border:1px solid var(--theme);color:var(--text);padding:10px 16px;border-radius:12px;
   font-size:12.5px;max-width:86vw;text-align:center;pointer-events:none;opacity:0;transition:opacity .25s;
   box-shadow:0 4px 14px rgba(0,0,0,.4);
@@ -210,16 +224,30 @@ input[type=range]{width:130px;accent-color:var(--theme)}
   #hudScore{font-size:22px}
   #hudCombo #comboNum{font-size:58px}
   #hudLife .lfBar{width:92px}
-  #hudLife{right:68px}
+  #hudLife{right:calc(68px + env(safe-area-inset-right))}
+}
+/* 320 宽极窄屏：SCORE 与 LIFE 会压在一起，等比收一点，不改桌面端视觉 */
+@media (max-width:359px){
+  #hudScore{font-size:20px;letter-spacing:.5px}
+  #hudLife{right:calc(64px + env(safe-area-inset-right))}
+  #hudLife .lfBar{width:78px}
+}
+/* 280 宽（折叠屏外屏）再收一档，避免 SCORE 与 LIFE 重叠 */
+@media (max-width:319px){
+  #hudScore{font-size:18px;letter-spacing:0}
+  #hudLife .lfBar{width:58px}
+  .val{min-width:38px;font-size:11px}
+  /* 280 宽：三个滑块的数值会被挤出卡片，收窄滑块宽度而不是缩字号 */
+  .setrow input[type=range]{width:100px}
 }
 @media (min-width:900px){
   #hudScore{font-size:34px;top:calc(20px + env(safe-area-inset-top))}
   #hudScore .scLabel{font-size:12px;margin-bottom:-2px}
-  #hudLife{top:calc(24px + env(safe-area-inset-top));right:86px}
+  #hudLife{top:24px;top:calc(24px + env(safe-area-inset-top));right:calc(86px + env(safe-area-inset-right))}
   #hudLife .lfBar{width:180px;height:12px}
   #hudCombo #comboNum{font-size:96px}
   #pauseBtn{width:54px;height:54px;font-size:21px}
-  #hudTitle{top:calc(84px + env(safe-area-inset-top));width:min(46vw,560px)}
+  #hudTitle{top:84px;top:calc(84px + env(safe-area-inset-top));width:min(46vw,560px)}
   #songTitle{font-size:13px}
 }
 @media (max-height:560px){
@@ -241,11 +269,11 @@ input[type=range]{width:130px;accent-color:var(--theme)}
   #pauseLayer button{padding:10px;margin:6px 0;font-size:14px}
   #resumeOverlay .num{font-size:84px}
   #resumeOverlay .tip{margin-top:12px;font-size:13px}
-  #selectPage{padding-top:calc(10px + env(safe-area-inset-top));padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+  #selectPage{padding-top:10px;padding-top:calc(10px + env(safe-area-inset-top));padding-bottom:104px;padding-bottom:calc(104px + env(safe-area-inset-bottom))}
   #selectPage h1{font-size:17px;margin:2px auto 2px}
   #selectPage .sub{font-size:11px;margin-bottom:10px}
   .card{padding:11px;margin-bottom:10px}
-  #startBtn{height:46px;bottom:calc(10px + env(safe-area-inset-bottom));max-width:560px;font-size:14px}
+  #startBtn{height:46px;bottom:10px;bottom:calc(10px + env(safe-area-inset-bottom));max-width:560px;font-size:14px}
   #startBtn small{font-size:10px;margin-top:0}
   #ctaScrim{height:96px}
   #libHint{display:none}
@@ -255,6 +283,7 @@ input[type=range]{width:130px;accent-color:var(--theme)}
 <body>
 
 <div id="selectPage">
+  <a class="backhome" id="backHome" href="home.html">← 主页</a>
   <h1>音游 · PJSK 风格</h1>
   <div class="sub">选择音源即可开玩。mp4 会自动作为背景 MV；音频文件则使用纯色舞台。</div>
 
@@ -353,8 +382,10 @@ input[type=range]{width:130px;accent-color:var(--theme)}
 <button id="startBtn">开始游戏<small id="startStatus">等待选择音源...</small></button>
 
 <div id="gamePage" class="gamearea block">
-  <video id="bgVideo" playsinline webkit-playsinline muted loop></video>
-  <video id="mediaEl" playsinline webkit-playsinline></video>
+  <video id="bgVideo" playsinline webkit-playsinline x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" muted loop disablepictureinpicture disableremoteplayback></video>
+  <video id="mediaEl" playsinline webkit-playsinline x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" disablepictureinpicture disableremoteplayback controlslist="nodownload noremoteplayback noplaybackrate"></video>
+  <!-- 在线曲库 / 音频文件走 <audio>：不渲染画面，任何内核都不会弹原生播放器或进度条 -->
+  <audio id="mediaElAudio" preload="auto"></audio>
   <div id="videoVeil"></div>
   <canvas id="gameCanvas"></canvas>
   <div id="topProg"><div id="topFill"></div></div>
@@ -405,13 +436,13 @@ input[type=range]{width:130px;accent-color:var(--theme)}
   </div>
   <div class="trow">
     <div class="tn" style="background:linear-gradient(180deg,#fff,#ff72a4);position:relative">
-      <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:11px">↑</span>
+      <span style="position:absolute;top:0;right:0;bottom:0;left:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:11px">↑</span>
     </div>
     <div class="td"><b>Flick↑ 上划</b><span>粉色上箭头，按下后向上滑动约 30px 即判定。</span></div>
   </div>
   <div class="trow">
     <div class="tn" style="background:linear-gradient(180deg,#fff,#ff72a4);position:relative">
-      <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:11px">↓</span>
+      <span style="position:absolute;top:0;right:0;bottom:0;left:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:11px">↓</span>
     </div>
     <div class="td"><b>Flick↓ 下划</b><span>粉色下箭头，按下后向下滑动约 30px 即判定。</span></div>
   </div>
@@ -427,11 +458,24 @@ input[type=range]{width:130px;accent-color:var(--theme)}
 <script>
 "use strict";
 
+/* ===================== 站点联动（主页） ===================== */
+const HOME_URL = "home.html";
+let framed = false;
+try{ framed = !!(window.parent && window.parent !== window); }catch(e){ framed = false; }
+function postHost(payload){
+  if(!framed) return false;
+  try{ window.parent.postMessage(payload, "*"); return true; }catch(e){ return false; }
+}
+function goHome(){
+  if(postHost({ type:"closeGame", from:"musicGame" })) return;
+  location.href = HOME_URL;
+}
+
 /* ===================== 工具 ===================== */
 const $ = id => document.getElementById(id);
 const clamp = (v, a, b) => v < a ? a : (v > b ? b : v);
 const pad2 = n => (n < 10 ? "0" : "") + n;
-const fmtTime = s => { s = Math.max(0, s || 0); return pad2(Math.floor(s / 60)) + ":" + pad2(Math.floor(s % 60)); };
+const fmtTime = s => { s = Number(s); if(!isFinite(s) || s < 0) s = 0; return pad2(Math.floor(s / 60)) + ":" + pad2(Math.floor(s % 60)); };
 const extOf = n => { const m = /\.([a-z0-9]+)$/i.exec(n || ""); return m ? m[1].toLowerCase() : ""; };
 
 let toastTimer = 0;
@@ -458,6 +502,8 @@ const COLORS = {
 const FALL = 1.55;            // 音符从出现到判定线耗时（秒）
 
 const S = {
+  mode: "media",        // 时钟来源：media（音源进度）
+
   lanes: 4,
   difficulty: "hard",
   judgeMs: 130,
@@ -484,13 +530,18 @@ const S = {
   playing: false,
   paused: false,
   ended: false,
+  lifeOut: false,
 
   lanePress: [0, 0, 0, 0, 0, 0],
   activeHolds: [],
   missCursor: 0,
   lrc: [],
   lrcIndex: -1,
-  lrcText: ""
+  lrcText: "",
+
+  /* 游戏中途改了轨道/难度时先挂起，下一局开始前统一重建谱面 */
+  pendingLanes: 0,
+  chartDirty: false
 };
 
 const KEYMAPS = { 3: ["D", "F", "J"], 4: ["D", "F", "J", "K"], 5: ["S", "D", "F", "J", "K"], 6: ["S", "D", "F", "J", "K", "L"] };
@@ -504,46 +555,62 @@ const VIDEO_EXT = ["mp4", "webm", "mkv", "mov", "m4v", "ogv", "avi"];
 const AUDIO_EXT = ["mp3", "wav", "ogg", "m4a", "aac", "flac", "opus", "weba"];
 
 /* ===================== 媒体 ===================== */
-const mediaEl = $("mediaEl");      // 音源载体（视频也走它）
-const bgEl = $("bgVideo");         // 额外背景视频（仅画面）
+const mediaVideo = $("mediaEl");        // 视频载体：只有当用户明确选择视频（MV）时才用
+const mediaAudio = $("mediaElAudio");   // 音频载体：在线曲库 / 音频文件，纯播放不出画面
+let mediaEl = mediaVideo;               // 当前激活的载体（其余代码都通过它取时间、时长、播放状态）
+const bgEl = $("bgVideo");              // 额外背景视频（仅画面）
 
 let mediaKind = "none";            // none | video | audio
 let bgMode = "media";              // media（用音源自带画面）| extra（额外背景）
 let currentObjUrl = null;
 let currentBgUrl = null;
+let bgLoadToken = 0;
 let loadToken = 0;
+const pendingLoads = new WeakMap();   // 每个载体上尚未结束的元数据加载，用于可重入取消
 
 function revokeObjUrl(){
   if(currentObjUrl){ try{ URL.revokeObjectURL(currentObjUrl); }catch(e){} currentObjUrl = null; }
 }
 
+/** 切换音源载体：停掉并清空另一个，避免出现两路声音同时播放 */
+function useMedia(el){
+  if(mediaEl === el) return;
+  const old = mediaEl;
+  const cancel = pendingLoads.get(old);
+  if(cancel) cancel(new Error("switched"));
+  mediaEl = el;
+  try{ old.pause(); }catch(e){}
+  try{ old.removeAttribute("src"); old.load(); }catch(e){}
+}
+
 /** 载入并等待元数据，失败/超时 reject */
 function tryLoad(el, url, timeoutMs){
+  /* 同一载体上的旧加载还没结束就再来一次：先取消旧的，避免旧 Promise 永远悬着 */
+  const prev = pendingLoads.get(el);
+  if(prev) prev(new Error("superseded"));
   return new Promise((resolve, reject) => {
-    let done = false;
-    const timer = setTimeout(() => {
+    let done = false, timer = 0;
+    const finish = err => {
       if(done) return;
       done = true;
+      if(timer) clearTimeout(timer);
       el.onloadedmetadata = null;
       el.onerror = null;
-      reject(new Error("timeout"));
+      if(pendingLoads.get(el) === cancel) pendingLoads.delete(el);
+      if(err) reject(err); else resolve();
+    };
+    const cancel = err => {
+      if(done) return;
+      try{ el.pause(); }catch(e){}
+      finish(err || new Error("cancelled"));
+    };
+    pendingLoads.set(el, cancel);
+    timer = setTimeout(() => {
+      try{ el.pause(); }catch(e){}
+      finish(new Error("timeout"));
     }, timeoutMs || 10000);
-    el.onloadedmetadata = () => {
-      if(done) return;
-      done = true;
-      clearTimeout(timer);
-      el.onloadedmetadata = null;
-      el.onerror = null;
-      resolve();
-    };
-    el.onerror = () => {
-      if(done) return;
-      done = true;
-      clearTimeout(timer);
-      el.onloadedmetadata = null;
-      el.onerror = null;
-      reject(new Error("media error"));
-    };
+    el.onloadedmetadata = () => finish(null);
+    el.onerror = () => finish(new Error("media error"));
     el.src = url;
     el.load();
   });
@@ -554,30 +621,53 @@ function finalizeSource(kind, title, token){
   if(token !== loadToken) return;
   mediaKind = kind;
   S.title = title || "未命名曲目";
-  S.duration = (isFinite(mediaEl.duration) && mediaEl.duration > 1) ? mediaEl.duration : (bgEl.duration || 60);
+
+  const known = (isFinite(mediaEl.duration) && mediaEl.duration > 1);
+  S.duration = known ? mediaEl.duration : (bgEl.duration || 60);
   S.bpm = 120;
   S.onsets = null;
+  S.lrc = [];
+  S.lrcIndex = -1;
   $("songTitle").textContent = S.title;
   updateVisualLayers();
 
   buildChart(null);
   S.ready = true;
   setStatus("就绪 · 点击开始");
+  updateVeil();
   analyzeAndRefine(token);
+
+  /* 长音频（流式 mp3）一开始 duration 可能是 Infinity，等真实总长到了再补谱面 */
+  if(!known){
+    const el = mediaEl;
+    const onDur = () => {
+      if(token !== loadToken){ el.removeEventListener("durationchange", onDur); return; }
+      const d = el.duration;
+      if(!isFinite(d) || d <= 1) return;
+      el.removeEventListener("durationchange", onDur);
+      if(Math.abs(S.duration - d) < 0.4) return;
+      S.duration = d;
+      if(!S.playing && !S.ended) buildChart(S.onsets);
+    };
+    el.addEventListener("durationchange", onDur);
+  }
 }
 
 /* ---- 在线曲库 ---- */
 /** 统一处理“哪一层画面可见” */
 function updateVisualLayers(){
-  mediaEl.classList.toggle("on", mediaKind === "video" && bgMode !== "extra");
+  mediaVideo.classList.toggle("on", mediaKind === "video" && bgMode !== "extra");
   bgEl.classList.toggle("on", bgMode === "extra");
 }
 
 async function loadRemote(url, title){
   const token = ++loadToken;
   cancelAnalysis();
+  /* 在线曲库可能是 mp4（MV 容器）。统一用 <audio> 播放：
+     只出声不出画面，避免移动端内核把 <video> 劫持成全屏/同层播放器，
+     导致谱面被视频盖住、进度条一拖就跳到结尾。 */
+  useMedia(mediaAudio);
   mediaKind = "none";
-  bgMode = "media";
   updateVisualLayers();
   S.ready = false;
   setStatus("解析直链中…");
@@ -585,15 +675,14 @@ async function loadRemote(url, title){
   try{
     await tryLoad(mediaEl, url, 30000);
   }catch(e){
+    if(token !== loadToken) return false;   // 已被新的点击取代，不覆盖新曲目的状态
     setStatus("加载失败，请重试");
     toast("该曲目加载失败，可能网络较慢，换个曲目或重试");
     return false;
   }
   if(token !== loadToken) return false;
   revokeObjUrl();
-  // 有画面尺寸就是 MV，否则按纯音频处理
-  const kind = (mediaEl.videoWidth > 0 && mediaEl.videoHeight > 0) ? "video" : "audio";
-  finalizeSource(kind, title, token);
+  finalizeSource("audio", title, token);
   return true;
 }
 
@@ -610,6 +699,9 @@ async function loadLocalBlob(file, kindHint){
   else if(kindHint === "audio") kind = "audio";
   else kind = isVideo ? "video" : (isAudio ? "audio" : "video");
 
+  /* 只有明确是视频时才启用画面层（MV）；音频文件不碰 <video>，永不被内核劫持 */
+  useMedia(kind === "video" ? mediaVideo : mediaAudio);
+
   setStatus("读取中…");
   revokeObjUrl();
   const url = URL.createObjectURL(file);
@@ -619,6 +711,7 @@ async function loadLocalBlob(file, kindHint){
   try{
     await tryLoad(mediaEl, url, 12000);
   }catch(e){
+    if(token !== loadToken) return;
     setStatus("读取失败，请重选");
     toast("无法读取该文件，可能格式不受支持");
     return;
@@ -628,16 +721,23 @@ async function loadLocalBlob(file, kindHint){
 
 /* ---- 额外背景视频 ---- */
 async function setExtraBg(file){
+  const token = ++bgLoadToken;
   if(currentBgUrl){ try{ URL.revokeObjectURL(currentBgUrl); }catch(e){} currentBgUrl = null; }
   const url = URL.createObjectURL(file);
   currentBgUrl = url;
   try{
     await tryLoad(bgEl, url, 10000);
-  }catch(e){ toast("背景视频读取失败"); return; }
+  }catch(e){
+    if(token !== bgLoadToken) return;   // 被后一次选择取代，不弹错误
+    toast("背景视频读取失败");
+    return;
+  }
+  if(token !== bgLoadToken) return;
   bgMode = "extra";
   bgEl.loop = true;
   bgEl.muted = true;
   updateVisualLayers();
+  updateVeil();
   toast("背景视频已切换");
 }
 
@@ -647,7 +747,10 @@ function getDecodeCtx(){
   if(decodeCtx) return decodeCtx;
   try{
     const AC = window.AudioContext || window.webkitAudioContext;
-    if(AC) decodeCtx = new AC();
+    if(!AC) return null;
+    /* 只为分析谱面，采样率降到 22.05k：解码内存约为一半，移动端更稳 */
+    try{ decodeCtx = new AC({ sampleRate: 22050 }); }catch(e){ decodeCtx = null; }
+    if(!decodeCtx) decodeCtx = new AC();
   }catch(e){}
   return decodeCtx;
 }
@@ -662,16 +765,25 @@ async function analyzeSource(token){
   const ac = getDecodeCtx();
   if(!url || !ac) return null;
   let ab;
+  let timer = 0;
   try{
     cancelAnalysis();
     const ctrl = typeof AbortController !== "undefined" ? new AbortController() : null;
     analyzeCtrl = ctrl;
-    const timer = ctrl ? setTimeout(() => ctrl.abort(), 22000) : 0;
+    timer = ctrl ? setTimeout(() => ctrl.abort(), 22000) : 0;
     const res = await fetch(url, ctrl ? { signal: ctrl.signal } : undefined);
-    if(timer) clearTimeout(timer);
     if(!res.ok) return null;
+    const cl = Number(res.headers.get("content-length"));
+    if(isFinite(cl) && cl > 64 * 1024 * 1024){
+      try{ if(ctrl) ctrl.abort(); }catch(e){}
+      return null;                     // 大文件不拉整段，直接走均匀补谱
+    }
     ab = await res.arrayBuffer();
   }catch(e){ return null; }
+  finally{ if(timer) clearTimeout(timer); }
+
+  /* 超大文件（如整段高清 MV）解码容易把移动端内存打爆，直接跳过分析走均匀补谱 */
+  if(ab && ab.byteLength > 64 * 1024 * 1024) return null;
 
   let buf = null;
   try{
@@ -844,7 +956,7 @@ function updateVeil(){
   const veil = $("videoVeil");
   if(!veil) return;
   const w = canvas.clientWidth, h = canvas.clientHeight;
-  const vw = mediaEl.videoWidth, vh = mediaEl.videoHeight;
+  const vw = mediaVideo.videoWidth, vh = mediaVideo.videoHeight;
   const base = "radial-gradient(125% 95% at 50% 52%,rgba(3,3,9,0) 34%,rgba(3,3,9,.30) 72%,rgba(3,3,9,.78) 100%)";
   if(!w || !h || !vw || !vh || mediaKind !== "video"){
     veil.style.background = base;
@@ -961,7 +1073,7 @@ const ambCtx = ambCanvas.getContext("2d");
 
 /** 视频黑边区域用视频本身做一层虚化背景，避免大片纯黑 */
 function drawAmbientBands(){
-  const el = (bgMode === "extra" && bgEl.classList.contains("on")) ? bgEl : mediaEl;
+  const el = (bgMode === "extra" && bgEl.classList.contains("on")) ? bgEl : mediaVideo;
   if(!el || el.readyState < 2) return;
   const vw = el.videoWidth, vh = el.videoHeight;
   if(!vw || !vh) return;
@@ -1004,7 +1116,7 @@ function render(now){
   ctx.clearRect(0, 0, W, H);
 
   const hasVideo = (bgMode === "extra" && bgEl.readyState >= 2 && bgEl.classList.contains("on"))
-                || (mediaKind === "video" && mediaEl.readyState >= 2 && mediaEl.classList.contains("on"));
+                || (mediaKind === "video" && mediaVideo.readyState >= 2 && mediaVideo.classList.contains("on"));
   if(hasVideo){
     ctx.fillStyle = "rgba(5,5,12,0.56)";
     ctx.fillRect(0, 0, W, H);
@@ -1174,6 +1286,7 @@ function drawNotes(now, g){
 }
 
 function drawNote(n, p, now, g){
+  if(n.lane < 0 || n.lane >= S.lanes) return;   /* 轨道数变更后的越界音符直接跳过 */
   const pNote = clamp(p, 0, 1);             // 只在轨道内绘制，到判定线为止
   let alpha = 1;
   if(n.judged){
@@ -1496,6 +1609,13 @@ function clearInputs(){
   pointers.clear();
   for(const k in kbTokens) delete kbTokens[k];
   S.lanePress = [0, 0, 0, 0, 0, 0];
+  /* 暂停 / 失焦时松开所有长按：不再算作按住，恢复后按超时判定，避免白送连击 */
+  for(let i = 0; i < S.activeHolds.length; i++){
+    const n = S.activeHolds[i];
+    n.holding = false;
+    n.holdToken = null;
+  }
+  S.activeHolds.length = 0;
 }
 
 /* ---- 触屏 / 鼠标 ---- */
@@ -1533,7 +1653,16 @@ canvas.addEventListener("pointercancel", onPointerEnd);
 /* ---- 键盘 ---- */
 const kbTokens = {};
 window.addEventListener("keydown", e => {
-  if(e.key === "Escape" || e.code === "Space"){      // 空格 / Esc 暂停与继续
+  if(e.key === "Escape"){
+    if(S.playing && !S.ended){ e.preventDefault(); togglePause(); return; }
+    if($("pauseLayer").classList.contains("show")){ e.preventDefault(); quitToSelect(); return; }
+    if($("resultLayer").classList.contains("show")){ e.preventDefault(); quitToSelect(); return; }
+    if($("typesPanel").classList.contains("show")){ e.preventDefault(); $("typesPanel").classList.remove("show"); return; }
+    /* 选曲页 / 非游戏状态下：退出到站点主页 */
+    if(!$("gamePage").classList.contains("show")){ e.preventDefault(); goHome(); }
+    return;
+  }
+  if(e.code === "Space"){          // 空格 暂停与继续
     if(S.playing && !S.ended){ e.preventDefault(); togglePause(); }
   }
 });
@@ -1637,7 +1766,7 @@ function updateProgress(t){
   progressTick++;
   if(progressTick % 3 !== 0 && !S.paused) return;   // 约 20fps
   const dur = S.duration || mediaEl.duration || 0;
-  if(!dur) return;
+  if(!isFinite(dur) || dur <= 0) return;
   const r = clamp(t / dur, 0, 1);
   $("topFill").style.width = (r * 100).toFixed(2) + "%";
   $("seekFill").style.width = (r * 100).toFixed(2) + "%";
@@ -1722,7 +1851,8 @@ function sfxTick(level, lane, critical){
   if(!S.sfx) return;
   const ac = getSfxCtx();
   if(!ac) return;
-  if(ac.state === "suspended"){ try{ ac.resume(); }catch(e){} return; }
+  /* 挂起时先恢复，本次音效照常排程（恢复后立即响），不要静默吞掉第一下 */
+  if(ac.state === "suspended"){ try{ ac.resume(); }catch(e){} }
   const t0 = ac.currentTime + 0.001;
   const pan = lane == null ? 0 : Math.max(-0.55, Math.min(0.55, lane / Math.max(1, S.lanes - 1) * 1.1 - 0.55));
   const out = ac.createGain();
@@ -1767,6 +1897,12 @@ function sfxTick(level, lane, critical){
 
 function startGame(){
   if(!S.ready){ toast("请先选择音源"); return; }
+  /* 上一局中途改过轨道 / 难度：先用新设置重建谱面，再开局 */
+  if(S.chartDirty){
+    if(S.pendingLanes){ S.lanes = S.pendingLanes; S.pendingLanes = 0; S.lanePress = [0, 0, 0, 0, 0, 0]; }
+    S.chartDirty = false;
+    buildChart(S.onsets);
+  }
   unlockAudio();
   if(S.sfx){ const ac = getSfxCtx(); if(ac && ac.state === "suspended") ac.resume().catch(() => {}); }
   cancelAnalysis();      // 开局后不再后台下载整曲，避免和播放抢带宽
@@ -1821,7 +1957,13 @@ function beginPlay(){
   if(S.mode === "media"){
     try{ mediaEl.volume = 1; }catch(e){}
     const p = mediaEl.play();
-    if(p && p.catch) p.catch(() => toast("浏览器拦截了播放，请再点一次开始"));
+    if(p && p.catch) p.catch(() => {
+      toast("浏览器拦截了播放，请再点一次开始");
+      /* 音源没真正播起来时谱面时间会卡住，点一下画面重新拉起播放 */
+      const retry = () => { mediaEl.play().catch(() => {}); };
+      canvas.addEventListener("pointerdown", retry, { once: true });
+      document.addEventListener("keydown", retry, { once: true });
+    });
     if(bgMode === "extra") bgEl.play().catch(() => {});
   }else{
     beatStart = performance.now() / 1000;
@@ -1948,7 +2090,12 @@ bindPick("pickAudio", "inAudio", f => loadLocalBlob(f, "audio"));
 bindPick("pickBg", "inBg", f => setExtraBg(f));
 bindPick("pickLrc", "inLrc", f => {
   const r = new FileReader();
-  r.onload = () => { parseLrc(r.result); toast("歌词已载入"); };
+  r.onload = () => {
+    let txt = String(r.result || "");
+    if(txt.charCodeAt(0) === 0xFEFF) txt = txt.slice(1);   // 去掉 UTF-8 BOM，否则首行时间戳解析失败
+    parseLrc(txt);
+    toast("歌词已载入");
+  };
   r.onerror = () => toast("歌词读取失败");
   r.readAsText(f, "utf-8");
 });
@@ -1988,13 +2135,20 @@ function bindSeg(id, onPick){
   });
 }
 bindSeg("segLane", v => {
-  S.lanes = Number(v);
+  const lanes = Number(v);
+  if(S.playing){                    // 局中改轨道会让当前谱面的轨道错位，先记下、下一局生效
+    S.pendingLanes = lanes;
+    S.chartDirty = true;
+    return;
+  }
+  S.lanes = lanes;
   S.lanePress = [0, 0, 0, 0, 0, 0];
-  if(S.ready && !S.playing) buildChart(S.onsets);
+  if(S.ready) buildChart(S.onsets);
 });
 bindSeg("segDiff", v => {
   S.difficulty = v;
-  if(S.ready && !S.playing) buildChart(S.onsets);
+  if(S.playing){ S.chartDirty = true; return; }
+  if(S.ready) buildChart(S.onsets);
 });
 bindSeg("segSfx", v => {
   S.sfx = v === "1";
@@ -2056,11 +2210,11 @@ document.addEventListener("touchmove", e => {
   }
 }, { passive: false });
 
-/* 全局屏蔽长按菜单、文字选中、拖拽、双击缩放与捏合缩放（多系统一致） */
+/* 全局屏蔽长按菜单、文字选中、拖拽、双击缩放与捏合缩放（多系统一致，不随设置关闭） */
 ["contextmenu", "selectstart", "dragstart"].forEach(ev => {
-  document.addEventListener(ev, e => { if(S.blockLongPress) e.preventDefault(); }, { passive: false });
+  document.addEventListener(ev, e => e.preventDefault(), { passive: false });
 });
-document.addEventListener("dblclick", e => { if(S.blockLongPress) e.preventDefault(); }, { passive: false });
+document.addEventListener("dblclick", e => e.preventDefault(), { passive: false });
 
 /* 页面隐藏 / 失焦时自动暂停，避免回来时音画错位 */
 document.addEventListener("visibilitychange", () => {
@@ -2075,15 +2229,25 @@ S.mode = "media";
   setStatus("等待选择音源...");
   updateHud();
   updateProgress(0);
-  mediaEl.addEventListener("ended", () => {
-    if(S.playing && !S.ended) endGame(S.life <= 0);
-  });
-  mediaEl.addEventListener("error", () => {
-    if(!S.ready) return;
-  });
-  // 被系统音频焦点、省电策略等意外暂停时，同步暂停游戏，避免音画错位
-  mediaEl.addEventListener("pause", () => {
-    if(S.playing && !S.paused && !S.ended) togglePause();
+
+  /* 标题即入口：点击回到站点主页（不改任何视觉样式） */
+  const pageTitle = document.querySelector("#selectPage h1");
+  if(pageTitle) pageTitle.addEventListener("click", goHome);
+
+  const backHome = $("backHome");
+  if(backHome) backHome.addEventListener("click", e => { e.preventDefault(); goHome(); });
+
+  /* 两个载体都要监听，但只有当前激活的那个才影响游戏状态 */
+  [mediaVideo, mediaAudio].forEach(el => {
+    el.addEventListener("ended", () => {
+      if(el !== mediaEl) return;
+      if(S.playing && !S.ended) endGame(S.life <= 0);
+    });
+    // 被系统音频焦点、省电策略等意外暂停时，同步暂停游戏，避免音画错位
+    el.addEventListener("pause", () => {
+      if(el !== mediaEl) return;
+      if(S.playing && !S.paused && !S.ended) togglePause();
+    });
   });
   $("gamePage").classList.toggle("block", S.blockLongPress);
 })();

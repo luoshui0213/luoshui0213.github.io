@@ -20,13 +20,16 @@
   --accent-2:#6ea8ff;
   --danger:#ff7b7b;
 }
-html,body{height:100%}
+html,body{height:100%;-webkit-text-size-adjust:100%;overscroll-behavior:none}
 body{
   margin:0;
   height:100vh;
   height:100dvh;
   padding:12px;
+  padding-left:12px;padding-left:calc(12px + env(safe-area-inset-left));
+  padding-right:12px;padding-right:calc(12px + env(safe-area-inset-right));
   overflow:hidden;
+  touch-action:manipulation;
   color:var(--text);
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
   background:
@@ -62,6 +65,15 @@ body{
   box-shadow:0 0 10px rgba(77,214,193,.45), 0 0 22px rgba(77,214,193,.28);
 }
 .panel-head h1{margin:0;font-size:15px;font-weight:650;letter-spacing:.01em}
+.panel-head .backhome{
+  position:relative;
+  width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--line);border-radius:99px;
+  color:var(--muted);font-size:13px;line-height:1;text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.panel-head .backhome:active{background:rgba(255,255,255,.06)}
+.panel-head .backhome::after{content:"";position:absolute;top:-10px;right:-10px;bottom:-10px;left:-10px}
 .badge{
   font-size:10.5px;color:var(--muted);
   padding:2px 7px;border:1px solid var(--line);border-radius:99px;
@@ -178,7 +190,7 @@ input[type=range]::-moz-range-thumb{
 .piano-wrap{
   position:relative;
   padding-bottom:6px;
-  overflow-x:auto;overflow-y:hidden;
+  overflow-x:auto;overflow-y:hidden;-webkit-user-select:none;-webkit-touch-callout:none;user-select:none;
   border:1px solid #1c232e;border-radius:14px;
   background:#0b0e14;
   box-shadow:inset 0 2px 12px -6px rgba(0,0,0,.95);
@@ -293,9 +305,14 @@ kbd{
   .btn{padding:7px 11px}
   .key-hint{font-size:10.5px;padding:9px 10px}
 }
-@media (max-height:640px){
+@media (max-height:680px){
   .key-hint{display:none}
   .scroll-tip{display:none}
+}
+/* 横屏矮窗口：键盘优先，控制面板下移，避免首屏只见面板不见琴键 */
+@media (max-height:460px) and (orientation:landscape){
+  .stage{order:-1}
+  .panel{margin-top:10px}
 }
 @media (prefers-reduced-motion:reduce){
   *{transition:none !important}
@@ -309,6 +326,7 @@ kbd{
       <span class="dot"></span>
       <h1>VOCALOID 钢琴</h1>
       <span class="badge">88 键 · A0–C8</span>
+      <a class="backhome" id="backHome" href="home.html" aria-label="返回主页" title="返回主页">←</a>
       <span class="now" id="noteDisplay">—</span>
     </div>
 
@@ -375,6 +393,36 @@ kbd{
 <script>
 (function(){
   'use strict';
+
+  /* ========== 站点联动（主页） ========== */
+  var HOME_URL = 'home.html';
+  var framed = false;
+  try{ framed = !!(window.parent && window.parent !== window); }catch(e){ framed = false; }
+
+  function postHost(payload){
+    if(!framed) return false;
+    try{ window.parent.postMessage(payload, '*'); return true; }catch(e){ return false; }
+  }
+  function goHome(){
+    if(postHost({ type:'closeGame', from:'piano' })) return;
+    location.href = HOME_URL;
+  }
+
+  /* 标题即入口：点击回到主页（不改动任何视觉样式） */
+  var headerTitle = document.querySelector('.panel-head h1');
+  if(headerTitle){
+    headerTitle.addEventListener('click', goHome);
+  }
+  var backHomeBtn = document.querySelector('.panel-head .backhome');
+  if(backHomeBtn){
+    backHomeBtn.addEventListener('click', function(e){ e.preventDefault(); goHome(); });
+  }
+  /* 来自主页的指令（保留扩展位） */
+  window.addEventListener('message', function(e){
+    var d = e.data;
+    var type = typeof d === 'string' ? d : (d && d.type) || '';
+    if(type === 'stopAll') stopAllNotes();
+  });
 
   /* ========== 常量 ========== */
   var LOW_MIDI = 21;          // A0
@@ -690,6 +738,8 @@ kbd{
   pianoEl.addEventListener('pointercancel', endPointer);
   window.addEventListener('pointerup', endPointer, { passive:true });
   pianoEl.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  document.addEventListener('dragstart', function(e){ e.preventDefault(); });
 
   /* 桌面端：鼠标滚轮纵向滚动 → 键盘横向滚动 */
   pianoWrap.addEventListener('wheel', function(e){
@@ -697,7 +747,9 @@ kbd{
     var max = pianoWrap.scrollWidth - pianoWrap.clientWidth;
     if(max <= 0) return;
     e.preventDefault();
-    pianoWrap.scrollLeft += e.deltaY;
+    /* deltaMode: 0 像素 / 1 行 / 2 页 */
+    var step = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? pianoWrap.clientWidth : 1);
+    pianoWrap.scrollLeft += e.deltaY * step;
   }, { passive:false });
 
   /* ========== 电脑键盘 ========== */
@@ -721,7 +773,10 @@ kbd{
     var k = e.key.toLowerCase();
 
     if(k === 'escape'){
-      if(isPlaying){ e.preventDefault(); stopPlayback(); setStatus('回放已停止'); }
+      if(isPlaying){ e.preventDefault(); stopPlayback(); setStatus('回放已停止'); return; }
+      if(isRecording) return;         /* 录制中不退出，避免丢失录音 */
+      e.preventDefault();
+      goHome();
       return;
     }
     if(k === '[' || k === '{' || k === ']' || k === '}'){

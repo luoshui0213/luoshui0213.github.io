@@ -51,6 +51,7 @@ html[data-theme="light"]{
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
 body{
   min-height:100vh;
+  min-height:100dvh;
   background:var(--c-bg);
   color:var(--c-text);
   font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
@@ -428,7 +429,9 @@ html[data-theme="light"] .player-panel{background:rgba(255,255,255,.95);}
 .pp-progress{padding:10px 16px 4px;}
 .bar{
   position:relative;height:4px;border-radius:99px;background:rgba(120,160,200,.18);cursor:pointer;
+  touch-action:none;
 }
+.bar::before{content:"";position:absolute;top:-9px;right:0;bottom:-9px;left:0}
 .bar-fill{position:absolute;top:0;right:auto;bottom:0;left:0;width:0;border-radius:99px;background:var(--grad);transition:width .15s linear;}
 .pp-time{display:flex;justify-content:space-between;font-size:11px;color:var(--c-text-mute);margin-top:7px;}
 .pp-controls{display:flex;align-items:center;justify-content:center;gap:16px;padding:6px 16px 12px;}
@@ -749,7 +752,9 @@ html[data-theme="light"] .player-panel{background:rgba(255,255,255,.95);}
 .pp-progress{padding:10px 16px 4px;}
 .bar{
   position:relative;height:4px;border-radius:99px;background:rgba(120,160,200,.18);cursor:pointer;
+  touch-action:none;
 }
+.bar::before{content:"";position:absolute;top:-9px;right:0;bottom:-9px;left:0}
 .bar-fill{position:absolute;top:0;right:auto;bottom:0;left:0;width:0;border-radius:99px;background:var(--grad);transition:width .15s linear;}
 .pp-time{display:flex;justify-content:space-between;font-size:11px;color:var(--c-text-mute);margin-top:7px;}
 .pp-controls{display:flex;align-items:center;justify-content:center;gap:16px;padding:6px 16px 12px;}
@@ -911,6 +916,8 @@ html[data-theme="light"] .modal-err b{color:#ee0000;}
   .gallery{columns:1;}
   .stat-row{gap:8px;}
   .footer{flex-direction:column;gap:4px;}
+  /* 左下版权文字不再钻到右下角音乐按钮底下 */
+  .footer{padding-right:calc(76px + env(safe-area-inset-right));}
   .player-fab{width:50px;height:50px;}
   .pp-controls{gap:12px;}
 }
@@ -2041,4 +2048,3 @@ int main()
 </script>
 </body>
 </html>
-<!-- 强制更新 -->
