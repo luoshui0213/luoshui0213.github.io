@@ -1,516 +1,1990 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-<title>SCP-LS-001档案</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#080b10">
+<title>SCP-LS-001 绝密档案</title>
+<meta name="description" content="SCP-LS-001绝密档案站">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;overflow-wrap:break-word;word-wrap:break-word;word-break:break-word;white-space:normal;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;}
-body{background-color:#222428;color:#cccccc;min-height:100vh;}
-div,p,span,a{max-width:100%;}
-.card,.main-content{flex-wrap:wrap;}
-.navbar{background-color:#2b2d31;border-bottom:2px solid #39c5bb;padding:15px 20px;display:flex;justify-content:center;align-items:center;gap:20px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.35);}
-.nav-btn{background:transparent;color:#e0e0e0;border:1px solid #44484f;padding:8px 20px;border-radius:20px;font-size:16px;cursor:pointer;transition:all 0.3s ease;font-weight:normal;}
-.nav-btn:hover,.nav-btn.active{color:#000;background-color:#39c5bb;border-color:#39c5bb;box-shadow:0 0 12px rgba(57,197,187,0.45);transform:translateY(-1px);}
-.main-content{flex:1;padding:30px 20px;max-width:900px;margin:0 auto;width:100%;}
-.tab-content{display:none;animation:fadeIn 0.5s ease;}
-.tab-content.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-.card{background-color:#2b2d31;border:1px solid #3c3f46;border-radius:12px;padding:25px;margin-bottom:22px;transition:transform 0.3s ease,box-shadow 0.3s ease;}
-.card:hover{transform:translateY(-4px);box-shadow:0 6px 18px rgba(57,197,187,0.14);}
-.card h2,.card h1,.card h3,.card h4,.card h5,.card h6{color:#39c5bb;margin-bottom:15px;text-shadow:0 0 6px rgba(57,197,187,0.3);font-weight:400;}
-.card p{margin-bottom:12px;color:#bbbbbb;line-height:1.65;font-weight:normal;}
-pre.code-block{background:#1e2024;padding:14px;border-radius:8px;overflow-x:auto;font-family:"Courier New",Courier,monospace;color:#9ce59c;margin:14px 0;line-height:1.55;white-space:pre;box-shadow:inset 0 2px 6px rgba(0,0,0,0.4);}
-.footer{text-align:center;padding:24px;color:#888888;font-size:14px;border-top:1px solid #33363b;background-color:#2b2d31;margin-top:10px;}
-.cover-btn{display:block;width:100%;max-width:600px;margin:18px auto;border-radius:12px;overflow:hidden;border:2px solid transparent;transition:all 0.32s ease;position:relative;}
-.cover-btn img{width:100%;display:block;transition:transform 0.32s ease;}
-.cover-btn:hover{border-color:#39c5bb;box-shadow:0 0 18px rgba(57,197,187,0.45);}
-.cover-btn:hover img{transform:scale(1.045);}
-.cover-btn:active{transform:scale(0.98);border-color:#39c5bb;}
-img{max-width:100%;height:auto;display:block;margin:0 auto;loading:lazy;border-radius:6px;}
-.image-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;margin-top:18px;}
-/* ========== 弹窗iframe 美化样式 ========== */
-.modal-wrap{position:fixed;inset:0;background:rgba(4,6,10,0.88);z-index:9999;display:none;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
-.modal-wrap.show{display:flex;}
-.modal-box{width:min(96vw,1120px);height:min(92vh,820px);background:#1a1a2e;border-radius:14px;display:flex;flex-direction:column;overflow:hidden;border:1px solid #39c5bb;box-shadow:0 10px 45px rgba(57,197,187,0.18);}
-.modal-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#22242b;border-bottom:1px solid #3c3f46;flex-shrink:0;}
-.modal-head h4{margin:0;color:#39c5bb;font-weight:400;font-size:16px;}
-.modal-close{background:#2b2d31;color:#cccccc;border:1px solid #44484f;border-radius:9px;padding:5px 12px;cursor:pointer;font-size:14px;transition:0.25s;}
-.modal-close:hover{background:#39c5bb;color:#000;border-color:#39c5bb;}
-.modal-iframe{flex:1;border:none;width:100%;background:#0d0f14;}
-
-/* ========== 背景音乐播放器面板 ========== */
-#music-toggle {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: #2b2d31;
-    border: 1px solid #39c5bb;
-    color: #39c5bb;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    transition: all 0.3s ease;
+/* ========== 设计变量 ========== */
+:root{
+  --c-bg:#080b10;
+  --c-bg-2:#0c1118;
+  --c-surface:rgba(23,30,40,.78);
+  --c-surface-2:rgba(31,39,51,.74);
+  --c-border:rgba(120,150,180,.14);
+  --c-border-strong:rgba(102,204,255,.38);
+  --c-text:#dce6f0;
+  --c-text-dim:#93a3b5;
+  --c-text-mute:#6c7d8f;
+  --c-blue:#66ccff;
+  --c-teal:#39c5bb;
+  --c-pink:#ff8fc8;
+  --grad:linear-gradient(115deg,#66ccff 0%,#57d6d6 48%,#9ef0ff 100%);
+  --shadow:0 18px 50px -22px rgba(0,0,0,.85);
+  --radius:18px;
+  --radius-sm:12px;
+  --maxw:clamp(1020px,79.4vw,1440px);
+  --ease:cubic-bezier(.22,.61,.36,1);
 }
-#music-toggle:hover { background: #39c5bb; color: #000; transform: scale(1.1); }
-#music-toggle.paused { color: #888; border-color: #444; }
-
-#music-panel {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    z-index: 9998;
-    width: 280px;
-    background: #2b2d31;
-    border: 1px solid #39c5bb;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-    transform-origin: bottom right;
-    animation: popIn 0.25s ease-out;
+html[data-theme="light"]{
+  --c-bg:#f2f3f5;
+  --c-bg-2:#e8eaee;
+  --c-surface:rgba(255,255,255,.86);
+  --c-surface-2:rgba(255,255,255,.94);
+  --c-border:rgba(25,35,45,.13);
+  --c-border-strong:rgba(20,150,190,.42);
+  --c-text:#1a2129;
+  --c-text-dim:#4f5a66;
+  --c-text-mute:#7d8793;
+  --c-blue:#1a8fbe;
+  --c-teal:#0f8f88;
+  --c-pink:#cf5c98;
+  --grad:linear-gradient(115deg,#1a8fbe 0%,#0f8f88 55%,#2b9fc4 100%);
+  --shadow:0 16px 40px -28px rgba(20,30,40,.35);
 }
-@keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-#music-panel.show { display: flex; }
 
-.music-header { padding: 12px 14px; border-bottom: 1px solid #3c3f46; background: #1e2024; }
-.music-header h4 { margin: 0; color: #39c5bb; font-size: 14px; font-weight: 400; }
-.music-controls { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #222428; }
-.music-controls button { background: transparent; border: none; color: #39c5bb; font-size: 18px; cursor: pointer; transition: 0.2s; }
-.music-controls button:hover { color: #fff; }
-.music-controls .now-playing { color: #e0e0e0; font-size: 12px; flex: 1; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 10px; }
+/* ========== 基础重置 ========== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+body{
+  min-height:100vh;
+  background:var(--c-bg);
+  color:var(--c-text);
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:15px;
+  line-height:1.65;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  transition:background .4s var(--ease),color .4s var(--ease);
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 12% -8%,rgba(102,204,255,.17),transparent 65%),
+    radial-gradient(760px 480px at 92% 4%,rgba(57,197,187,.15),transparent 68%),
+    radial-gradient(900px 600px at 50% 108%,rgba(255,143,200,.10),transparent 70%),
+    linear-gradient(180deg,var(--c-bg) 0%,var(--c-bg-2) 100%);
+}
+html[data-theme="light"] body::before{
+  background:
+    radial-gradient(820px 460px at 14% -10%,rgba(255,255,255,.9),transparent 62%),
+    radial-gradient(700px 420px at 88% 2%,rgba(255,255,255,.75),transparent 66%),
+    radial-gradient(760px 520px at 50% 106%,rgba(255,255,255,.65),transparent 70%),
+    linear-gradient(180deg,#f5f6f8 0%,#e7e9ed 100%);
+}
 
-.music-list { max-height: 250px; overflow-y: auto; }
-.music-item { padding: 10px 14px; font-size: 13px; color: #bbbbbb; cursor: pointer; display: flex; justify-content: space-between; transition: 0.2s; border-bottom: 1px solid #33363b; }
-.music-item:hover { background: #36393f; color: #fff; }
-.music-item.active { color: #39c5bb; font-weight: bold; background: rgba(57,197,187,0.1); }
-.music-item .playing-icon { font-size: 10px; color: #39c5bb; display: none; }
-.music-item.active .playing-icon { display: block; }
+/* 星空层：深色主题显示，浅色主题淡出 */
+#starfield{
+  position:fixed;inset:0;z-index:-2;pointer-events:none;display:block;
+  opacity:1;transition:opacity .6s var(--ease);
+}
+html[data-theme="light"] #starfield{opacity:0;}
+body::after{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.35;
+  background-image:linear-gradient(rgba(120,160,200,.055) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(120,160,200,.055) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse at 50% 20%,#000 20%,transparent 78%);
+  -webkit-mask-image:radial-gradient(ellipse at 50% 20%,#000 20%,transparent 78%);
+}
+img{display:block;max-width:100%;height:auto;border-radius:10px;}
+a{color:var(--c-blue);text-decoration:none;}
+button{font:inherit;color:inherit;cursor:pointer;}
+:focus-visible{outline:2px solid var(--c-blue);outline-offset:3px;border-radius:6px;}
 
-.music-list::-webkit-scrollbar { width: 6px; }
-.music-list::-webkit-scrollbar-thumb { background: #44484f; border-radius: 3px; }
-.music-list::-webkit-scrollbar-track { background: transparent; }
+/* ========== 顶部导航 ========== */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  padding:calc(10px + env(safe-area-inset-top)) clamp(12px,4vw,28px) 10px;
+  background:rgba(8,11,16,.78);
+  background:color-mix(in srgb,var(--c-bg) 72%,transparent);
+  backdrop-filter:blur(18px) saturate(150%);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);
+  border-bottom:1px solid var(--c-border);
+  transition:background .4s var(--ease),border-color .4s var(--ease);
+}
+.topbar::after{
+  content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent 8%,rgba(102,204,255,.45) 42%,rgba(57,197,187,.45) 58%,transparent 92%);
+  opacity:.8;
+}
+.topbar-inner{
+  max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;text-decoration:none;color:inherit;min-width:0;}
+.brand-avatar{
+  width:34px;height:34px;flex:0 0 34px;display:block;border-radius:50%;
+  border:1px solid var(--c-border-strong);background:var(--c-surface-2);
+  box-shadow:0 0 20px rgba(102,204,255,.42);
+}
+.brand-text{min-width:0;}
+.brand-name{font-size:14px;font-weight:700;letter-spacing:.02em;line-height:1.25;white-space:nowrap;}
+.brand-sub{font-size:11px;color:var(--c-text-mute);letter-spacing:.14em;text-transform:uppercase;line-height:1.2;}
+.tabs{display:flex;gap:4px;padding:4px;border:1px solid var(--c-border);border-radius:999px;background:var(--c-surface);}
+.tab{
+  border:0;background:transparent;color:var(--c-text-dim);
+  padding:8px 16px;border-radius:999px;font-size:13.5px;font-weight:500;
+  display:flex;align-items:center;gap:6px;white-space:nowrap;
+  transition:color .25s,background .25s,box-shadow .25s;
+}
+.tab .tab-ico{font-size:14px;line-height:1;opacity:.85;}
+.tab .tab-avatar{width:18px;height:18px;flex:0 0 18px;display:block;border-radius:50%;border:1px solid var(--c-border-strong);}
+.tab:hover{color:var(--c-text);background:color-mix(in srgb,var(--c-blue) 12%,transparent);}
+.tab[aria-selected="true"]{
+  color:#04121a;background:var(--grad);
+  box-shadow:0 6px 18px -8px rgba(102,204,255,.85);
+}
+html[data-theme="light"] .tab[aria-selected="true"]{color:#fff;}
+.icon-btn{
+  width:38px;height:38px;flex:0 0 38px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid var(--c-border);background:var(--c-surface);font-size:16px;
+  transition:transform .25s var(--ease),border-color .25s,background .25s;
+}
+.icon-btn:hover{border-color:var(--c-border-strong);transform:translateY(-2px);}
 
-@media (max-width:600px){
-.navbar{gap:8px;padding:10px;flex-wrap:wrap;}
-.nav-btn{padding:6px 12px;font-size:14px;}
-.main-content{padding:20px 10px;}
-.card{padding:18px;}
-.image-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;}
-.modal-box{height:min(90vh,620px);}
-#music-panel { width: 250px; bottom: 75px; }
+/* ========== 主容器 ========== */
+main{max-width:var(--maxw);margin:0 auto;padding:clamp(18px,4vw,40px) clamp(14px,4vw,28px) 40px;}
+.tabpanel{display:none;}
+.tabpanel.is-active{display:block;animation:panelIn .5s var(--ease) both;}
+@keyframes panelIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+@media (prefers-reduced-motion:reduce){
+  body,.tab,.card{transition:none!important;}
+  .tabpanel.is-active{animation:none;}
+}
+
+/* ========== 通用卡片 ========== */
+.card{
+  position:relative;background:var(--c-surface);border:1px solid var(--c-border);
+  border-radius:var(--radius);padding:clamp(18px,3vw,26px);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),var(--shadow);
+  transition:transform .35s var(--ease),border-color .35s,box-shadow .35s,background .4s;
+}
+.card:hover{transform:translateY(-3px);border-color:var(--c-border-strong);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 26px 54px -26px rgba(0,0,0,.9),0 0 0 1px rgba(102,204,255,.08);}
+.card h3{
+  color:var(--c-blue);font-size:15px;font-weight:600;letter-spacing:.02em;
+  margin-bottom:12px;display:flex;align-items:center;gap:8px;
+}
+.card h3::before{content:"";width:4px;height:14px;border-radius:2px;background:var(--grad);flex:0 0 4px;}
+.card p{color:var(--c-text-dim);font-size:14px;line-height:1.75;}
+.card p + p{margin-top:8px;}
+.link{color:var(--c-blue);border-bottom:1px solid transparent;transition:border-color .2s;}
+.link:hover{border-color:var(--c-blue);}
+.mono{font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Courier New",monospace;}
+.tag{
+  display:inline-flex;align-items:center;gap:5px;font-size:12px;line-height:1;
+  padding:5px 9px;border-radius:999px;border:1px solid var(--c-border);
+  color:var(--c-text-dim);background:color-mix(in srgb,var(--c-blue) 8%,transparent);
+}
+
+/* ========== 首页 Hero ========== */
+.hero{
+  overflow:hidden;padding:clamp(24px,5vw,42px);
+  display:grid;gap:22px;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+}
+.hero::before{
+  content:"";position:absolute;width:460px;height:460px;right:-160px;top:-200px;pointer-events:none;
+  background:radial-gradient(circle,rgba(102,204,255,.20),transparent 66%);
+}
+.hero::after{
+  content:"";position:absolute;width:300px;height:300px;left:-120px;bottom:-190px;pointer-events:none;
+  background:radial-gradient(circle,rgba(57,197,187,.16),transparent 70%);
+}
+html[data-theme="light"] .hero::before{background:radial-gradient(circle,rgba(27,147,204,.14),transparent 66%);}
+html[data-theme="light"] .hero::after{background:radial-gradient(circle,rgba(18,148,140,.10),transparent 70%);}
+.hero-copy{min-width:0;position:relative;z-index:1;}
+.hero-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.hero-title{
+  font-size:clamp(26px,5.2vw,42px);line-height:1.18;font-weight:800;letter-spacing:.01em;
+  margin-bottom:10px;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 22px rgba(102,204,255,.16));
+}
+.hero-title .grad{
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+html[data-theme="light"] .hero-title{filter:none;}
+.hero-lede{color:var(--c-text-dim);font-size:14.5px;max-width:46ch;}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+  padding:10px 20px;border-radius:999px;font-size:14px;font-weight:600;
+  border:1px solid var(--c-border);background:var(--c-surface-2);color:var(--c-text);
+  transition:transform .25s var(--ease),border-color .25s,box-shadow .25s,background .25s;
+}
+.btn:hover{transform:translateY(-2px);border-color:var(--c-border-strong);}
+.btn.primary{background:var(--grad);color:#04121a;border-color:transparent;box-shadow:0 10px 26px -12px rgba(102,204,255,.9);}
+html[data-theme="light"] .btn.primary{color:#fff;}
+
+/* 时钟卡 */
+.clock{
+  position:relative;z-index:1;
+  min-width:214px;padding:16px;border-radius:14px;
+  border:1px solid var(--c-border);background:rgba(8,12,18,.42);
+  display:grid;gap:10px;
+}
+html[data-theme="light"] .clock{background:rgba(255,255,255,.55);}
+.clock-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+.clock-label{font-size:11px;letter-spacing:.16em;color:var(--c-text-mute);text-transform:uppercase;}
+.clock-time{font-size:13px;color:var(--c-text);letter-spacing:.02em;}
+.clock-time b{color:var(--c-blue);font-weight:600;}
+.clock-foot{font-size:11px;color:var(--c-text-mute);border-top:1px dashed var(--c-border);padding-top:8px;display:flex;justify-content:space-between;gap:6px;}
+
+/* ========== 信息网格 ========== */
+.grid{display:grid;gap:clamp(12px,2.4vw,18px);}
+.grid > .card{margin:0;}
+.hero + .grid{margin-top:clamp(12px,2.4vw,18px);}
+.cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}
+.cols-3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+
+/* 欢迎卡里的贡献者 */
+.people{display:grid;gap:6px;margin-top:8px;}
+.person{
+  display:flex;align-items:center;gap:10px;font-size:14px;color:var(--c-text);
+  flex-wrap:wrap;padding:6px 10px 6px 8px;border-radius:12px;
+  border:1px solid transparent;transition:background .25s,border-color .25s;
+}
+.person:hover{background:color-mix(in srgb,var(--c-blue) 7%,transparent);border-color:var(--c-border);}
+.person-avatar{
+  width:40px;height:40px;flex:0 0 40px;display:block;border-radius:50%;
+  background:linear-gradient(160deg,#f8fafc,#e5e9ef);border:1px solid var(--c-border-strong);
+  box-shadow:0 0 0 2px rgba(102,204,255,.16),0 6px 14px -8px rgba(0,0,0,.8);
+  transition:transform .3s var(--ease),box-shadow .3s;
+}
+.person:hover .person-avatar{transform:scale(1.06);box-shadow:0 0 0 2px rgba(102,204,255,.5),0 8px 18px -8px rgba(0,0,0,.8);}
+.person-body{flex:1 1 0;min-width:0;}
+.person-name{font-weight:600;letter-spacing:.01em;line-height:1.35;}
+.person-links{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:1px;}
+.person-links .link{font-size:13px;color:var(--c-text-dim);}
+.person-links .link:hover{color:var(--c-blue);border-color:var(--c-blue);}
+
+/* ========== 工具入口 ========== */
+.tools{display:grid;gap:var(--radius);grid-template-columns:repeat(auto-fit,minmax(230px,1fr));}
+.tool{
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+  padding:18px;border-radius:var(--radius);
+  border:1px solid var(--c-border);background:var(--c-surface);
+  transition:transform .3s var(--ease),border-color .3s,box-shadow .3s;
+}
+.tool:hover{transform:translateY(-3px);border-color:var(--c-border-strong);box-shadow:0 16px 34px -22px rgba(102,204,255,.7);}
+.tool-ico{
+  width:46px;height:46px;flex:0 0 46px;border-radius:14px;display:grid;place-items:center;font-size:22px;
+  background:color-mix(in srgb,var(--c-blue) 16%,transparent);
+  border:1px solid var(--c-border);
+}
+.tool-body{min-width:0;}
+.tool-title{font-size:15px;font-weight:600;color:var(--c-text);display:flex;align-items:center;gap:6px;}
+.tool-desc{font-size:12.5px;color:var(--c-text-mute);margin-top:2px;}
+.tool .arrow{margin-left:auto;color:var(--c-blue);font-size:18px;transition:transform .3s var(--ease);flex:0 0 auto;}
+.tool:hover .arrow{transform:translateX(4px);}
+
+/* ========== 音乐推荐 ========== */
+.music-grid{display:grid;gap:clamp(12px,2.4vw,20px);grid-template-columns:repeat(auto-fit,minmax(290px,1fr));}
+@media (min-width:1024px){
+  .music-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+.video-card{padding:0;overflow:hidden;display:flex;flex-direction:column;}
+.video-cover{
+  position:relative;display:block;aspect-ratio:16/9;overflow:hidden;background:#0a0f16;
+}
+.video-cover img{width:100%;height:100%;object-fit:cover;border-radius:0;transition:transform .5s var(--ease);}
+.video-cover::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 35%,rgba(4,8,14,.78) 100%);
+  transition:opacity .35s;
+}
+.play-badge{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.92);
+  width:54px;height:54px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(6,14,22,.55);border:1px solid rgba(158,240,255,.7);color:#9ef0ff;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  font-size:17px;opacity:.92;transition:transform .35s var(--ease),opacity .35s,background .35s;
+  z-index:2;
+}
+.video-cover:hover img{transform:scale(1.05);}
+.video-cover:hover .play-badge{transform:translate(-50%,-50%) scale(1);background:rgba(102,204,255,.9);color:#04121a;border-color:transparent;}
+.video-info{padding:16px clamp(14px,2.6vw,20px) 18px;display:flex;flex-direction:column;flex:1;}
+.video-info h4{font-size:14.5px;font-weight:600;line-height:1.5;color:var(--c-text);}
+.video-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:12px;}
+.video-note{margin-top:10px;font-size:13px;color:var(--c-pink);letter-spacing:.01em;}
+
+/* 代码块终端 */
+.terminal{
+  margin-top:14px;border:1px solid var(--c-border);border-radius:var(--radius-sm);overflow:hidden;
+  background:rgba(4,8,14,.72);
+}
+html[data-theme="light"] .terminal{background:#0e1620;}
+.term-bar{display:flex;align-items:center;gap:6px;padding:8px 12px;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.06);}
+.term-dot{width:8px;height:8px;border-radius:50%;background:#ff5f57;}
+.term-dot:nth-child(2){background:#febc2e;}
+.term-dot:nth-child(3){background:#28c840;}
+.term-bar span{margin-left:6px;font-size:11px;color:#7d8fa3;letter-spacing:.08em;}
+pre.code{
+  margin:0;padding:14px 16px;overflow-x:auto;
+  font-family:"Lucida Console","Consolas","Monaco","Menlo",ui-monospace,"SFMono-Regular","Courier New",monospace;
+  font-size:12.5px;line-height:1.7;color:#9ce0c8;white-space:pre;
+  -webkit-overflow-scrolling:touch;
+}
+pre.code::-webkit-scrollbar{height:6px;}
+pre.code::-webkit-scrollbar-thumb{background:rgba(102,204,255,.4);border-radius:3px;}
+
+/* ========== 应援图集 ========== */
+.gallery-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px;}
+.gallery-title{
+  font-size:clamp(22px,4.4vw,32px);font-weight:800;letter-spacing:.04em;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.gallery-sub{font-size:12.5px;color:var(--c-text-mute);}
+.gallery{columns:3 240px;column-gap:clamp(10px,2vw,16px);}
+.gallery figure{
+  break-inside:avoid;margin:0 0 clamp(10px,2vw,16px);position:relative;overflow:hidden;
+  border-radius:var(--radius-sm);border:1px solid var(--c-border);background:var(--c-surface);
+  transition:transform .35s var(--ease),border-color .35s;cursor:zoom-in;
+}
+.gallery figure:hover{transform:translateY(-3px);border-color:var(--c-border-strong);}
+.gallery figure.is-broken{min-height:190px;display:grid;place-items:center;background:var(--c-surface-2);}
+.gallery figure.is-broken img{display:none;}
+.gallery figure.is-broken::after{
+  content:"✧ 图片加载失败";font-size:12.5px;color:var(--c-text-mute);letter-spacing:.04em;
+}
+.gallery img{width:100%;border-radius:0;}
+.gallery figcaption{
+  position:absolute;left:0;right:0;bottom:0;padding:16px 12px 10px;font-size:12px;color:#dbe9f5;
+  background:linear-gradient(180deg,transparent,rgba(5,10,16,.82));
+  opacity:0;transition:opacity .3s;
+}
+.gallery figure:hover figcaption{opacity:1;}
+
+/* ========== 关于 ========== */
+.about{display:grid;gap:clamp(14px,3vw,22px);grid-template-columns:auto minmax(0,1fr);align-items:start;}
+.avatar{
+  width:78px;height:78px;border-radius:50%;display:grid;place-items:center;overflow:hidden;flex:0 0 auto;
+  background:#fff;border:1px solid var(--c-border-strong);
+  box-shadow:0 14px 30px -16px rgba(102,204,255,.55);
+}
+.avatar svg{width:100%;height:100%;display:block;}
+html[data-theme="light"] .avatar{color:#fff;}
+.about-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+.stat-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px;padding-top:14px;border-top:1px dashed var(--c-border);}
+.stat b{display:block;font-size:18px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800;}
+.stat span{font-size:11.5px;color:var(--c-text-mute);letter-spacing:.06em;}
+
+/* ========== 页脚 ========== */
+.footer{
+  max-width:var(--maxw);margin:0 auto;padding:26px clamp(14px,4vw,28px) calc(30px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--c-border);color:var(--c-text-mute);font-size:12.5px;
+  display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;
+}
+.footer .mono{letter-spacing:.04em;}
+
+/* ========== 音乐播放器 ========== */
+.player-fab{
+  position:fixed;right:clamp(14px,3vw,26px);bottom:calc(18px + env(safe-area-inset-bottom));
+  z-index:120;width:54px;height:54px;border-radius:50%;
+  border:1px solid var(--c-border-strong);background:rgba(12,18,26,.82);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  color:var(--c-blue);display:grid;place-items:center;
+  box-shadow:0 10px 30px -14px rgba(0,0,0,.9);
+  transition:transform .3s var(--ease),box-shadow .3s;
+}
+.player-fab:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 14px 34px -14px rgba(102,204,255,.55);}
+html[data-theme="light"] .player-fab{background:rgba(255,255,255,.88);box-shadow:0 12px 28px -16px rgba(20,60,90,.55);}
+.fab-note{
+  display:grid;place-items:center;width:24px;height:24px;
+  color:var(--c-blue);transition:opacity .3s,transform .3s;
+}
+.fab-note svg{display:block;width:100%;height:100%;}
+.player-fab.is-playing .fab-note{animation:note-pulse 2.6s ease-in-out infinite;}
+@keyframes note-pulse{0%,100%{transform:scale(1);opacity:.9;}50%{transform:scale(1.07);opacity:1;}}
+.player-fab.is-paused{color:var(--c-text-mute);border-color:var(--c-border);}
+.player-fab.is-paused .fab-note{opacity:.68;animation:none;}
+
+.player-panel{
+  position:fixed;right:clamp(14px,3vw,26px);bottom:calc(84px + env(safe-area-inset-bottom));
+  z-index:119;width:min(340px,calc(100vw - 24px));
+  border:1px solid var(--c-border-strong);border-radius:18px;overflow:hidden;
+  background:rgba(11,16,23,.93);backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  box-shadow:0 24px 60px -20px rgba(0,0,0,.95);
+  transform-origin:bottom right;
+  display:none;flex-direction:column;
+}
+html[data-theme="light"] .player-panel{background:rgba(255,255,255,.95);}
+.player-panel.is-open{display:flex;animation:popIn .28s var(--ease) both;}
+@keyframes popIn{from{opacity:0;transform:scale(.94) translateY(6px);}to{opacity:1;transform:none;}}
+
+.pp-head{padding:14px 16px 12px;border-bottom:1px solid var(--c-border);}
+.pp-kicker{font-size:10.5px;letter-spacing:.18em;color:var(--c-text-mute);text-transform:uppercase;}
+.pp-title{margin-top:4px;font-size:14px;font-weight:600;line-height:1.45;color:var(--c-blue);}
+.pp-title.is-loading{color:var(--c-text-mute);}
+.pp-progress{padding:10px 16px 4px;}
+.bar{
+  position:relative;height:4px;border-radius:99px;background:rgba(120,160,200,.18);cursor:pointer;
+}
+.bar-fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:99px;background:var(--grad);transition:width .15s linear;}
+.pp-time{display:flex;justify-content:space-between;font-size:11px;color:var(--c-text-mute);margin-top:7px;}
+.pp-controls{display:flex;align-items:center;justify-content:center;gap:16px;padding:6px 16px 12px;}
+.pp-btn{border:0;background:transparent;color:var(--c-text-dim);font-size:16px;padding:6px;border-radius:50%;transition:color .2s,transform .2s;}
+.pp-btn:hover{color:var(--c-blue);transform:scale(1.08);}
+.pp-btn.main{
+  width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:15px;
+  background:var(--grad);color:#04121a;
+}
+html[data-theme="light"] .pp-btn.main{color:#fff;}
+
+.pp-list-toggle{
+  width:100%;border:0;border-top:1px solid var(--c-border);background:rgba(255,255,255,.03);
+  color:var(--c-text-dim);font-size:12px;padding:9px;display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.pp-list-toggle:hover{color:var(--c-blue);}
+.pp-list{max-height:0;overflow-y:auto;transition:max-height .3s var(--ease);}
+.pp-list.is-open{
+  max-height:240px;
+  mask-image:linear-gradient(180deg,#000 calc(100% - 22px),transparent 100%);
+  -webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 22px),transparent 100%);
+}
+@media (min-width:900px){
+  .pp-list.is-open{max-height:300px;}
+}
+.track{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 16px;border:0;background:transparent;border-top:1px solid rgba(120,160,200,.08);}
+.track:hover{background:color-mix(in srgb,var(--c-blue) 10%,transparent);}
+.track.is-current{background:color-mix(in srgb,var(--c-blue) 14%,transparent);}
+.track-idx{font-size:11px;color:var(--c-text-mute);font-family:ui-monospace,monospace;flex:0 0 20px;}
+.track-name{font-size:12.5px;color:var(--c-text-dim);line-height:1.45;min-width:0;}
+.track.is-current .track-name{color:var(--c-blue);font-weight:600;}
+.pp-list::-webkit-scrollbar{width:6px;}
+.pp-list::-webkit-scrollbar-thumb{background:rgba(102,204,255,.35);border-radius:3px;}
+
+/* ========== 后室文章推荐（本板块专属视觉） ========== */
+.br-accent{color:#d9c08a;}
+html[data-theme="light"] .br-accent{color:#9a7325;}
+
+.card.br-hero{
+  position:relative;overflow:hidden;
+  padding:clamp(26px,4.6vw,52px);
+  color:#e9e2d0;
+  display:grid;grid-template-columns:minmax(0,1fr);
+  border:1px solid rgba(217,192,138,.22);
+  background:
+    radial-gradient(115% 78% at 50% -12%,rgba(232,208,142,.17),transparent 62%),
+    radial-gradient(90% 60% at 50% 118%,rgba(196,166,96,.10),transparent 70%),
+    linear-gradient(172deg,#16150f 0%,#0d0d0b 52%,#070706 100%);
+  box-shadow:inset 0 0 120px rgba(0,0,0,.75),var(--shadow);
+}
+.br-hero::before{
+  content:"";position:absolute;left:34%;top:-170px;width:min(560px,80vw);height:300px;
+  transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(255,238,196,.20),transparent 70%);
+  filter:blur(8px);
+}
+.br-hero::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.14;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+}
+html[data-theme="light"] .card.br-hero{
+  color:#2a251c;
+  border-color:rgba(154,115,37,.26);
+  background:
+    radial-gradient(115% 78% at 50% -12%,rgba(255,255,255,.85),transparent 62%),
+    radial-gradient(90% 60% at 50% 118%,rgba(191,164,110,.16),transparent 70%),
+    linear-gradient(172deg,#f7f2e7 0%,#ece4d4 58%,#e2d8c3 100%);
+  box-shadow:0 22px 48px -30px rgba(80,62,20,.45),inset 0 0 80px rgba(255,255,255,.35);
+}
+
+.br-main{min-width:0;}
+@media (min-width:1000px){
+  .card.br-hero{grid-template-columns:minmax(0,1fr) 214px;column-gap:clamp(24px,3.2vw,44px);}
+}
+.br-aside{display:none;}
+
+@media (min-width:1000px){
+  .br-aside{
+    display:grid;gap:6px;align-content:start;
+    padding-left:clamp(18px,2.2vw,26px);
+    border-left:1px solid rgba(217,192,138,.18);
+    color:rgba(200,190,168,.66);font-size:12px;
+  }
+  .br-aside-k{font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:rgba(217,192,138,.62);}
+  .br-aside-n{font-family:ui-monospace,monospace;font-size:42px;font-weight:700;line-height:1;color:#efe6d1;}
+  .br-aside-t{font-size:12px;letter-spacing:.06em;color:rgba(214,206,190,.8);}
+  .br-aside-tags{display:grid;gap:4px;margin-top:10px;font-size:11.5px;color:rgba(200,190,168,.55);}
+  .br-aside-link{
+    margin-top:14px;display:inline-flex;align-items:center;gap:6px;
+    font-size:12px;color:#d9c08a;border-bottom:1px solid rgba(217,192,138,.35);
+    padding-bottom:3px;align-self:start;justify-self:start;transition:border-color .2s,color .2s;
+  }
+  .br-aside-link:hover{border-color:#d9c08a;color:#f0e2bd;}
+}
+html[data-theme="light"] .br-aside{border-left-color:rgba(154,115,37,.22);color:rgba(92,80,58,.8);}
+html[data-theme="light"] .br-aside-k{color:rgba(120,90,30,.7);}
+html[data-theme="light"] .br-aside-n{color:#2a251c;}
+html[data-theme="light"] .br-aside-t{color:rgba(70,60,44,.9);}
+html[data-theme="light"] .br-aside-tags{color:rgba(92,80,58,.66);}
+html[data-theme="light"] .br-aside-link{color:#8d6a22;border-bottom-color:rgba(154,115,37,.45);}
+
+.br-kicker{
+  position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;
+  font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(217,192,138,.92);
+}
+.br-kicker i{width:22px;height:1px;background:rgba(217,192,138,.55);display:inline-block;}
+html[data-theme="light"] .br-kicker{color:rgba(134,102,32,.95);}
+html[data-theme="light"] .br-kicker i{background:rgba(154,115,37,.5);}
+
+.br-mark{position:relative;z-index:1;display:block;padding:clamp(12px,2vw,20px) 0 4px;}
+
+.br-logo{
+  position:relative;z-index:2;margin:0;
+  font-family:"Helvetica Neue",Arial,"Noto Sans SC",system-ui,sans-serif;
+  font-size:clamp(27px,4.6vw,54px);font-weight:800;line-height:1.1;letter-spacing:.012em;
+  color:#faf6ec;
+  text-shadow:0 0 22px rgba(255,242,206,.22),0 2px 36px rgba(0,0,0,.55);
+}
+html[data-theme="light"] .br-logo{color:#1c1810;text-shadow:0 1px 0 rgba(255,255,255,.4),0 2px 22px rgba(90,70,20,.18);}
+
+.br-sub{
+  position:relative;z-index:2;margin-top:10px;
+  font-size:clamp(10.5px,1.15vw,12px);letter-spacing:.34em;
+  color:rgba(214,203,180,.66);
+}
+html[data-theme="light"] .br-sub{color:rgba(104,92,70,.86);}
+
+.br-quote{
+  position:relative;z-index:1;
+  margin:clamp(20px,3.4vw,32px) 0 0;
+  padding:14px 20px 14px 22px;
+  max-width:74ch;
+  border-left:2px solid rgba(217,192,138,.55);
+  background:linear-gradient(90deg,rgba(217,192,138,.08),transparent 78%);
+  font-size:clamp(13px,1.15vw,14.5px);line-height:2.05;
+  color:rgba(214,206,190,.86);
+  text-align:left;
+}
+html[data-theme="light"] .br-quote{
+  border-left-color:rgba(154,115,37,.55);
+  background:linear-gradient(90deg,rgba(154,115,37,.09),transparent 78%);
+  color:rgba(58,50,38,.92);
+}
+.br-quote em{font-style:normal;color:#efe6d2;}
+html[data-theme="light"] .br-quote em{color:#3a3126;font-weight:600;}
+
+.br-hero-foot{
+  position:relative;z-index:1;grid-column:1/-1;margin-top:20px;padding-top:16px;
+  border-top:1px solid rgba(217,192,138,.14);
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  font-size:12px;color:rgba(200,190,168,.62);
+}
+html[data-theme="light"] .br-hero-foot{border-color:rgba(154,115,37,.16);color:rgba(92,80,58,.8);}
+.br-hero-foot .mono{letter-spacing:.02em;}
+.br-hero-foot a{color:#d9c08a;border-bottom:1px solid transparent;transition:border-color .2s;}
+.br-hero-foot a:hover{border-color:#d9c08a;}
+html[data-theme="light"] .br-hero-foot a{color:#8d6a22;}
+html[data-theme="light"] .br-hero-foot a:hover{border-color:#8d6a22;}
+
+.br-chips .tag{
+  border-color:rgba(217,192,138,.26);background:rgba(217,192,138,.07);
+  color:rgba(226,212,182,.86);
+}
+html[data-theme="light"] .br-chips .tag{
+  border-color:rgba(154,115,37,.22);background:rgba(154,115,37,.07);color:#6d5722;
+}
+.br-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:clamp(22px,3.6vw,32px) 0 14px;}
+.br-head h3{
+  margin:0;font-size:15px;font-weight:600;letter-spacing:.02em;color:var(--c-blue);
+  display:flex;align-items:center;gap:8px;
+}
+.br-head h3::before{content:"";width:4px;height:14px;border-radius:2px;background:var(--grad);flex:0 0 4px;}
+.br-head p{font-size:12.5px;color:var(--c-text-mute);}
+
+.br-grid{display:grid;gap:clamp(10px,1.8vw,14px);grid-template-columns:repeat(auto-fit,minmax(272px,1fr));}
+@media (min-width:1180px){.br-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+
+.br-item{
+  position:relative;display:flex;flex-direction:column;gap:8px;
+  padding:clamp(16px,2.2vw,20px);border-radius:var(--radius-sm);
+  border:1px solid var(--c-border);background:var(--c-surface);
+  color:var(--c-text);text-decoration:none;overflow:hidden;
+  transition:transform .32s var(--ease),border-color .32s,box-shadow .32s,background .3s;
+}
+.br-item::after{
+  content:"";position:absolute;left:0;right:0;top:0;height:2px;
+  background:linear-gradient(90deg,rgba(217,192,138,.0),rgba(217,192,138,.55),rgba(217,192,138,0));
+  opacity:0;transition:opacity .32s;
+}
+.br-item:hover{transform:translateY(-3px);border-color:rgba(217,192,138,.42);box-shadow:0 18px 36px -26px rgba(0,0,0,.85);}
+.br-item:hover::after{opacity:1;}
+html[data-theme="light"] .br-item:hover{border-color:rgba(154,115,37,.45);}
+
+.br-num{
+  position:absolute;right:14px;top:8px;font-family:ui-monospace,monospace;
+  font-size:34px;font-weight:700;line-height:1;
+  color:rgba(217,192,138,.12);letter-spacing:-.04em;pointer-events:none;
+}
+html[data-theme="light"] .br-num{color:rgba(154,115,37,.14);}
+
+.br-chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.br-chips .tag{padding:4px 8px;font-size:11px;}
+
+.br-title{
+  font-size:15.5px;font-weight:700;line-height:1.45;letter-spacing:.01em;
+  color:var(--c-text);display:flex;flex-direction:column;gap:2px;
+}
+.br-title small{
+  font-size:11.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--c-text-mute);
+}
+.br-note{font-size:13px;line-height:1.75;color:var(--c-text-dim);flex:1;}
+.br-go{
+  margin-top:auto;padding-top:10px;font-size:12.5px;font-weight:600;color:#d9c08a;
+  display:inline-flex;align-items:center;gap:6px;transition:gap .25s;
+}
+html[data-theme="light"] .br-go{color:#8d6a22;}
+.br-item:hover .br-go{gap:10px;}
+
+.br-foot{
+  margin-top:clamp(14px,2.2vw,18px);
+  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  padding:14px 18px;border-radius:var(--radius-sm);
+  border:1px dashed var(--c-border);background:color-mix(in srgb,var(--c-blue) 4%,transparent);
+  font-size:12.5px;color:var(--c-text-mute);
+}
+.br-foot-links{display:flex;gap:14px;flex-wrap:wrap;}
+.br-foot-links a{color:var(--c-text-dim);border-bottom:1px solid transparent;}
+.br-foot-links a:hover{color:var(--c-blue);border-color:var(--c-blue);}
+
+@media (max-width:520px){
+  .br-hero{padding:22px 18px;}
+  .br-quote{padding:12px 14px 12px 16px;line-height:1.95;}
+  .br-hero-foot{display:block;font-size:11.5px;line-height:1.8;row-gap:0;}
+  .br-hero-foot>*{display:inline;}
+  .br-num{font-size:28px;top:10px;}
+  .br-head p{display:none;}
+}
+
+/* ========== 关于 ========== */
+.about{display:grid;gap:clamp(14px,3vw,22px);grid-template-columns:auto minmax(0,1fr);align-items:start;}
+.about-title{font-size:clamp(22px,3.4vw,32px);line-height:1.24;font-weight:800;letter-spacing:-.01em;margin-bottom:8px;}
+.avatar{
+  width:78px;height:78px;border-radius:50%;display:grid;place-items:center;overflow:hidden;flex:0 0 auto;
+  background:#fff;border:1px solid var(--c-border-strong);
+  box-shadow:0 14px 30px -16px rgba(102,204,255,.55);
+}
+.avatar svg{width:100%;height:100%;display:block;}
+html[data-theme="light"] .avatar{color:#fff;}
+.about-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+.stat-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px;}
+.stat{
+  min-width:0;padding:11px 12px;border-radius:12px;
+  border:1px solid var(--c-border);
+  background:rgba(102,204,255,.06);
+  background:color-mix(in srgb,var(--c-blue) 7%,transparent);
+  transition:border-color .3s,transform .3s var(--ease),background .3s;
+}
+.stat:hover{border-color:var(--c-border-strong);transform:translateY(-2px);}
+.stat b{display:block;font-size:20px;line-height:1.2;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800;font-variant-numeric:tabular-nums;}
+.stat span{display:block;margin-top:3px;font-size:11.5px;color:var(--c-text-mute);letter-spacing:.06em;}
+
+/* ========== 页脚 ========== */
+.footer{
+  max-width:var(--maxw);margin:0 auto;padding:26px clamp(14px,4vw,28px) calc(30px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--c-border);color:var(--c-text-mute);font-size:12.5px;
+  display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;
+}
+.footer .mono{letter-spacing:.04em;}
+/* 通用间距/说明文字（替代内联样式） */
+.gap-top{margin-top:18px;}
+.gap-sm{margin-top:12px;}
+.mb-gap{margin-bottom:18px;}
+.mb-md{margin-bottom:14px;}
+.hint{font-size:12.5px;color:var(--c-text-mute);}
+
+/* ========== 音乐播放器 ========== */
+.player-fab{
+  position:fixed;right:clamp(14px,3vw,26px);bottom:calc(18px + env(safe-area-inset-bottom));
+  z-index:120;width:54px;height:54px;border-radius:50%;
+  border:1px solid var(--c-border-strong);background:rgba(12,18,26,.82);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  color:var(--c-blue);display:grid;place-items:center;
+  box-shadow:0 10px 30px -14px rgba(0,0,0,.9);
+  transition:transform .3s var(--ease),box-shadow .3s;
+}
+.player-fab:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 14px 34px -14px rgba(102,204,255,.55);}
+html[data-theme="light"] .player-fab{background:rgba(255,255,255,.88);box-shadow:0 12px 28px -16px rgba(20,60,90,.55);}
+.fab-note{
+  display:grid;place-items:center;width:24px;height:24px;
+  color:var(--c-blue);transition:opacity .3s,transform .3s;
+}
+.fab-note svg{display:block;width:100%;height:100%;}
+.player-fab.is-playing .fab-note{animation:note-pulse 2.6s ease-in-out infinite;}
+@keyframes note-pulse{0%,100%{transform:scale(1);opacity:.9;}50%{transform:scale(1.07);opacity:1;}}
+.player-fab.is-paused{color:var(--c-text-mute);border-color:var(--c-border);}
+.player-fab.is-paused .fab-note{opacity:.68;animation:none;}
+
+.player-panel{
+  position:fixed;right:clamp(14px,3vw,26px);bottom:calc(84px + env(safe-area-inset-bottom));
+  z-index:119;width:min(340px,calc(100vw - 24px));
+  border:1px solid var(--c-border-strong);border-radius:18px;overflow:hidden;
+  background:rgba(11,16,23,.93);backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  box-shadow:0 24px 60px -20px rgba(0,0,0,.95);
+  transform-origin:bottom right;
+  display:none;flex-direction:column;
+}
+html[data-theme="light"] .player-panel{background:rgba(255,255,255,.95);}
+.player-panel.is-open{display:flex;animation:popIn .28s var(--ease) both;}
+@keyframes popIn{from{opacity:0;transform:scale(.94) translateY(6px);}to{opacity:1;transform:none;}}
+
+.pp-head{padding:14px 16px 12px;border-bottom:1px solid var(--c-border);}
+.pp-kicker{font-size:10.5px;letter-spacing:.18em;color:var(--c-text-mute);text-transform:uppercase;}
+.pp-title{margin-top:4px;font-size:14px;font-weight:600;line-height:1.45;color:var(--c-blue);}
+.pp-title.is-loading{color:var(--c-text-mute);}
+.pp-progress{padding:10px 16px 4px;}
+.bar{
+  position:relative;height:4px;border-radius:99px;background:rgba(120,160,200,.18);cursor:pointer;
+}
+.bar-fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:99px;background:var(--grad);transition:width .15s linear;}
+.pp-time{display:flex;justify-content:space-between;font-size:11px;color:var(--c-text-mute);margin-top:7px;}
+.pp-controls{display:flex;align-items:center;justify-content:center;gap:16px;padding:6px 16px 12px;}
+.pp-btn{border:0;background:transparent;color:var(--c-text-dim);font-size:16px;padding:6px;border-radius:50%;transition:color .2s,transform .2s;}
+.pp-btn:hover{color:var(--c-blue);transform:scale(1.08);}
+.pp-btn.main{
+  width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:15px;
+  background:var(--grad);color:#04121a;
+}
+html[data-theme="light"] .pp-btn.main{color:#fff;}
+
+.pp-list-toggle{
+  width:100%;border:0;border-top:1px solid var(--c-border);background:rgba(255,255,255,.03);
+  color:var(--c-text-dim);font-size:12px;padding:9px;display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.pp-list-toggle:hover{color:var(--c-blue);}
+.pp-list{max-height:0;overflow-y:auto;transition:max-height .3s var(--ease);}
+.pp-list.is-open{
+  max-height:240px;
+  mask-image:linear-gradient(180deg,#000 calc(100% - 22px),transparent 100%);
+  -webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 22px),transparent 100%);
+}
+@media (min-width:900px){
+  .pp-list.is-open{max-height:300px;}
+}
+.track{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 16px;border:0;background:transparent;border-top:1px solid rgba(120,160,200,.08);}
+.track:hover{background:color-mix(in srgb,var(--c-blue) 10%,transparent);}
+.track.is-current{background:color-mix(in srgb,var(--c-blue) 14%,transparent);}
+.track-idx{font-size:11px;color:var(--c-text-mute);font-family:ui-monospace,monospace;flex:0 0 20px;}
+.track-name{font-size:12.5px;color:var(--c-text-dim);line-height:1.45;min-width:0;}
+.track.is-current .track-name{color:var(--c-blue);font-weight:600;}
+.pp-list::-webkit-scrollbar{width:6px;}
+.pp-list::-webkit-scrollbar-thumb{background:rgba(102,204,255,.35);border-radius:3px;}
+
+
+/* ========== 弹窗 ========== */
+.modal{
+  position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;
+  padding:clamp(10px,3vw,24px);
+  background:rgba(3,6,10,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.modal.is-open{display:flex;animation:modalIn .25s ease both;}
+@keyframes modalIn{from{opacity:0;}to{opacity:1;}}
+.modal-box{
+  width:min(96vw,1120px);height:min(90vh,830px);display:flex;flex-direction:column;overflow:hidden;
+  border-radius:16px;border:1px solid var(--c-border-strong);background:#0e131b;
+  box-shadow:0 30px 80px -30px rgba(0,0,0,.95);
+}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;
+  padding:10px clamp(10px,2vw,16px);background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.08);
+}
+.modal-head h2{font-size:13.5px;font-weight:600;color:#9ef0ff;letter-spacing:.02em;}
+.modal-actions{display:flex;gap:8px;}
+.modal-close,.modal-external{
+  border:1px solid rgba(255,255,255,.16);background:transparent;color:#c8d6e4;
+  padding:5px 12px;border-radius:999px;font-size:12.5px;transition:.2s;
+}
+.modal-close:hover{background:#ff5f57;border-color:#ff5f57;color:#fff;}
+.modal-external:hover{background:rgba(102,204,255,.9);border-color:transparent;color:#04121a;}
+.modal iframe{flex:1;width:100%;border:0;background:#0a0e14;}
+.modal-err{display:none;flex:1;place-items:center;text-align:center;padding:28px;background:#0a0e14;}
+.modal-err.is-show{display:grid;}
+.modal-err b{display:block;font-size:16px;font-weight:700;color:#ee0000;letter-spacing:.02em;}
+.modal-err p{margin:10px auto 0;max-width:46ch;font-size:12.5px;line-height:1.7;color:var(--c-text-mute);}
+.modal-err-btn{
+  margin-top:18px;padding:7px 16px;border-radius:999px;font-size:12.5px;
+  border:1px solid var(--c-border-strong);background:transparent;color:var(--c-blue);transition:.2s;
+}
+.modal-err-btn:hover{background:var(--c-blue);border-color:transparent;color:#04121a;}
+html[data-theme="light"] .modal-err{background:#fff;}
+html[data-theme="light"] .modal-err b{color:#ee0000;}
+
+/* ========== 灯箱 ========== */
+.lightbox{
+  position:fixed;inset:0;z-index:210;display:none;align-items:center;justify-content:center;
+  padding:16px;background:rgba(2,4,8,.92);backdrop-filter:blur(6px);
+}
+.lightbox.is-open{display:flex;animation:modalIn .2s ease both;}
+.lightbox img{max-width:min(94vw,1100px);max-height:88vh;width:auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.8);}
+.lightbox-close{position:absolute;top:calc(14px + env(safe-area-inset-top));right:16px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(10,16,24,.7);color:#cfe0ee;font-size:18px;}
+
+/* ========== 提示条 ========== */
+.toast{
+  position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translate(-50%,16px);
+  z-index:300;padding:9px 16px;border-radius:999px;font-size:12.5px;
+  background:rgba(12,18,26,.92);border:1px solid var(--c-border-strong);color:var(--c-text);
+  opacity:0;pointer-events:none;transition:opacity .3s,transform .3s var(--ease);
+  max-width:calc(100vw - 32px);text-align:center;
+}
+.toast.is-show{opacity:1;transform:translate(-50%,0);}
+
+/* ========== 大屏等比放大（保持参考图的疏密关系） ========== */
+@media (min-width:1440px){
+  body{font-size:16px;}
+  main{padding-top:46px;padding-bottom:52px;}
+  .hero-title{font-size:48px;}
+  .card h3{font-size:15.5px;}
+  .card p{font-size:14.5px;}
+  .video-info h4{font-size:15.5px;}
+  .clock{padding:18px;min-width:232px;}
+  .clock-label{font-size:11.5px;}
+  .clock-time{font-size:14px;}
+}
+@media (min-width:1700px){
+  body{font-size:16.5px;line-height:1.7;}
+  main{padding-top:56px;padding-bottom:60px;}
+  .hero-title{font-size:54px;}
+  .hero{padding:48px;}
+  .card{padding:30px;}
+  .card h3{font-size:16px;}
+  .video-info h4{font-size:16px;}
+  .gallery-title{font-size:34px;}
+}
+
+/* ========== 响应式 ========== */
+@media (max-width:1000px){
+  .gallery{columns:2 180px;}
+  .clock{min-width:186px;padding:14px;}
+  .hero{gap:16px;}
+  .clock-time{font-size:12.5px;}
+}
+@media (max-width:760px){
+  .hero{grid-template-columns:minmax(0,1fr);}
+  .clock{width:100%;min-width:0;}
+}
+@media (max-width:900px){
+  .brand-sub{display:none;}
+  .topbar-inner{gap:10px;}
+  .tabs{order:3;width:100%;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{padding:7px 13px;font-size:13px;flex:0 0 auto;}
+}
+@media (max-width:720px){
+  body{font-size:14.5px;}
+  .topbar{padding-left:14px;padding-right:14px;}
+  .brand-sub{display:none;}
+  .topbar-inner{gap:10px;}
+  .tabs{order:3;width:100%;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{padding:7px 13px;font-size:13px;flex:0 0 auto;}
+  .cols-2{grid-template-columns:minmax(0,1fr);}
+  .video-cover{aspect-ratio:16/9;}
+  .about{grid-template-columns:auto minmax(0,1fr);}
+  .avatar{width:60px;height:60px;}
+  .modal-box{height:min(92vh,100%);border-radius:14px;}
+  .modal{padding:8px;}
+}
+@media (max-width:520px){
+  .tab{padding:6px 10px;font-size:12.2px;gap:5px;justify-content:center;}
+  .tab .tab-ico,.tab .tab-avatar{display:none;}
+  .tabs{gap:3px;}
+
+  .gallery{columns:1;}
+  .stat-row{gap:8px;}
+  .footer{flex-direction:column;gap:4px;}
+  .player-fab{width:50px;height:50px;}
+  .pp-controls{gap:12px;}
+}
+@media (hover:none){
+  .card:hover{transform:none;}
+  .gallery figcaption{opacity:1;}
 }
 </style>
 </head>
 <body>
-<audio id="bgm" loop></audio>
-<button id="music-toggle" title="点击打开/关闭音乐面板">🎵</button>
+<canvas id="starfield" aria-hidden="true"></canvas>
 
-<div id="music-panel">
-    <div class="music-header">
-        <h4>🎶 背景音乐 (官方优先+多节点)</h4>
+<!-- nory 圆形头像矢量图（内联符号，全站复用） -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="nory-avatar" viewBox="0 0 1024 1024">
+    <rect width="1024" height="1024" fill="#FFFFFF"/>
+    <circle cx="512.00" cy="512.00" r="512.00" fill="#E9E9EB"/>
+    <g fill="#171719">
+      <path transform="translate(56.250,624.517) scale(0.427821,-0.427821)" d="M63 540V0H203V324C203 388 247 430 316 430C376 430 406 397 406 333V0H546V362C546 482 481 549 365 549C292 549 243 523 203 462V540Z"/>
+      <path transform="translate(309.428,624.517) scale(0.427821,-0.427821)" d="M301 549C136 549 35 440 35 263C35 85 136 -23 302 -23C467 -23 569 85 569 259C569 442 470 549 301 549ZM302 436C379 436 429 367 429 261C429 160 377 90 302 90C226 90 175 159 175 263C175 367 226 436 302 436Z"/>
+      <path transform="translate(562.606,624.517) scale(0.427821,-0.427821)" d="M63 540V0H203V287C203 369 244 410 326 410C341 410 351 409 370 406V548C362 549 359 549 353 549C289 549 234 507 203 434V540Z"/>
+      <path transform="translate(731.377,624.517) scale(0.322186,-0.322186)" d="M419 270 650 729H482L343 407L194 729H27L269 270V0H419Z"/>
+    </g>
+  </symbol>
+</svg>
+
+<!-- ================= 顶部导航 ================= -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#home" data-tab-link="home">
+      <svg class="brand-avatar" aria-hidden="true"><use href="#nory-avatar"/></svg>
+      <span class="brand-text">
+        <span class="brand-name">SCP-LS-001绝密档案</span>
+        <span class="brand-sub">SCP-LS-001</span>
+      </span>
+    </a>
+
+    <nav class="tabs" role="tablist" aria-label="站点导航">
+      <button class="tab" role="tab" id="tab-home" aria-controls="panel-home" aria-selected="true" data-tab="home">
+        <span class="tab-ico" aria-hidden="true">◆</span>首页
+      </button>
+      <button class="tab" role="tab" id="tab-music" aria-controls="panel-music" aria-selected="false" tabindex="-1" data-tab="music">
+        <span class="tab-ico" aria-hidden="true">♫</span>音乐推荐
+      </button>
+      <button class="tab" role="tab" id="tab-articles" aria-controls="panel-articles" aria-selected="false" tabindex="-1" data-tab="articles">
+        <span class="tab-ico" aria-hidden="true">▤</span>后室文章
+      </button>
+      <button class="tab" role="tab" id="tab-support" aria-controls="panel-support" aria-selected="false" tabindex="-1" data-tab="support">
+        <span class="tab-ico" aria-hidden="true">✧</span>应援
+      </button>
+      <button class="tab" role="tab" id="tab-about" aria-controls="panel-about" aria-selected="false" tabindex="-1" data-tab="about">
+        <svg class="tab-avatar" aria-hidden="true"><use href="#nory-avatar"/></svg>关于作者
+      </button>
+    </nav>
+
+    <button class="icon-btn" id="themeBtn" type="button" aria-label="切换明暗主题" title="切换明暗主题">☾</button>
+  </div>
+</header>
+
+<main>
+  <!-- ================= 首页 ================= -->
+  <section class="tabpanel is-active" id="panel-home" role="tabpanel" aria-labelledby="tab-home">
+    <div class="card hero">
+      <div class="hero-copy">
+        <div class="hero-badges">
+          <span class="tag">SCP-LS-001绝密档案</span>
+          <span class="tag">Version 1.5.3</span>
+          <span class="tag">GitHub Pages</span>
+        </div>
+        <h1 class="hero-title">华风夏韵，<span class="grad">洛水天依</span></h1>
+        <p class="hero-lede">
+          这是用静态页面搭建的档案站（SCP-LS-001绝密档案）：VOCALOID 音乐、应援图集
+        </p>
+        <div class="hero-actions">
+          <button class="btn primary" type="button" data-tab-link="music">开始听歌 →</button>
+          <button class="btn" type="button" data-tab-link="about">关于作者</button>
+        </div>
+      </div>
+
+      <div class="clock" role="group" aria-label="授时显示">
+        <div class="clock-row">
+          <span class="clock-label">UTC(协调世界时)</span>
+          <span class="clock-time mono" id="clock-utc">---</span>
+        </div>
+        <div class="clock-row">
+          <span class="clock-label">北京 CST</span>
+          <span class="clock-time mono" id="clock-cst">---</span>
+        </div>
+        <div class="clock-foot">
+          <span>UTC+8 北京时间换算</span>
+          <span class="mono" id="clock-date">--</span>
+        </div>
+      </div>
     </div>
-    <div class="music-controls">
-        <button id="prev-btn" title="上一首">⏮</button>
-        <div class="now-playing" id="current-title">加载中...</div>
-        <button id="next-btn" title="下一首">⏭</button>
+
+    <div class="grid cols-2" style="margin-top:18px;">
+      <article class="card">
+        <h3>声明</h3>
+        <p>本网站入站动画素材来自 Vsinger 官网的中转梗页面，版权归原作者所有。</p>
+        <p><a class="link" href="https://thstars.com" target="_blank" rel="noopener">https://thstars.com ↗</a></p>
+      </article>
+
+      <article class="card">
+        <h3>贡献者</h3>
+        <div class="people">
+          <div class="person">
+            <svg class="person-avatar" aria-label="chinory 的头像"><use href="#nory-avatar"/></svg>
+            <div class="person-body">
+              <div class="person-name">作者：chinory</div>
+              <div class="person-links">
+                <a class="link" href="https://github.com/luoshui0213" target="_blank" rel="noopener">作者GitHub↗</a>
+              </div>
+            </div>
+          </div>
+          <div class="person">
+            <img class="person-avatar" src="data:image/png;base64,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" alt="loopzlx 的头像" width="42" height="42" loading="lazy" decoding="async">
+            <div class="person-body">
+              <div class="person-name">协助者：loopzlx</div>
+              <div class="person-links">
+                <a class="link" href="https://github.com/loopzlx" target="_blank" rel="noopener">loopzlx的GitHub↗</a>
+                <a class="link" href="https://loopzlx.github.io/loopzlx" target="_blank" rel="noopener">loopzlx的个人博客网站 ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p style="margin-top:12px;">协调世界时（UTC）与北京时间换算：<strong>UTC+8</strong></p>
+      </article>
+
+      <article class="card">
+        <h3>公告</h3>
+        <p>网站刚刚建立，仍在持续完善中。</p>
+        <p>如有有趣的创意，欢迎联系作者：<a class="link" href="mailto:luoshui0213@163.com?subject=创意建议">luoshui0213@163.com</a></p>
+      </article>
+
+      <article class="card">
+        <h3>最新动态</h3>
+        <p>音乐播放列表已接入多首曲目，可在右下角的播放器里切换。</p>
+        <p class="mono" style="font-size:12.5px;color:#39c5bb;"><i>哔哩哔哩 (゜-゜)つロ 干杯~</i></p>
+        <p><a class="link" href="https://space.bilibili.com/3707020247042077" target="_blank" rel="noopener">关注作者的哔哩哔哩账号 ↗</a></p>
+      </article>
     </div>
-    <div class="music-list" id="playlist"></div>
-</div>
 
-<nav class="navbar">
-<button class="nav-btn active" onclick="switchTab('home', this)">首页</button>
-<button class="nav-btn" onclick="switchTab('resources', this)">音乐推荐</button>
-<button class="nav-btn" onclick="switchTab('callhelp',this)">应援</button>
-<button class="nav-btn" onclick="switchTab('about', this)">关于作者</button>
-</nav>
-<main class="main-content">
-<div id="home" class="tab-content active">
-<div style="display:flex;justify-content:flex-end;margin-bottom:18px;">
-<div id="sync-clock-panel" style="background:#1e2024;border:1px solid #39c5bb;border-radius:8px;padding:9px 14px;box-shadow:0 0 12px rgba(57,197,187,0.12);font-size:13px;color:#ccc;">正在与授时中心同步时间...</div>
-</div>
-<div class="card"><h2>版本号Version1.5.1</h2></div>
-<div class="card">
-<h2>声明：本网站入站动画来自于Vsinger官网的中转梗页面
-<a href="https://thstars.com" style="color:#39c5bb;text-decoration:underline;"><i>https://thstars.com</i></a>
-</h2>
-</div>
-<div class="card">
-<h2>欢迎进入本网站</h2>
-<p>贡献者：<br>
-chinory(<a href="https://github.com/luoshui0213" style="color:#66ccff; text-decoration:underline;">Github</a>)<br>
-loopzlx(<a href="https://github.com/loopzlx" style="color:#66ccff; text-decoration:underline;">Github</a><br>
-网站：<a href="https://loopzlx.github.io/loopzlx" style="color:#66ccff; text-decoration:underline;">loopzlx.github.io/loopzlx</a>)
-</p>
-<p style="font-size:18px;">以上协调世界时(UTC)与北京时间换算：UTC+8</p>
-<p style="color:#ee0000;"><i>哔哩哔哩 (゜ - ゜)つロ 干杯~ - bilibili</i></p>
-<p>要关注作者哔哩哔哩账号？请点击
-<a href="https://space.bilibili.com/3707020247042077" style="color:#66ccff;text-decoration:underline;"><i>这里</i></a>
-</p>
-<p>暂无其他内容</p>
-<p>如有有趣的创意请联系作者<br>作者邮箱：
-<a href="mailto:luoshui0213@163.com?subject=创意建议" style="color:#66ccff;text-decoration:underline;"><i>luoshui0213@163.com</i></a>
-</p>
-</div>
-<div class="card"><h2>最新公告</h2><p>网站刚刚建立，还在完善中...</p></div>
+    <article class="card" style="margin-top:18px;">
+      <h3>娱乐小工具</h3>
+      <p style="margin-bottom:14px;">点击后以弹窗方式打开，工具运行在独立页面，关闭弹窗即退出，不影响浏览本站。</p>
+      <div class="tools">
+        <button class="tool" type="button" data-modal="musicGame.html" data-title="音游 · pjsk 风格">
+          <span class="tool-ico" aria-hidden="true">🎮</span>
+          <span class="tool-body">
+            <span class="tool-title">音游</span>
+            <span class="tool-desc">pjsk 风格节奏小游戏</span>
+          </span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </button>
+        <button class="tool" type="button" data-modal="VOCALOIDpiano.html" data-title="VOCALOID 全 88 键钢琴">
+          <span class="tool-ico" aria-hidden="true">🎹</span>
+          <span class="tool-body">
+            <span class="tool-title">88 键钢琴</span>
+            <span class="tool-desc">完整88键键盘</span>
+          </span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+    </article>
+  </section>
 
-<div class="card">
-    <h2>🎮 娱乐小工具</h2>
-    <p>点击按钮弹出窗口运行工具，工具为独立页面，关闭弹窗仅退出游戏，不影响网页浏览。</p>
-    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;">
-        <button class="nav-btn" onclick="openModal('musicGame.html','音游 ·pjsk风格 ')">🎮 打开音游</button>
-        <button class="nav-btn" onclick="openModal('VOCALOIDpiano.html','VOCALOID全88键钢琴')">🎹 打开88键钢琴</button>
+  <!-- ================= 音乐推荐 ================= -->
+  <section class="tabpanel" id="panel-music" role="tabpanel" aria-labelledby="tab-music">
+    <div class="card" style="margin-bottom:18px;">
+      <h3>音乐推荐</h3>
+      <p>点击跳转哔哩哔哩网页版观看原片；也可用右下角的播放器。</p>
     </div>
-</div>
 
-</div>
-<div id="resources" class="tab-content">
-<div class="card">
-<h4>共青团中央发布【【洛天依】天行健【2017中国制造日原创主题曲】-哔哩哔哩】</h4>
-<a href="https://b23.tv/TWoNRCe" target="_blank" class="cover-btn"><img src="txjcover.jpg" alt="点击前往B站观看"></a>
-</div>
-<div class="card">
-<h4>【千本樱（纯音乐版）-哔哩哔哩】</h4>
-<a href="https://b23.tv/Maei5q9" target="_blank" class="cover-btn"><img src="qbycover.jpg" alt="点击前往B站观看"></a>
-<h5>当反战的旋律响彻全世界！</h5>
-</div>
-<div class="card">
-<h4>【初音未来 - 甩葱歌-哔哩哔哩】</h4>
-<a href="https://b23.tv/mxh97Gr" target="_blank" class="cover-btn"><img src="scgcover.jpg" alt="点击前往B站观看"></a>
-</div>
-<div class="card">
-<h4>Hello World!【【徵羽摩柯原创曲】你好，世界！【摩柯印象曲】-哔哩哔哩】</h4>
-<a href="https://b23.tv/opJM2R7" target="_blank" class="cover-btn"><img src="nhcover.jpg" alt="点击前往B站观看"></a>
-<pre class="code-block">#include &lt;iostream&gt;
+    <div class="music-grid">
+      <article class="card video-card">
+        <a class="video-cover" href="https://b23.tv/TWoNRCe" target="_blank" rel="noopener" aria-label="前往 B 站观看：洛天依 天行健">
+          <img src="txjcover.jpg" alt="洛天依《天行健》封面" loading="lazy" decoding="async">
+          <span class="play-badge" aria-hidden="true">▶</span>
+        </a>
+        <div class="video-info">
+          <h4>【洛天依】【共青团中央 发布】天行健 — 2017 中国制造日原创主题曲</h4>
+          <div class="video-meta"><span class="tag">共青团中央</span><span class="tag">主题曲</span></div>
+        </div>
+      </article>
+
+      <article class="card video-card">
+        <a class="video-cover" href="https://b23.tv/Maei5q9" target="_blank" rel="noopener" aria-label="前往 B 站观看：千本樱">
+          <img src="qbycover.jpg" alt="《千本樱（纯音乐版）》封面" loading="lazy" decoding="async">
+          <span class="play-badge" aria-hidden="true">▶</span>
+        </a>
+        <div class="video-info">
+          <h4>千本樱（纯音乐版）</h4>
+          <div class="video-meta"><span class="tag">纯音乐</span></div>
+          <p class="video-note">当反战的旋律响彻全世界！</p>
+        </div>
+      </article>
+
+      <article class="card video-card">
+        <a class="video-cover" href="https://b23.tv/mxh97Gr" target="_blank" rel="noopener" aria-label="前往 B 站观看：甩葱歌">
+          <img src="scgcover.jpg" alt="初音未来《甩葱歌》封面" loading="lazy" decoding="async">
+          <span class="play-badge" aria-hidden="true">▶</span>
+        </a>
+        <div class="video-info">
+          <h4>初音未来《甩葱歌》</h4>
+          <div class="video-meta"><span class="tag">初音未来</span><span class="tag">经典</span></div>
+        </div>
+      </article>
+
+      <article class="card video-card">
+        <a class="video-cover" href="https://b23.tv/opJM2R7" target="_blank" rel="noopener" aria-label="前往 B 站观看：你好，世界！">
+          <img src="nhcover.jpg" alt="徵羽摩柯《你好，世界！》封面" loading="lazy" decoding="async">
+          <span class="play-badge" aria-hidden="true">▶</span>
+        </a>
+        <div class="video-info">
+          <h4>Hello World! — 徵羽摩柯原创曲《你好，世界！》</h4>
+          <div class="video-meta"><span class="tag">徵羽摩柯</span><span class="tag">原创曲</span></div>
+          <p>原视频简介内容（C++语言） C++</p>
+          <div class="terminal">
+            <div class="term-bar">
+              <i class="term-dot"></i><i class="term-dot"></i><i class="term-dot"></i>
+              <span>hello_world.cpp</span>
+            </div>
+            <pre class="code">#include &lt;iostream&gt;
 using namespace std;
-Life is short, I learn Python
-0123456789
-人生苦短，我学Python
-人生苦短，私はPythonを学ぶ
 int main()
-{/*徵羽摩柯，如约苏醒。*/
-    cout&lt;&lt;"*****Hello World!!*****"&lt;&lt;endl
-    &lt;&lt;"曲名:你好，世界！"&lt;&lt;endl
-    &lt;&lt;"作曲:正弦函数p"&lt;&lt;endl
-    &lt;&lt;"作词:鸣泣的紫蝶"&lt;&lt;endl
-    &lt;&lt;"曲绘:偶尤大肥羊"&lt;&lt;endl
-    &lt;&lt;"PV:hisa镜"&lt;&lt;endl
-    &lt;&lt;"调校/策划:OQQ君"&lt;&lt;endl
-    &lt;&lt;"演唱:徵羽摩柯"&lt;&lt;endl
-    &lt;&lt;"徵羽摩柯中之人:苏尚卿(西呱双)"&lt;&lt;endl;
+{
+    cout &lt;&lt; "***** Hello World!! *****" &lt;&lt; endl
+         &lt;&lt; "曲名:你好，世界！" &lt;&lt; endl
+         &lt;&lt; "作曲:正弦函数p" &lt;&lt; endl
+         &lt;&lt; "作词:鸣泣的紫蝶" &lt;&lt; endl
+         &lt;&lt; "曲绘:偶尤大肥羊" &lt;&lt; endl
+         &lt;&lt; "PV:hisa镜" &lt;&lt; endl
+         &lt;&lt; "调校/策划:OQQ君" &lt;&lt; endl
+         &lt;&lt; "演唱:徵羽摩柯" &lt;&lt; endl
+         &lt;&lt; "中之人:苏尚卿(西呱双)" &lt;&lt; endl;
     return 0;
 }</pre>
-</div>
-<div class="card">
-<h4>【大哉乾元-洛天依【2024拜年纪单品】-哔哩哔哩】</h4>
-<a href="https://b23.tv/r8tv9LS" target="_blank" class="cover-btn"><img src="dzcover.jpg" alt="点击前往B站观看"></a>
-</div>
-<div class="card">
-<h4>【原版《神的随波逐流》中文字幕【初音ミク、鏡音リン、GUMI】 神のまにまに 随神之侧-哔哩哔哩】</h4>
-<a href="https://b23.tv/MgU5MaE" target="_blank" class="cover-btn"><img src="sscover.jpg" alt="点击前往B站观看"></a>
-<h5>不论国籍，我们只愿世界和平！</h5>
-</div>
-<div class="card">
-<h4>【《2020最美的夜》 走进三体文明 洛天依《夜航星》机甲造型炫炸-哔哩哔哩综艺】
-<a href="https://b23.tv/ep376266" target="_blank" style="color:#66ccff;text-decoration:underline;"><i>点这里</i></a>
-</h4>
-</div>
-</div>
-<div id="callhelp" class="tab-content">
-<div class="card">
-<h1 style="color:#66ccff;font-weight:400;">华风夏韵，洛水天依！</h1>
-<div class="image-grid">
-<img src="10.jpg" alt="应援图">
-<img src="11.jpg" alt="应援图">
-<img src="1.jpeg" alt="应援图">
-<img src="2.jpeg" alt="应援图">
-<img src="3.jpeg" alt="应援图">
-<img src="4.jpeg" alt="应援图">
-<img src="5.jpeg" alt="应援图">
-<img src="6.jpeg" alt="应援图">
-<img src="7.jpeg" alt="应援图">
-<img src="8.jpeg" alt="应援图">
-<img src="9.jpeg" alt="应援图">
-</div>
-</div>
-</div>
-<div id="about" class="tab-content">
-<div class="card">
-<h2>关于作者</h2>
-<p>你好，我是Luo_Shui！</p>
-<p>这是用 GitHub Pages 搭建的静态网站。</p>
-<div class="card">
-<a href="https://github.com/luoshui0213" target="_blank" style="display:inline-block;padding:10px 20px;background:#39c5bb;color:#000;text-decoration:none;border-radius:8px;font-weight:400;">前往作者的GitHub</a>
-</div>
-</div>
-</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card video-card">
+        <a class="video-cover" href="https://b23.tv/r8tv9LS" target="_blank" rel="noopener" aria-label="前往 B 站观看：大哉乾元">
+          <img src="dzcover.jpg" alt="《大哉乾元》封面" loading="lazy" decoding="async">
+          <span class="play-badge" aria-hidden="true">▶</span>
+        </a>
+        <div class="video-info">
+          <h4>《大哉乾元》— 洛天依 2024 拜年纪单品</h4>
+          <div class="video-meta"><span class="tag">洛天依</span><span class="tag">bilibili2024拜年纪</span></div>
+        </div>
+      </article>
+
+      <article class="card video-card">
+        <a class="video-cover" href="https://b23.tv/MgU5MaE" target="_blank" rel="noopener" aria-label="前往 B 站观看：神的随波逐流">
+          <img src="sscover.jpg" alt="《神的随波逐流》封面" loading="lazy" decoding="async">
+          <span class="play-badge" aria-hidden="true">▶</span>
+        </a>
+        <div class="video-info">
+          <h4>《神的随波逐流》中文字幕 — 初音ミク / 鏡音リン / GUMI</h4>
+          <div class="video-meta"><span class="tag">中文字幕</span><span class="tag">合唱</span></div>
+          <p class="video-note">不论国籍，我们只愿世界和平！</p>
+        </div>
+      </article>
+    </div>
+
+    <article class="card" style="margin-top:18px;">
+      <h3>综艺推荐</h3>
+      <p>
+        《2020 最美的夜》走进三体文明 — 洛天依《夜航星》机甲造型。
+        <a class="link" href="https://b23.tv/ep376266" target="_blank" rel="noopener">前往观看 ↗</a>
+      </p>
+    </article>
+  </section>
+
+  <!-- ================= 后室文章推荐 ================= -->
+  <section class="tabpanel" id="panel-articles" role="tabpanel" aria-labelledby="tab-articles">
+    <div class="card br-hero">
+      <div class="br-main">
+      <div class="br-kicker"><i></i>The Backrooms · 中文维基</div>
+      <div class="br-mark">
+        <h2 class="br-logo">The Backrooms</h2>
+        <div class="br-sub">你曾经来过这里</div>
+      </div>
+      <blockquote class="br-quote"><i>
+        假如你不小心在错误的地方从现实中切出，你最终将坠入后室，这里只有腐臭的潮湿地毯，令人发狂的单色调黄色，荧光灯全力运作发出的永无止境的嗡鸣，还有令人深陷其中的大约六亿平方英里随机分割的空荡房间。倘若你听见有什么东西在附近徘徊，愿上帝保佑你吧，因为它一定也听见了你的声音。
+      </i></blockquote>
+      </div>
+
+      <aside class="br-aside" aria-label="栏目信息">
+        <span class="br-aside-k">Reading Room</span>
+        <span class="br-aside-n">06</span>
+        <span class="br-aside-t">篇精选条目</span>
+        <div class="br-aside-tags">
+          <span>层级 · 5</span>
+          <span>物品 · 1</span>
+        </div>
+        <a class="br-aside-link" href="https://brcn.backroomswiki.cn/" target="_blank" rel="noopener">打开中文维基 ↗</a>
+      </aside>
+      <div class="br-hero-foot">
+        <span class="mono">EPIGRAPH / 01</span>
+        <br>
+        <span>以上为wikidot后室社区入站描述，出处：</span>
+        <a href="https://brcn.backroomswiki.cn/" target="_blank" rel="noopener">brcn.backroomswiki.cn ↗</a>
+        <br>
+        <span>(注：该站为代理站，原wikidot暂时无法访问)</span>
+        <br>
+        <span>原站站点：<br><a class="br-aside-link" href="https://backrooms-wiki-cn.wikidot.com/" target="_blank" rel="noopener"><i>https://backrooms-wiki-cn.wikidot.com↗</i></a></span>
+      </div>
+    </div>
+
+    <div class="br-head">
+      <h3>推荐阅读</h3>
+      <p>六篇入门条目 · 点击标题跳转中文维基原文(代理站）</p>
+    </div>
+
+    <div class="br-grid">
+      <a class="br-item" href="https://brcn.backroomswiki.cn/level-0" target="_blank" rel="noopener">
+        <span class="br-num">01</span>
+        <span class="br-chips"><span class="tag">层级</span><span class="tag">翻译</span></span>
+        <span class="br-title">Level 0<small>教学关卡</small></span>
+        <span class="br-note">一切开始的地方：潮湿地毯、单色调的黄色墙纸，以及永远在头顶嗡鸣的荧光灯。</span>
+        <span class="br-go">阅读原文 →</span>
+      </a>
+
+      <a class="br-item" href="https://brcn.backroomswiki.cn/level-37" target="_blank" rel="noopener">
+        <span class="br-num">02</span>
+        <span class="br-chips"><span class="tag">层级</span><span class="tag">翻译</span></span>
+        <span class="br-title">Level 37<small>崇高</small></span>
+        <span class="br-note">瓷砖、池水与回声。它常被称作最安静的一层，而安静本身在这里就是危险。</span>
+        <span class="br-go">阅读原文 →</span>
+      </a>
+
+      <a class="br-item" href="https://brcn.backroomswiki.cn/level-5-5" target="_blank" rel="noopener">
+        <span class="br-num">03</span>
+        <span class="br-chips"><span class="tag">层级</span><span class="tag">翻译</span></span>
+        <span class="br-title">Level 5.5<small>破败修院</small></span>
+        <span class="br-note">近期新增的译文，名字已经把氛围说完了：一座被慢慢放弃的修院。</span>
+        <span class="br-go">阅读原文 →</span>
+      </a>
+
+      <a class="br-item" href="https://brcn.backroomswiki.cn/level-c-886" target="_blank" rel="noopener">
+        <span class="br-num">04</span>
+        <span class="br-chips"><span class="tag">层级</span><span class="tag">原创</span></span>
+        <span class="br-title">Level C-886<small>砼野</small></span>
+        <span class="br-note">混凝土浇筑出的荒野，中站原创层级。越往前走，越像被城市遗忘的郊外。</span>
+        <span class="br-go">阅读原文 →</span>
+      </a>
+
+      <a class="br-item" href="https://brcn.backroomswiki.cn/alternative:level-599" target="_blank" rel="noopener">
+        <span class="br-num">05</span>
+        <span class="br-chips"><span class="tag">层级</span><span class="tag">他版</span></span>
+        <span class="br-title">Level 599<small>群星（他版）</small></span>
+        <span class="br-note">同一条目被重新写了一遍。读过原版再来对照，能看到完全不同的重心。</span>
+        <span class="br-go">阅读原文 →</span>
+      </a>
+
+      <a class="br-item" href="https://brcn.backroomswiki.cn/object-79" target="_blank" rel="noopener">
+        <span class="br-num">06</span>
+        <span class="br-chips"><span class="tag">物品</span><span class="tag">翻译</span></span>
+        <span class="br-title">项目 #79<small>有事将要发生</small></span>
+        <span class="br-note">一件物品的条目，标题本身就是预告：你拿起它的时候，事情就已经开始了。</span>
+        <span class="br-go">阅读原文 →</span>
+      </a>
+    </div>
+
+    <div class="br-foot">
+      <span>以上链接均指向外部站点，本板块遵循CC协议，内容与版权归 The Backrooms 中文维基及其作者所有。</span>
+      <span class="br-foot-links">
+        <a href="https://brcn.backroomswiki.cn/most-recently-created-translated" target="_blank" rel="noopener">最近新增翻译 ↗</a>
+        <a href="https://brcn.backroomswiki.cn/most-recently-created-cn" target="_blank" rel="noopener">最近新增原创 ↗</a>
+        <a href="https://brcn.backroomswiki.cn/" target="_blank" rel="noopener">进入站点 ↗</a>
+      </span>
+    </div>
+  </section>
+
+  <!-- ================= 应援 ================= -->
+  <section class="tabpanel" id="panel-support" role="tabpanel" aria-labelledby="tab-support">
+    <article class="card">
+      <div class="gallery-head">
+        <div>
+          <h2 class="gallery-title">华风夏韵 · 洛水天依</h2>
+          <p class="gallery-sub">应援图集 · 点击可放大查看</p>
+        </div>
+        <span class="tag">共 11 张</span>
+      </div>
+      <div class="gallery" id="gallery">
+        <figure><img src="1.jpeg" alt="洛天依应援图 1" loading="lazy" decoding="async"><figcaption>应援图 · 1</figcaption></figure>
+        <figure><img src="2.jpeg" alt="洛天依应援图 2" loading="lazy" decoding="async"><figcaption>应援图 · 2</figcaption></figure>
+        <figure><img src="3.jpeg" alt="洛天依应援图 3" loading="lazy" decoding="async"><figcaption>应援图 · 3</figcaption></figure>
+        <figure><img src="4.jpeg" alt="洛天依应援图 4" loading="lazy" decoding="async"><figcaption>应援图 · 4</figcaption></figure>
+        <figure><img src="5.jpeg" alt="洛天依应援图 5" loading="lazy" decoding="async"><figcaption>应援图 · 5</figcaption></figure>
+        <figure><img src="6.jpeg" alt="洛天依应援图 6" loading="lazy" decoding="async"><figcaption>应援图 · 6</figcaption></figure>
+        <figure><img src="7.jpeg" alt="洛天依应援图 7" loading="lazy" decoding="async"><figcaption>应援图 · 7</figcaption></figure>
+        <figure><img src="8.jpeg" alt="洛天依应援图 8" loading="lazy" decoding="async"><figcaption>应援图 · 8</figcaption></figure>
+        <figure><img src="9.jpeg" alt="洛天依应援图 9" loading="lazy" decoding="async"><figcaption>应援图 · 9</figcaption></figure>
+        <figure><img src="10.jpg" alt="洛天依应援图 10" loading="lazy" decoding="async"><figcaption>应援图 · 10</figcaption></figure>
+        <figure><img src="11.jpg" alt="洛天依应援图 11" loading="lazy" decoding="async"><figcaption>应援图 · 11</figcaption></figure>
+      </div>
+    </article>
+  </section>
+
+  <!-- ================= 关于 ================= -->
+  <section class="tabpanel" id="panel-about" role="tabpanel" aria-labelledby="tab-about">
+    <article class="card about">
+      <div class="avatar" aria-hidden="true">
+        <svg class="avatar-mark" viewBox="0 0 1024 1024"><use href="#nory-avatar"/></svg>
+      </div>
+      <div>
+        <h2 class="hero-title" style="font-size:clamp(22px,4vw,30px);">你好，我是 <span class="grad">Chinory</span></h2>
+        <p>该网站使用GitHub Pages 搭建的纯前端、无后端依赖的静态网站，图片与音乐皆放于仓库或外部节点。</p>
+        <div class="about-links">
+          <a class="btn primary" href="https://github.com/luoshui0213" target="_blank" rel="noopener">前往作者的 GitHub</a>
+          <a class="btn" href="https://space.bilibili.com/3707020247042077" target="_blank" rel="noopener">哔哩哔哩</a>
+          <a class="btn" href="mailto:luoshui0213@163.com?subject=创意建议">邮件联系</a>
+        </div>
+        <div class="stat-row">
+          <div class="stat"><b>6</b><span>推荐曲目</span></div>
+          <div class="stat"><b>11</b><span>应援图</span></div>
+          <div class="stat"><b>2</b><span>娱乐工具</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card" style="margin-top:18px;">
+      <h3>站点信息</h3>
+      <p>技术支持：鲁高原第 15 技术部</p>
+      <p class="mono" style="font-size:12.5px;color:var(--c-text-mute);">© 2024 Luo_Shui. All Rights Reserved.</p>
+    </article>
+  </section>
 </main>
+
 <footer class="footer">
-&copy; 本网站由鲁高第15技术部提供技术支持.
-<br>
-&copy; 2024 Luo_Shui . All Rights Reserved.
+  <span>© 本网站由鲁高原第 15 技术部提供技术支持</span>
+  <span class="mono">© 2024 Luo_Shui · All Rights Reserved</span>
 </footer>
 
-<div id="modalWrap" class="modal-wrap">
+<!-- ================= 音乐播放器 ================= -->
+<audio id="bgm" preload="none"></audio>
+<button class="player-fab is-paused" id="playerFab" type="button" aria-label="打开音乐播放器" aria-expanded="false" title="音乐播放器">
+  <svg class="fab-note" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <g fill="currentColor">
+      <ellipse cx="7" cy="17.2" rx="3.6" ry="3.1"/>
+      <rect x="9.6" y="3" width="2" height="14.4" rx="1"/>
+      <path d="M11.6 3c4.6 1.2 7.2 3.4 7.2 6.4 0 1.9-1 3.5-2.6 4.6.9-1.6 1.4-3.2 1.4-5.1 0-2.6-2.3-4.6-6-5.5z"/>
+    </g>
+  </svg>
+</button>
+
+<div class="player-panel" id="playerPanel" role="dialog" aria-label="音乐播放器" aria-modal="false">
+  <div class="pp-head">
+    <div class="pp-kicker">Now Playing</div>
+    <div class="pp-title" id="ppTitle">点击以开始播放</div>
+  </div>
+  <div class="pp-progress">
+    <div class="bar" id="ppBar" role="slider" tabindex="0" aria-label="播放进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="bar-fill" id="ppFill"></div>
+    </div>
+    <div class="pp-time"><span id="ppCur">0:00</span><span id="ppDur">0:00</span></div>
+  </div>
+  <div class="pp-controls">
+    <button class="pp-btn" id="ppPrev" type="button" aria-label="上一首">⏮</button>
+    <button class="pp-btn main" id="ppToggle" type="button" aria-label="播放">▶</button>
+    <button class="pp-btn" id="ppNext" type="button" aria-label="下一首">⏭</button>
+  </div>
+  <button class="pp-list-toggle" id="ppListToggle" type="button" aria-expanded="false">播放列表（14 首） ⌄</button>
+  <div class="pp-list" id="ppList"></div>
+</div>
+
+<!-- ================= 弹窗 / 灯箱 / 提示 ================= -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-box">
     <div class="modal-head">
-      <h4 id="modalTitle">工具</h4>
-      <button class="modal-close" onclick="closeModal()">✕ 关闭</button>
+      <h2 id="modalTitle">工具</h2>
+      <div class="modal-actions">
+        <button class="modal-external" id="modalExternal" type="button">新窗口打开 ↗</button>
+        <button class="modal-close" id="modalClose" type="button">✕ 关闭</button>
+      </div>
     </div>
-    <iframe id="modalIframe" class="modal-iframe"></iframe>
+    <iframe id="modalFrame" title="工具页面" allow="autoplay; fullscreen"></iframe>
+    <div class="modal-err" id="modalErr">
+      <div class="modal-err-in">
+        <b>403</b>
+        <b>页面暂时无法打开</b>
+        <p>该工具页可能尚未部署，或站点拒绝了访问。</p>
+        <button class="modal-err-btn" id="modalErrOpen" type="button">新窗口打开 ↗</button>
+      </div>
+    </div>
   </div>
 </div>
 
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="图片预览">
+  <button class="lightbox-close" id="lightboxClose" type="button" aria-label="关闭预览">✕</button>
+  <img id="lightboxImg" alt="">
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script>
-// === 选项卡切换逻辑 ===
-function switchTab(tabId, btn){
-    const contents=document.querySelectorAll('.tab-content');
-    contents.forEach(content=>{content.classList.remove('active');});
-    const btns=document.querySelectorAll('.nav-btn');
-    btns.forEach(b=>{b.classList.remove('active');});
-    document.getElementById(tabId).classList.add('active');
-    btn.classList.add('active');
-}
+(function () {
+  'use strict';
 
-// === 弹窗iframe逻辑 ===
-function openModal(pageSrc,titleText){
-  const wrap=document.getElementById("modalWrap");
-  const iframe=document.getElementById("modalIframe");
-  const titleEl=document.getElementById("modalTitle");
-  titleEl.textContent=titleText;
-  iframe.src=pageSrc;
-  wrap.classList.add("show");
-}
+  /* ============ 小工具 ============ */
+  const $ = (id) => document.getElementById(id);
+  const toastEl = $('toast');
+  let toastTimer = null;
+  function toast(msg, ms = 2200) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add('is-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('is-show'), ms);
+  }
 
-function closeModal(){
-  const wrap=document.getElementById("modalWrap");
-  const iframe=document.getElementById("modalIframe");
-  wrap.classList.remove("show");
-  iframe.src=""; 
-}
+  // 浮层滚动锁定：引用计数，避免弹窗/灯箱叠加时提前解锁页面滚动
+  let scrollLock = 0;
+  function lockScroll() { scrollLock++; document.body.style.overflow = 'hidden'; }
+  function unlockScroll() { if (scrollLock > 0) scrollLock--; if (scrollLock === 0) document.body.style.overflow = ''; }
 
-document.getElementById("modalWrap").addEventListener("click",function(e){
-  if(e.target===this) closeModal();
-});
+  /* ============ 星空背景（低调闪烁，仅在深色主题运行） ============ */
+  const starfield = (function () {
+    const cv = document.getElementById('starfield');
+    if (!cv || !cv.getContext) return { setActive() {} };
+    const ctx = cv.getContext('2d');
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let stars = [], w = 0, h = 0, raf = null, last = 0, active = false, built = false;
 
-window.addEventListener("message", function(e) {
-    if (e.data === 'closeGame') {
-        closeModal();
-    }
-});
+    function build() {
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      w = window.innerWidth;
+      h = window.innerHeight;
+      cv.width = Math.round(w * dpr);
+      cv.height = Math.round(h * dpr);
+      cv.style.width = w + 'px';
+      cv.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-const REPO_OWNER = "luoshui0213";
-const REPO_NAME = "resources";
-const BRANCH = "main";
-
-// 加速节点列表（官方优先，后跟镜像）
-const URL_PREFIXES = [
-    `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/`,
-    `https://cdn.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${BRANCH}/`,
-    `https://fastly.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${BRANCH}/`,
-    `https://gcore.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${BRANCH}/`,
-    `https://testingcf.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${BRANCH}/`
-];
-const playlistData = [
-    { title: "【洛天依】毕业季歌曲《夏至又至》", file: "https://pdf3.webgetstore.com/564020c7d742e0d5487894840b21e3af/6b098494/2026/11/27/2f2a98b65fc8992bf6e6b993bcc99e30.mp4?fn=xiazhiyouzhi.mp4" },
-    { title: "【洛天依】毕业季歌曲《为什么夏天总是属于离别》", file: "https://pdf3.webgetstore.com/c2ca784719338ed3dc0be50813ab7b6f/6b0984c3/2026/11/27/8c2eb35489ba60305f67a0b88dbb48d3.mp4?fn=xiatianzongshi.mp4" },
-    { title: "【初音未来】《神的随波逐流》", file: "https://pdf3.webgetstore.com/47d8f3231bf64f56dc8c0e7b9b04b5ed/6b0984ce/2026/11/27/0f13432f0b91e0dfa7f598607ad25c13.mp4?fn=shensui.mp4" },
-    { title: "【初音未来】《甩葱歌》", file: "https://pdf3.webgetstore.com/1239ee5516845890bebd4ca9fcb18945/6b0984e8/2026/11/27/a7699c397a95ff7fcb2be90f487d5753.mp4?fn=shuaicongge.mp4" },
-    { title: "【洛天依】治愈系《蝴蝶》", file: "https://pdf3.webgetstore.com/136fd0f60f942eaa5b4be7dd5dc58be8/6b098510/2026/11/27/a99bcea735b2655f8d74afcf7a4de1c4.mp4?fn=hudie.mp4" },
-    { title: "【言和】《刀剑春秋》", file: "https://pdf3.webgetstore.com/44eb195cbb348406772431bdbb77ed52/6b09851c/2026/11/27/7fce86df54e14625d3d802ab91b3b9a2.mp4?fn=daojianchunqiu.mp4" },
-    { title: "【洛天依】《勾指起誓》", file: "https://pdf3.webgetstore.com/d0c1926e0d155253a6c48fdc2e5e0a5a/6b098528/2026/11/27/a111f3d024ca1f0647a057dbd1e23759.mp4?fn=gouzhiqishi.mp4" },
-    { title: "【初音未来】《千本樱(纯音乐版)》", file: "https://pdf3.webgetstore.com/2a99722e5d28afbf0d4b15e53fbb352d/6b098541/2026/11/27/13abda4c41d5a2c8c61bc05540ed9f5f.mp4?fn=senbonzakurachunyinye.mp4" },
-    { title: "【乐正绫】《繁华唱遍》", file: "https://pdf3.webgetstore.com/04f58d9c638d425af48b802e70ef7d74/6b098538/2026/11/27/ef2a0f947c0b0ec1f32ac172b43834a6.mp4?fn=fanhuachangbian.mp4" },
-    { title: "【徵羽摩柯】《你好世界》", file: "https://pdf3.webgetstore.com/fe878e413a76883fd019dea7f1aee8e5/6b0984f6/2026/11/27/175c74ee52942905971dc811452a3168.mp4?fn=nihaoshijie.mp4" },
-    { title: "《星降之海》（电影《超时空辉夜姬！》月见八千代（早见沙织配音）演唱）", file: "https://pdf3.webgetstore.com/66f2e12334618c9116fdba2a859b0f1c/6b0984a4/2026/11/27/9db07c60e37ff148f4c2c7723b2a868b.mp4?fn=xingjiangzhihai.mp4" },
-    { title: "《校歌》（鲁高）", file: "https://pdf3.webgetstore.com/604ac8e87d9c2b56c8aa29e2e0cd6431/6b098462/2026/11/27/eb7ef3664ab5b81a0722d091f847b0b0.mp4?fn=xiaoge.mp4" }
-];
-
-const bgm = document.getElementById('bgm');
-const musicToggle = document.getElementById('music-toggle');
-const musicPanel = document.getElementById('music-panel');
-const playlistContainer = document.getElementById('playlist');
-const currentTitleEl = document.getElementById('current-title');
-
-let currentIndex = 0;
-let currentNodeIndex = 0; // 当前使用的加速节点索引
-let isMusicPlaying = false;
-let isUserPaused = false;
-let retryTimeout = null; // 节点加载超时定时器
-
-// 渲染列表
-function renderPlaylist() {
-    playlistContainer.innerHTML = '';
-    playlistData.forEach((song, index) => {
-        const item = document.createElement('div');
-        item.className = `music-item ${index === currentIndex ? 'active' : ''}`;
-        item.innerHTML = `<span>${song.title}</span><span class="playing-icon">▶</span>`;
-        item.onclick = () => {
-            if (currentIndex === index && !bgm.paused) return; // 如果点的是当前正在播放的，则忽略
-            currentIndex = index;
-            loadTrack(currentIndex, true);
+      const count = Math.min(220, Math.round((w * h) / 8200));
+      stars = Array.from({ length: count }, function () {
+        const big = Math.random() < 0.06;
+        return {
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: big ? 1.4 + Math.random() * 0.6 : 0.4 + Math.random() * 0.8,
+          base: big ? 0.16 : 0.08,
+          amp: big ? 0.18 : 0.10,
+          sp: 0.4 + Math.random() * 1.1,
+          ph: Math.random() * Math.PI * 2,
+          teal: Math.random() < 0.18
         };
-        playlistContainer.appendChild(item);
-    });
-}
+      });
+      built = true;
+    }
 
-// 核心：直接赋 URL 给 audio，边下边播
-function loadTrack(index, shouldPlay) {
-    const song = playlistData[index];
-    currentNodeIndex = 0;
-    
-    currentTitleEl.textContent = `${song.title} (连接中)`;
-    
-    // 更新 UI 高亮
-    const items = document.querySelectorAll('.music-item');
-    items.forEach((item, i) => {
-        if(i === index) item.classList.add('active');
-        else item.classList.remove('active');
+    function draw(t) {
+      ctx.clearRect(0, 0, w, h);
+      for (let i = 0; i < stars.length; i++) {
+        const st = stars[i];
+        const a = st.base + st.amp * (0.5 + 0.5 * Math.sin(t * st.sp + st.ph));
+        if (a <= 0.02) continue;
+        ctx.beginPath();
+        ctx.fillStyle = st.teal
+          ? 'rgba(150,235,230,' + a.toFixed(3) + ')'
+          : 'rgba(198,222,255,' + a.toFixed(3) + ')';
+        ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function loop(ts) {
+      if (!active) return;
+      if (ts - last > 32) { draw(ts / 1000); last = ts; }
+      raf = window.requestAnimationFrame(loop);
+    }
+    function start() {
+      if (reduceMotion || raf !== null) return;
+      last = 0;
+      raf = window.requestAnimationFrame(loop);
+    }
+    function stop() {
+      if (raf !== null) { window.cancelAnimationFrame(raf); raf = null; }
+    }
+    function setActive(on) {
+      active = !!on;
+      if (!active) { stop(); if (built) ctx.clearRect(0, 0, w, h); return; }
+      if (!built) build();
+      if (reduceMotion) draw(0);
+      else start();
+    }
+
+    let resizeTimer = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        build();
+        if (active) { if (reduceMotion) draw(0); else { stop(); start(); } }
+      }, 180);
+    });
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stop();
+      else if (active) { if (reduceMotion) draw(0); else start(); }
     });
 
-    // 强制暂停当前
+    build();
+    return { setActive: setActive };
+  })();
+
+  /* ============ 明暗主题 ============ */
+  const THEME_KEY = 'ls-theme';
+  const themeBtn = $('themeBtn');
+  function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    const dark = theme === 'dark';
+    themeBtn.textContent = dark ? '☾' : '☀';
+    themeBtn.setAttribute('aria-label', dark ? '切换到浅色主题' : '切换到深色主题');
+    themeBtn.title = themeBtn.getAttribute('aria-label');
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', dark ? '#080b10' : '#f2f3f5');
+    starfield.setActive(dark);
+  }
+  // 默认深色星空主题；只有用户手动切过浅色才记住
+  let savedTheme = 'dark';
+  try { savedTheme = localStorage.getItem(THEME_KEY) || 'dark'; } catch (e) {}
+  applyTheme(savedTheme);
+  themeBtn.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+  });
+
+  /* ============ 选项卡 ============ */
+  const tabs = Array.from(document.querySelectorAll('.tab'));
+  const panels = Array.from(document.querySelectorAll('.tabpanel'));
+
+  function selectTab(name, focusTab) {
+    const tab = tabs.find((t) => t.dataset.tab === name);
+    if (!tab) return;
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    panels.forEach((p) => p.classList.toggle('is-active', p.id === 'panel-' + name));
+    if (focusTab) tab.focus({ preventScroll: true });
+    // 切页后回到顶部，避免长页面停留在中间位置
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => selectTab(tab.dataset.tab, false));
+  });
+
+  // 键盘左右切换（tablist 无障碍）
+  document.querySelector('.tabs').addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const i = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+    const next = (i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+    e.preventDefault();
+    selectTab(tabs[next].dataset.tab, true);
+  });
+
+  // 其它跳转入口（hero 按钮、品牌）
+  document.querySelectorAll('[data-tab-link]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      selectTab(el.dataset.tabLink, false);
+    });
+  });
+
+  /* ============ 授时时钟（本地时区换算，无外部请求） ============ */
+  const clockUtc = $('clock-utc');
+  const clockCst = $('clock-cst');
+  const clockDate = $('clock-date');
+  const pad = (n, l = 2) => String(n).padStart(l, '0');
+
+  function renderClock() {
+    const now = new Date();
+    clockUtc.textContent =
+      pad(now.getUTCHours()) + ':' + pad(now.getUTCMinutes()) + ':' + pad(now.getUTCSeconds());
+    // 北京时间 = UTC + 8，用 UTC getter 计算避免依赖设备时区
+    const bj = new Date(now.getTime() + 8 * 3600 * 1000);
+    clockCst.textContent =
+      pad(bj.getUTCHours()) + ':' + pad(bj.getUTCMinutes()) + ':' + pad(bj.getUTCSeconds());
+    clockDate.textContent =
+      bj.getUTCFullYear() + '-' + pad(bj.getUTCMonth() + 1) + '-' + pad(bj.getUTCDate()) +
+      ' ' + '周' + '日一二三四五六'[bj.getUTCDay()];
+  }
+  renderClock();
+  // 页面切到后台时暂停时钟，回前台再补刷一次，避免空跑定时器
+  let clockTimer = setInterval(renderClock, 1000);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      clearInterval(clockTimer);
+      clockTimer = null;
+    } else if (!clockTimer) {
+      renderClock();
+      clockTimer = setInterval(renderClock, 1000);
+    }
+  });
+
+  /* ============ 弹窗 ============ */
+  const modal = $('modal');
+  const modalFrame = $('modalFrame');
+  const modalTitle = $('modalTitle');
+  const modalExternal = $('modalExternal');
+  let lastModalSrc = '';
+
+  const modalErr = $('modalErr');
+
+  function showModalError() {
+    if (!modalErr) return;
+    modalFrame.style.display = 'none';
+    modalErr.classList.add('is-show');
+  }
+  function clearModalError() {
+    if (!modalErr) return;
+    modalErr.classList.remove('is-show');
+    modalFrame.style.display = '';
+  }
+
+  function openModal(src, title) {
+    lastModalSrc = src;
+    modalTitle.textContent = title || '工具';
+    modalExternal.dataset.src = src;
+    clearModalError();
+    modalFrame.src = src;              // 注意：先赋 src 再显示，避免白屏闪烁
+    modal.classList.add('is-open');
+    lockScroll();
+    $('modalClose').focus({ preventScroll: true });
+  }
+
+  // 同源页面才读得到内容：用于识别 404 / ACCESS DENIED 之类的错误页
+  modalFrame.addEventListener('load', () => {
+    if (!modalFrame.src) return;
+    let bad = false;
+    try {
+      const doc = modalFrame.contentDocument;
+      if (doc) {
+        const body = doc.body ? doc.body.textContent.replace(/\s+/g, ' ').trim() : '';
+        const head = ((doc.title || '') + ' ' + body.slice(0, 600)).toLowerCase();
+        // 错误页通常很短：限定长度，避免把正文里偶然出现的 error 当成失败
+        bad = body.length < 900 && /(page not found|file not found|404|access denied|error response|forbidden)/.test(head);
+      }
+    } catch (e) { bad = false; }
+    if (bad) showModalError();
+  });
+  modalFrame.addEventListener('error', showModalError);
+  if (modalErr && $('modalErrOpen')) {
+    $('modalErrOpen').addEventListener('click', () => {
+      if (lastModalSrc) window.open(lastModalSrc, '_blank', 'noopener');
+    });
+  }
+
+  function closeModal() {
+    modal.classList.remove('is-open');
+    clearModalError();
+    modalFrame.src = '';               // 置空以停止页面内的音频/循环
+    unlockScroll();
+    lastModalSrc = '';
+  }
+
+  document.querySelectorAll('[data-modal]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const src = btn.dataset.modal;
+      if (!src) return;
+      openModal(src, btn.dataset.title || '工具');
+    });
+  });
+  $('modalClose').addEventListener('click', closeModal);
+  $('modalExternal').addEventListener('click', () => {
+    if (lastModalSrc) window.open(lastModalSrc, '_blank', 'noopener');
+  });
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+  // 子页面通过 postMessage 请求关闭
+  window.addEventListener('message', (e) => {
+    if (e.data === 'closeGame' && modal.classList.contains('is-open')) closeModal();
+  });
+
+  /* ============ 应援图灯箱 ============ */
+  const lightbox = $('lightbox');
+  const lightboxImg = $('lightboxImg');
+  const gallery = $('gallery');
+
+  if (gallery) {
+    gallery.addEventListener('click', (e) => {
+      const fig = e.target.closest('figure');
+      if (!fig) return;
+      const img = fig.querySelector('img');
+      if (!img) return;
+      lightboxImg.src = img.currentSrc || img.src;
+      lightboxImg.alt = img.alt || '应援图';
+      lightbox.classList.add('is-open');
+      lockScroll();
+      $('lightboxClose').focus({ preventScroll: true });
+    });
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('is-open');
+    lightboxImg.removeAttribute('src');
+    unlockScroll();
+  }
+  $('lightboxClose').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (lightbox.classList.contains('is-open')) closeLightbox();
+    else if (modal.classList.contains('is-open')) closeModal();
+    else if (playerPanel.classList.contains('is-open') && !(document.activeElement && document.activeElement.closest('.player-panel'))) {
+      closePlayer();
+    }
+  });
+
+  /* ============ 音乐播放器 ============ */
+  // 曲目直链为外部节点，若失效会自动跳过并在控制台提示
+  // 曲目由 lz.qaiu.top 解析蓝奏云直链，失效时播放器会自动跳过
+  const playlist = [
+    { title: '徵羽摩柯原创曲《你好，世界》', src: 'https://lz.qaiu.top/parser?url=https://wwbph.lanzoul.com/iaLYj4hi339a' },
+    { title: '洛天依毕业季歌曲《夏至又至》', src: 'https://lz.qaiu.top/parser?url=https://wwbph.lanzoul.com/io0N84hi2vle' },
+    { title: '《鲁高校歌》', src: 'https://lz.qaiu.top/parser?url=https://wwbph.lanzoul.com/iZCZz4hi2veh' },
+    { title: '超时空辉夜姬原创《星降之海》', src: 'https://lz.qaiu.top/parser?url=https://wwbph.lanzoul.com/iKL0n4hi2wba' },
+    { title: '2233＆洛天依治愈系歌曲《心的连接》', src: 'https://lz.qaiu.top/parser?url=https://wwbph.lanzoul.com/ixiIK4hi2yri' },
+    { title: '洛天依毕业季歌曲《为什么夏天总是属于离别》', src: 'https://lz.qaiu.top/parser?url=https://wwbph.lanzoul.com/idGTe4hi2zvi' },
+    { title: '初音未来，镜音，GUMI等演唱《神的随波逐流》', src: 'https://lz.qaiu.top/parser?url=https://wwbph.lanzoul.com/inrmo4hi31gf' },
+    { title: '初音ミク及其他C社六子《千本樱（纯音乐版）》', src: 'https://lz.qaiu.top/parser?url=https://wwbph.lanzoul.com/iZQoC4hi38ab' },
+    { title: '初音ミク《世界第一的公主殿下》', src: 'https://lz.qaiu.top/parser?url=https://wwbph.lanzoul.com/iB4vx4hi32af' },
+    { title: '初音ミク《甩葱歌》', src: 'https://lz.qaiu.top/parser?url=https://wwbph.lanzoul.com/iuFj34hi32je' },
+    { title: '洛天依治愈系歌曲《蝴蝶》', src: 'https://lz.qaiu.top/parser?url=https://wwbph.lanzoul.com/iWWVI4hi35mf' },
+    { title: '言和《刀剑春秋》', src: 'https://lz.qaiu.top/parser?url=https://wwbph.lanzoul.com/imWb14hi36mb' },
+    { title: '洛天依情人节歌曲《勾指起誓》', src: 'https://lz.qaiu.top/parser?url=https://wwbph.lanzoul.com/iz7IY4hi377c' },
+    { title: '乐正绫《繁华唱遍》', src: 'https://lz.qaiu.top/parser?url=https://wwbph.lanzoul.com/iTIZS4hi37te' }
+  ];
+
+  const bgm = $('bgm');
+  const fab = $('playerFab');
+  const playerPanel = $('playerPanel');
+  const ppTitle = $('ppTitle');
+  const ppBar = $('ppBar');
+  const ppFill = $('ppFill');
+  const ppCur = $('ppCur');
+  const ppDur = $('ppDur');
+  const ppToggle = $('ppToggle');
+  const ppList = $('ppList');
+  const ppListToggle = $('ppListToggle');
+
+  let index = 0;
+  let loadingTimer = null;
+  let userPaused = false;
+  let dragging = false;
+  let wantPlay = false;   // 本次加载是否是"用户要求播放"，决定失败时是否自动跳曲
+  let failCount = 0;      // 连续失败计数，全部失败时停止自动跳曲
+
+  const fmt = (sec) => {
+    if (!isFinite(sec) || sec < 0) sec = 0;
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return m + ':' + pad(s);
+  };
+
+  function renderList() {
+    ppList.innerHTML = '';
+    playlist.forEach((song, i) => {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'track' + (i === index ? ' is-current' : '');
+      item.innerHTML =
+        '<span class="track-idx">' + pad(i + 1) + '</span>' +
+        '<span class="track-name">' + song.title + '</span>';
+      item.addEventListener('click', () => load(i, true));
+      ppList.appendChild(item);
+    });
+    ppListToggle.textContent = '播放列表（' + playlist.length + ' 首） ' +
+      (ppList.classList.contains('is-open') ? '⌃' : '⌄');
+  }
+
+  function syncFab() {
+    const playing = !bgm.paused && !bgm.ended;
+    fab.classList.toggle('is-playing', playing);
+    fab.classList.toggle('is-paused', !playing);
+    ppToggle.textContent = playing ? '❚❚' : '▶';
+    ppToggle.setAttribute('aria-label', playing ? '暂停' : '播放');
+  }
+
+  function setLoading(text) {
+    ppTitle.textContent = text;
+    ppTitle.classList.add('is-loading');
+  }
+  function setTitle(text) {
+    ppTitle.textContent = text;
+    ppTitle.classList.remove('is-loading');
+  }
+
+  function load(i, play) {
+    index = (i + playlist.length) % playlist.length;
+    userPaused = !play;
+    wantPlay = !!play;
+    clearTimeout(loadingTimer);
+
+    const song = playlist[index];
+    setLoading((play ? '连接中' : '待播放') + ' · ' + song.title);
     bgm.pause();
-    isUserPaused = false;
+    bgm.src = song.src;
+    bgm.load();
 
-    // 开始播放逻辑
-    playCurrentNode(shouldPlay);
-}
+    Array.from(ppList.children).forEach((el, j) => el.classList.toggle('is-current', j === index));
+    ppFill.style.width = '0%';
+    ppCur.textContent = '0:00';
+    ppBar.setAttribute('aria-valuenow', '0');
 
-function playCurrentNode(shouldPlay) {
-    clearTimeout(retryTimeout);
-    
-    const song = playlistData[currentIndex];
-    const url = song.file;
-    
-    bgm.src = url;
-
-    if (shouldPlay) {
-        bgm.play().then(() => {
-            isMusicPlaying = true;
-            musicToggle.classList.remove('paused');
-            musicToggle.textContent = '🎵';
-            currentTitleEl.textContent = song.title;
-        }).catch(err => {
-            // 处理浏览器自动播放拦截，或者加载失败
-            if (err.name === 'NotAllowedError') {
-                isMusicPlaying = false;
-                musicToggle.classList.add('paused');
-                musicToggle.textContent = '🔇';
-            }
-        });
+    if (play) {
+      const p = safePlay();
+      if (p) p.catch(() => {});
     }
+    syncFab();
 
-    // 超时保护：如果 8 秒后仍然无法播放或没缓冲出数据，直接切节点
-    retryTimeout = setTimeout(() => {
-        if (bgm.readyState < 2) { // HAVE_CURRENT_DATA 以下说明没拉到数据
-            handleNodeError("超时");
-        }
+    // 8 秒内没拿到数据就视为该节点不可用
+    loadingTimer = setTimeout(() => {
+      if (bgm.readyState < 2) onTrackFail('曲目加载超时');
     }, 8000);
-}
+  }
 
-// 节点失败处理
-function handleNodeError(reason) {
-    clearTimeout(retryTimeout);
-    const song = playlistData[currentIndex];
+  // 单曲失败处理：只在自己要求播放时才自动跳到下一首，避免连锁刷屏
+  function onTrackFail(msg) {
+    clearTimeout(loadingTimer);
+    syncFab();
+    if (!wantPlay) {
+      setLoading('暂不可用 · 点击播放重试');
+      return;
+    }
+    failCount++;
+    if (failCount >= playlist.length) {
+      failCount = 0;
+      wantPlay = false;
+      setLoading('所有曲目暂时无法播放');
+      toast('曲目链接可能已失效，请稍后在浏览器控制台检查 CORS 或直链');
+      return;
+    }
+    toast(msg + '，已跳到下一首');
+    load(index + 1, true);
+  }
 
-    if (currentNodeIndex < URL_PREFIXES.length - 1) {
-        // 还有下一个备用节点，自动重试
-        currentNodeIndex++;
-        currentTitleEl.textContent = `${song.title} (节点${currentNodeIndex + 1})`;
-        playCurrentNode(!bgm.paused); // 维持原本的播放状态
+  function safePlay() {
+    try { return bgm.play(); } catch (e) { return null; }
+  }
+
+  bgm.addEventListener('canplay', () => {
+    clearTimeout(loadingTimer);
+    failCount = 0;
+    setTitle(playlist[index].title);
+  });
+  bgm.addEventListener('playing', () => {
+    clearTimeout(loadingTimer);
+    failCount = 0;
+    userPaused = false;
+    setTitle(playlist[index].title);
+    syncFab();
+  });
+  bgm.addEventListener('pause', () => { if (!bgm.ended) syncFab(); });
+  bgm.addEventListener('ended', () => { load(index + 1, true); });
+  bgm.addEventListener('error', () => onTrackFail('曲目链接不可用'));
+  bgm.addEventListener('timeupdate', () => {
+    if (dragging) return;
+    const d = bgm.duration;
+    if (!isFinite(d) || d <= 0) return;
+    const pct = (bgm.currentTime / d) * 100;
+    ppFill.style.width = pct + '%';
+    ppBar.setAttribute('aria-valuenow', String(Math.round(pct)));
+    ppCur.textContent = fmt(bgm.currentTime);
+    ppDur.textContent = fmt(d);
+  });
+  bgm.addEventListener('loadedmetadata', () => {
+    ppDur.textContent = fmt(bgm.duration);
+  });
+
+  function seekFromEvent(e) {
+    const rect = ppBar.getBoundingClientRect();
+    const clientX = e.clientX;
+    const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+    if (isFinite(bgm.duration) && bgm.duration > 0) {
+      bgm.currentTime = ratio * bgm.duration;
+      ppFill.style.width = (ratio * 100) + '%';
+    }
+  }
+  ppBar.addEventListener('pointerdown', (e) => { dragging = true; seekFromEvent(e); ppBar.setPointerCapture(e.pointerId); });
+  ppBar.addEventListener('pointermove', (e) => { if (dragging) seekFromEvent(e); });
+  ppBar.addEventListener('pointerup', (e) => { dragging = false; });
+  ppBar.addEventListener('keydown', (e) => {
+    if (!isFinite(bgm.duration)) return;
+    if (e.key === 'ArrowRight') { bgm.currentTime = Math.min(bgm.duration, bgm.currentTime + 5); e.preventDefault(); }
+    if (e.key === 'ArrowLeft') { bgm.currentTime = Math.max(0, bgm.currentTime - 5); e.preventDefault(); }
+  });
+
+  ppToggle.addEventListener('click', () => {
+    if (!bgm.src) { load(0, true); return; }
+    if (bgm.paused) {
+      wantPlay = true;
+      userPaused = false;
+      const p = safePlay();
+      if (p) p.catch(() => toast('浏览器拦截了自动播放，请再点一次'));
     } else {
-        // 所有节点全挂，延时切下一首
-        currentTitleEl.textContent = `${song.title} (播放失败)`;
-        setTimeout(() => {
-            nextTrack();
-        }, 1500);
+      userPaused = true;
+      bgm.pause();
     }
-}
+  });
+  $('ppPrev').addEventListener('click', () => load(index - 1, true));
+  $('ppNext').addEventListener('click', () => load(index + 1, true));
 
-// 监听 audio 自带的事件
-bgm.addEventListener('error', () => {
-    handleNodeError("报错");
-});
+  ppListToggle.addEventListener('click', () => {
+    const open = ppList.classList.toggle('is-open');
+    ppListToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    ppListToggle.textContent = '播放列表（' + playlist.length + ' 首） ' + (open ? '⌃' : '⌄');
+  });
 
-bgm.addEventListener('canplay', () => {
-    // 成功拿到数据可以播放了，清除超时定时器
-    clearTimeout(retryTimeout);
-    currentTitleEl.textContent = playlistData[currentIndex].title;
-});
+  function openPlayer() {
+    playerPanel.classList.add('is-open');
+    fab.setAttribute('aria-expanded', 'true');
+    // 首次打开时挂载第一首并开始播放（点击属于用户手势，不会被自动播放策略拦截）
+    if (!bgm.src) load(0, true);
+  }
+  function closePlayer() {
+    playerPanel.classList.remove('is-open');
+    fab.setAttribute('aria-expanded', 'false');
+  }
+  /* 进入页面即尝试播放背景音乐；被浏览器拦截时，任意一次交互接管播放 */
+  let autoStarted = false;
+  function autoStartMusic() {
+    if (autoStarted) return;
+    autoStarted = true;
+    if (!bgm.src) load(0, true);
+  }
 
-bgm.addEventListener('playing', () => {
-    isMusicPlaying = true;
-    isUserPaused = false;
-    musicToggle.classList.remove('paused');
-    musicToggle.textContent = '🎵';
-});
-
-bgm.addEventListener('pause', () => {
-    if (!bgm.ended) {
-        isMusicPlaying = false;
-        musicToggle.classList.add('paused');
-        musicToggle.textContent = '🔇';
+  function armGestureUnlock() {
+    const disarm = () => {
+      document.removeEventListener('pointerdown', tryPlay);
+      document.removeEventListener('touchstart', tryPlay);
+      document.removeEventListener('keydown', tryPlay);
+    };
+    function tryPlay() {
+      if (userPaused) return;
+      if (!bgm.paused && bgm.currentTime > 0) { disarm(); return; }
+      wantPlay = true;
+      const p = safePlay();
+      if (p) p.catch(() => {});
+      setTimeout(() => { if (!bgm.paused) { disarm(); syncFab(); } }, 400);
     }
-});
+    document.addEventListener('pointerdown', tryPlay, { passive: true });
+    document.addEventListener('touchstart', tryPlay, { passive: true });
+    document.addEventListener('keydown', tryPlay);
+  }
 
-bgm.addEventListener('ended', () => {
-    nextTrack();
-});
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', autoStartMusic);
+  } else {
+    autoStartMusic();
+  }
+  setTimeout(() => { if (bgm.paused && !userPaused) armGestureUnlock(); }, 1600);
 
-// 控制函数
-function nextTrack() {
-    currentIndex = (currentIndex + 1) % playlistData.length;
-    loadTrack(currentIndex, true);
-}
-
-function prevTrack() {
-    currentIndex = (currentIndex - 1 + playlistData.length) % playlistData.length;
-    loadTrack(currentIndex, true);
-}
-
-// 按钮点击事件
-document.getElementById('prev-btn').addEventListener('click', prevTrack);
-document.getElementById('next-btn').addEventListener('click', nextTrack);
-
-// 悬浮球点击
-musicToggle.addEventListener('click', function(e) {
+  fab.addEventListener('click', (e) => {
     e.stopPropagation();
-    musicPanel.classList.toggle('show');
-    
-    // 如果当前没在播放（且不是用户主动暂停），或者加载失败了，尝试点击即可播放
-    if (!isMusicPlaying && !isUserPaused) {
-        bgm.play().catch(() => {});
-    }
-});
+    if (playerPanel.classList.contains('is-open')) closePlayer();
+    else openPlayer();
+  });
+  document.addEventListener('click', (e) => {
+    if (!playerPanel.classList.contains('is-open')) return;
+    if (playerPanel.contains(e.target) || fab.contains(e.target)) return;
+    closePlayer();
+  });
 
-// 点击空白关闭面板
-document.addEventListener('click', function(e) {
-    if (!musicPanel.contains(e.target) && e.target !== musicToggle) {
-        musicPanel.classList.remove('show');
-    }
-});
+  renderList();
+  // 不在页面加载时就请求音频直链，等用户第一次点击播放器再加载
+  syncFab();
 
-// 初始化列表，并提前加载第一首（不自动播放，等待用户交互）
-renderPlaylist();
-loadTrack(0, false);
+  /* ============ 图片加载失败兜底 ============ */
+  document.querySelectorAll('img').forEach((img) => {
+    img.addEventListener('error', () => {
+      const fig = img.closest('figure');
+      if (fig) { fig.classList.add('is-broken'); return; }
+      img.style.opacity = '.35';
+      img.alt = (img.alt || '图片') + '（加载失败）';
+    }, { once: true });
+  });
 
-// 首次交互自动播放
-document.addEventListener('click', function firstInteraction() {
-    if (!isMusicPlaying && !isUserPaused) {
-        bgm.play().catch(() => {});
-    }
-}, { once: true });
-
+})();
 </script>
-<script src="time-widget.js"></script>
 </body>
 </html>
