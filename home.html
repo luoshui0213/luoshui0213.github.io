@@ -58,10 +58,12 @@ body{
   line-height:1.65;
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
+  touch-action:manipulation;
+  overscroll-behavior-y:contain;
   transition:background .4s var(--ease),color .4s var(--ease);
 }
 body::before{
-  content:"";position:fixed;inset:0;z-index:-3;pointer-events:none;
+  content:"";position:fixed;top:0;right:0;bottom:0;left:0;z-index:-3;pointer-events:none;
   background:
     radial-gradient(900px 520px at 12% -8%,rgba(102,204,255,.17),transparent 65%),
     radial-gradient(760px 480px at 92% 4%,rgba(57,197,187,.15),transparent 68%),
@@ -78,12 +80,12 @@ html[data-theme="light"] body::before{
 
 /* 星空层：深色主题显示，浅色主题淡出 */
 #starfield{
-  position:fixed;inset:0;z-index:-2;pointer-events:none;display:block;
+  position:fixed;top:0;right:0;bottom:0;left:0;z-index:-2;pointer-events:none;display:block;
   opacity:1;transition:opacity .6s var(--ease);
 }
 html[data-theme="light"] #starfield{opacity:0;}
 body::after{
-  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.35;
+  content:"";position:fixed;top:0;right:0;bottom:0;left:0;z-index:-1;pointer-events:none;opacity:.35;
   background-image:linear-gradient(rgba(120,160,200,.055) 1px,transparent 1px),
                     linear-gradient(90deg,rgba(120,160,200,.055) 1px,transparent 1px);
   background-size:64px 64px;
@@ -98,7 +100,8 @@ button{font:inherit;color:inherit;cursor:pointer;}
 /* ========== 顶部导航 ========== */
 .topbar{
   position:sticky;top:0;z-index:100;
-  padding:calc(10px + env(safe-area-inset-top)) clamp(12px,4vw,28px) 10px;
+  padding:10px clamp(12px,4vw,28px) 10px;
+  padding-top:calc(10px + env(safe-area-inset-top));
   background:rgba(8,11,16,.78);
   background:color-mix(in srgb,var(--c-bg) 72%,transparent);
   backdrop-filter:blur(18px) saturate(150%);
@@ -294,7 +297,7 @@ html[data-theme="light"] .clock{background:rgba(255,255,255,.55);}
 }
 .video-cover img{width:100%;height:100%;object-fit:cover;border-radius:0;transition:transform .5s var(--ease);}
 .video-cover::after{
-  content:"";position:absolute;inset:0;
+  content:"";position:absolute;top:0;right:0;bottom:0;left:0;
   background:linear-gradient(180deg,transparent 35%,rgba(4,8,14,.78) 100%);
   transition:opacity .35s;
 }
@@ -376,7 +379,7 @@ html[data-theme="light"] .avatar{color:#fff;}
 
 /* ========== 页脚 ========== */
 .footer{
-  max-width:var(--maxw);margin:0 auto;padding:26px clamp(14px,4vw,28px) calc(30px + env(safe-area-inset-bottom));
+  max-width:var(--maxw);margin:0 auto;padding:26px clamp(14px,4vw,28px) 30px;padding-bottom:calc(30px + env(safe-area-inset-bottom));
   border-top:1px solid var(--c-border);color:var(--c-text-mute);font-size:12.5px;
   display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;
 }
@@ -384,7 +387,7 @@ html[data-theme="light"] .avatar{color:#fff;}
 
 /* ========== 音乐播放器 ========== */
 .player-fab{
-  position:fixed;right:clamp(14px,3vw,26px);bottom:calc(18px + env(safe-area-inset-bottom));
+  position:fixed;right:clamp(14px,3vw,26px);bottom:18px;bottom:calc(18px + env(safe-area-inset-bottom));
   z-index:120;width:54px;height:54px;border-radius:50%;
   border:1px solid var(--c-border-strong);background:rgba(12,18,26,.82);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
@@ -405,7 +408,7 @@ html[data-theme="light"] .player-fab{background:rgba(255,255,255,.88);box-shadow
 .player-fab.is-paused .fab-note{opacity:.68;animation:none;}
 
 .player-panel{
-  position:fixed;right:clamp(14px,3vw,26px);bottom:calc(84px + env(safe-area-inset-bottom));
+  position:fixed;right:clamp(14px,3vw,26px);bottom:84px;bottom:calc(84px + env(safe-area-inset-bottom));
   z-index:119;width:min(340px,calc(100vw - 24px));
   border:1px solid var(--c-border-strong);border-radius:18px;overflow:hidden;
   background:rgba(11,16,23,.93);backdrop-filter:blur(20px) saturate(160%);
@@ -426,7 +429,7 @@ html[data-theme="light"] .player-panel{background:rgba(255,255,255,.95);}
 .bar{
   position:relative;height:4px;border-radius:99px;background:rgba(120,160,200,.18);cursor:pointer;
 }
-.bar-fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:99px;background:var(--grad);transition:width .15s linear;}
+.bar-fill{position:absolute;top:0;right:auto;bottom:0;left:0;width:0;border-radius:99px;background:var(--grad);transition:width .15s linear;}
 .pp-time{display:flex;justify-content:space-between;font-size:11px;color:var(--c-text-mute);margin-top:7px;}
 .pp-controls{display:flex;align-items:center;justify-content:center;gap:16px;padding:6px 16px 12px;}
 .pp-btn{border:0;background:transparent;color:var(--c-text-dim);font-size:16px;padding:6px;border-radius:50%;transition:color .2s,transform .2s;}
@@ -483,7 +486,7 @@ html[data-theme="light"] .br-accent{color:#9a7325;}
   filter:blur(8px);
 }
 .br-hero::after{
-  content:"";position:absolute;inset:0;pointer-events:none;opacity:.14;mix-blend-mode:overlay;
+  content:"";position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;opacity:.14;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
 }
 html[data-theme="light"] .card.br-hero{
@@ -691,7 +694,7 @@ html[data-theme="light"] .avatar{color:#fff;}
 
 /* ========== 页脚 ========== */
 .footer{
-  max-width:var(--maxw);margin:0 auto;padding:26px clamp(14px,4vw,28px) calc(30px + env(safe-area-inset-bottom));
+  max-width:var(--maxw);margin:0 auto;padding:26px clamp(14px,4vw,28px) 30px;padding-bottom:calc(30px + env(safe-area-inset-bottom));
   border-top:1px solid var(--c-border);color:var(--c-text-mute);font-size:12.5px;
   display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;
 }
@@ -705,7 +708,7 @@ html[data-theme="light"] .avatar{color:#fff;}
 
 /* ========== 音乐播放器 ========== */
 .player-fab{
-  position:fixed;right:clamp(14px,3vw,26px);bottom:calc(18px + env(safe-area-inset-bottom));
+  position:fixed;right:clamp(14px,3vw,26px);bottom:18px;bottom:calc(18px + env(safe-area-inset-bottom));
   z-index:120;width:54px;height:54px;border-radius:50%;
   border:1px solid var(--c-border-strong);background:rgba(12,18,26,.82);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
@@ -726,7 +729,7 @@ html[data-theme="light"] .player-fab{background:rgba(255,255,255,.88);box-shadow
 .player-fab.is-paused .fab-note{opacity:.68;animation:none;}
 
 .player-panel{
-  position:fixed;right:clamp(14px,3vw,26px);bottom:calc(84px + env(safe-area-inset-bottom));
+  position:fixed;right:clamp(14px,3vw,26px);bottom:84px;bottom:calc(84px + env(safe-area-inset-bottom));
   z-index:119;width:min(340px,calc(100vw - 24px));
   border:1px solid var(--c-border-strong);border-radius:18px;overflow:hidden;
   background:rgba(11,16,23,.93);backdrop-filter:blur(20px) saturate(160%);
@@ -747,7 +750,7 @@ html[data-theme="light"] .player-panel{background:rgba(255,255,255,.95);}
 .bar{
   position:relative;height:4px;border-radius:99px;background:rgba(120,160,200,.18);cursor:pointer;
 }
-.bar-fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:99px;background:var(--grad);transition:width .15s linear;}
+.bar-fill{position:absolute;top:0;right:auto;bottom:0;left:0;width:0;border-radius:99px;background:var(--grad);transition:width .15s linear;}
 .pp-time{display:flex;justify-content:space-between;font-size:11px;color:var(--c-text-mute);margin-top:7px;}
 .pp-controls{display:flex;align-items:center;justify-content:center;gap:16px;padding:6px 16px 12px;}
 .pp-btn{border:0;background:transparent;color:var(--c-text-dim);font-size:16px;padding:6px;border-radius:50%;transition:color .2s,transform .2s;}
@@ -784,14 +787,14 @@ html[data-theme="light"] .pp-btn.main{color:#fff;}
 
 /* ========== 弹窗 ========== */
 .modal{
-  position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;
+  position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;display:none;align-items:center;justify-content:center;
   padding:clamp(10px,3vw,24px);
   background:rgba(3,6,10,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
 }
 .modal.is-open{display:flex;animation:modalIn .25s ease both;}
 @keyframes modalIn{from{opacity:0;}to{opacity:1;}}
 .modal-box{
-  width:min(96vw,1120px);height:min(90vh,830px);display:flex;flex-direction:column;overflow:hidden;
+  width:min(96vw,1120px);height:min(90vh,830px);height:min(90dvh,830px);display:flex;flex-direction:column;overflow:hidden;
   border-radius:16px;border:1px solid var(--c-border-strong);background:#0e131b;
   box-shadow:0 30px 80px -30px rgba(0,0,0,.95);
 }
@@ -822,16 +825,16 @@ html[data-theme="light"] .modal-err b{color:#ee0000;}
 
 /* ========== 灯箱 ========== */
 .lightbox{
-  position:fixed;inset:0;z-index:210;display:none;align-items:center;justify-content:center;
+  position:fixed;top:0;right:0;bottom:0;left:0;z-index:210;display:none;align-items:center;justify-content:center;
   padding:16px;background:rgba(2,4,8,.92);backdrop-filter:blur(6px);
 }
 .lightbox.is-open{display:flex;animation:modalIn .2s ease both;}
 .lightbox img{max-width:min(94vw,1100px);max-height:88vh;width:auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.8);}
-.lightbox-close{position:absolute;top:calc(14px + env(safe-area-inset-top));right:16px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(10,16,24,.7);color:#cfe0ee;font-size:18px;}
+.lightbox-close{position:absolute;top:14px;top:calc(14px + env(safe-area-inset-top));right:16px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(10,16,24,.7);color:#cfe0ee;font-size:18px;}
 
 /* ========== 提示条 ========== */
 .toast{
-  position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translate(-50%,16px);
+  position:fixed;left:50%;bottom:90px;bottom:calc(90px + env(safe-area-inset-bottom));transform:translate(-50%,16px);
   z-index:300;padding:9px 16px;border-radius:999px;font-size:12.5px;
   background:rgba(12,18,26,.92);border:1px solid var(--c-border-strong);color:var(--c-text);
   opacity:0;pointer-events:none;transition:opacity .3s,transform .3s var(--ease);
@@ -892,10 +895,15 @@ html[data-theme="light"] .modal-err b{color:#ee0000;}
   .video-cover{aspect-ratio:16/9;}
   .about{grid-template-columns:auto minmax(0,1fr);}
   .avatar{width:60px;height:60px;}
-  .modal-box{height:min(92vh,100%);border-radius:14px;}
+  .modal-box{height:min(92vh,100%);height:min(92dvh,100%);border-radius:14px;}
   .modal{padding:8px;}
 }
 @media (max-width:520px){
+  /* 窄屏弹窗头：标题单行省略，按钮不换行，避免挤成两行 */
+  .modal-head{padding:8px 10px;gap:8px;}
+  .modal-head h2{font-size:12px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .modal-actions{flex:0 0 auto;gap:6px;}
+  .modal-close,.modal-external{padding:4px 9px;font-size:11.5px;white-space:nowrap;}
   .tab{padding:6px 10px;font-size:12.2px;gap:5px;justify-content:center;}
   .tab .tab-ico,.tab .tab-avatar{display:none;}
   .tabs{gap:3px;}
@@ -1608,6 +1616,8 @@ int main()
   const modalTitle = $('modalTitle');
   const modalExternal = $('modalExternal');
   let lastModalSrc = '';
+  let modalOpener = null;
+  let bgmSuspendedByModal = false;
 
   const modalErr = $('modalErr');
 
@@ -1622,11 +1632,17 @@ int main()
     modalFrame.style.display = '';
   }
 
-  function openModal(src, title) {
+  function openModal(src, title, opener) {
     lastModalSrc = src;
+    modalOpener = opener || null;
     modalTitle.textContent = title || '工具';
     modalExternal.dataset.src = src;
     clearModalError();
+    /* 工具页会自己发声，先把站点 BGM 让出来，关掉弹窗再续播 */
+    if (!bgmSuspendedByModal && !bgm.paused && !bgm.ended) {
+      bgmSuspendedByModal = true;
+      bgm.pause();
+    }
     modalFrame.src = src;              // 注意：先赋 src 再显示，避免白屏闪烁
     modal.classList.add('is-open');
     lockScroll();
@@ -1658,16 +1674,29 @@ int main()
   function closeModal() {
     modal.classList.remove('is-open');
     clearModalError();
-    modalFrame.src = '';               // 置空以停止页面内的音频/循环
+    /* 关键修复：src='' 会解析成当前页面地址，会把 home.html 递归装进 iframe；
+       这里明确换成 about:blank，既停止子页面里的音频/循环，也不重复加载首页 */
+    try { modalFrame.src = 'about:blank'; } catch (e) {}
     unlockScroll();
     lastModalSrc = '';
+    if (bgmSuspendedByModal) {
+      bgmSuspendedByModal = false;
+      if (bgm.src && !userPaused) {
+        const p = safePlay();
+        if (p) p.catch(() => {});
+      }
+    }
+    if (modalOpener && typeof modalOpener.focus === 'function') {
+      try { modalOpener.focus({ preventScroll: true }); } catch (e) {}
+    }
+    modalOpener = null;
   }
 
   document.querySelectorAll('[data-modal]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const src = btn.dataset.modal;
       if (!src) return;
-      openModal(src, btn.dataset.title || '工具');
+      openModal(src, btn.dataset.title || '工具', btn);
     });
   });
   $('modalClose').addEventListener('click', closeModal);
@@ -1676,9 +1705,16 @@ int main()
   });
   modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-  // 子页面通过 postMessage 请求关闭
+  // 子页面通过 postMessage 请求关闭 / 切换工具（仅接受来自当前 iframe 的消息）
   window.addEventListener('message', (e) => {
-    if (e.data === 'closeGame' && modal.classList.contains('is-open')) closeModal();
+    if (!modal.classList.contains('is-open')) return;
+    if (e.source !== modalFrame.contentWindow) return;
+    const data = e.data;
+    const type = typeof data === 'string' ? data : (data && data.type) || '';
+    if (type === 'closeGame') { closeModal(); return; }
+    if (type === 'openTool' && data && typeof data.src === 'string' && /^[\w.-]+\.html([?#].*)?$/.test(data.src)) {
+      openModal(data.src, data.title || '工具', modalOpener);
+    }
   });
 
   /* ============ 应援图灯箱 ============ */
@@ -1767,9 +1803,14 @@ int main()
       const item = document.createElement('button');
       item.type = 'button';
       item.className = 'track' + (i === index ? ' is-current' : '');
-      item.innerHTML =
-        '<span class="track-idx">' + pad(i + 1) + '</span>' +
-        '<span class="track-name">' + song.title + '</span>';
+      const idx = document.createElement('span');
+      idx.className = 'track-idx';
+      idx.textContent = pad(i + 1);
+      const name = document.createElement('span');
+      name.className = 'track-name';
+      name.textContent = song.title;
+      item.appendChild(idx);
+      item.appendChild(name);
       item.addEventListener('click', () => load(i, true));
       ppList.appendChild(item);
     });
@@ -1813,7 +1854,14 @@ int main()
 
     if (play) {
       const p = safePlay();
-      if (p) p.catch(() => {});
+      if (p) p.catch(() => {
+        /* 自动播放被浏览器拦住：放弃本次自动播放，别让它 8 秒后连锁跳完整张列表 */
+        if (bgm.paused) {
+          wantPlay = false;
+          clearTimeout(loadingTimer);
+          setLoading('待播放 · ' + song.title);
+        }
+      });
     }
     syncFab();
 
@@ -1878,16 +1926,21 @@ int main()
 
   function seekFromEvent(e) {
     const rect = ppBar.getBoundingClientRect();
+    if (!rect.width) return;
     const clientX = e.clientX;
     const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
     if (isFinite(bgm.duration) && bgm.duration > 0) {
       bgm.currentTime = ratio * bgm.duration;
       ppFill.style.width = (ratio * 100) + '%';
+      ppBar.setAttribute('aria-valuenow', String(Math.round(ratio * 100)));
     }
   }
-  ppBar.addEventListener('pointerdown', (e) => { dragging = true; seekFromEvent(e); ppBar.setPointerCapture(e.pointerId); });
+  ppBar.addEventListener('pointerdown', (e) => { dragging = true; seekFromEvent(e); try { ppBar.setPointerCapture(e.pointerId); } catch (err) {} });
   ppBar.addEventListener('pointermove', (e) => { if (dragging) seekFromEvent(e); });
   ppBar.addEventListener('pointerup', (e) => { dragging = false; });
+  ppBar.addEventListener('pointercancel', () => { dragging = false; });
+  /* 指针在进度条外抬起时也要结束拖拽，避免"黏住" */
+  window.addEventListener('pointerup', () => { dragging = false; }, { passive: true });
   ppBar.addEventListener('keydown', (e) => {
     if (!isFinite(bgm.duration)) return;
     if (e.key === 'ArrowRight') { bgm.currentTime = Math.min(bgm.duration, bgm.currentTime + 5); e.preventDefault(); }
