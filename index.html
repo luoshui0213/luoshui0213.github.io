@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- 
+<!--
   ================================
   Cracked by Luo_Shui洛水
   Powered by Claude - AI Assistant
@@ -9,7 +9,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TOP SECRET最高机密</title>
     <meta name="keywords" content="梗页面,官网中转">
     <meta name="description" content="本页面是创意梗设计，恶搞展示。">
@@ -21,301 +21,689 @@
     <meta name="X-Powered-By" content="Claude AI">
     <meta name="robots" content="index, follow">
     <meta name="X-Content-Classification" content="FICTIONAL_ART">
-    
-    <style>
-        /* 黑客风格页面样式 - 黑底绿字命令行效果 */
+    <meta name="theme-color" content="#000000">
+    <meta name="format-detection" content="telephone=no">
 
-        * {
+    <style>
+        /* ================= 基础重置 ================= */
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --bg: #000000;
+            --fg: #00ff6a;
+            --fg-bright: #b6ffd2;
+            --fg-soft: #8dffbe;
+            --line: rgba(0, 255, 106, 0.32);
+            --glow: rgba(0, 255, 106, 0.45);
+            --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code",
+                "Cascadia Code", Menlo, Consolas, "Courier New", monospace;
+        }
+
+        html {
+            color-scheme: dark;
+            -webkit-text-size-adjust: 100%;
+            height: 100%;
+        }
+
         body {
-            background-color: #000000;
-            font-family: 'Courier New', Courier, monospace;
-            color: #00ff00;
-            overflow: hidden;
-            height: 100vh;
+            height: 100%;
+            box-sizing: border-box;
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: var(--mono);
             display: flex;
-            align-items: center;
+            /* 终端固定贴顶：打字过程中框体不再随文字上下移动 */
+            align-items: flex-start;
             justify-content: center;
-        }
-
-        .terminal-container {
-            width: 90%;
-            max-width: 900px;
-            background-color: #0a0a0a;
-            border: 2px solid #00ff00;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            padding: clamp(10px, 3vw, 32px);
             overflow: hidden;
-            animation: terminalAppear 0.3s ease-out;
+            overscroll-behavior: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        @keyframes terminalAppear {
-            from {
+        /* ================= 背景层 ================= */
+        #matrix {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .vignette {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse at center, transparent 28%, rgba(0, 0, 0, 0.62) 100%);
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.45;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(0, 255, 106, 0.05) 0 1px,
+                transparent 1px 3px
+            );
+        }
+
+        /* ================= 终端容器 ================= */
+        .terminal {
+            position: relative;
+            z-index: 3;
+            width: min(940px, 100%);
+            /* 高度写死成可用区域：内容是滚动输出，框体位置与尺寸全程不变 */
+            height: 100%;
+            max-height: min(100%, 900px);
+            display: flex;
+            flex-direction: column;
+            background:
+                linear-gradient(180deg, rgba(6, 26, 14, 0.9), rgba(1, 7, 4, 0.95));
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow:
+                0 0 0 1px rgba(0, 255, 106, 0.06) inset,
+                0 0 44px rgba(0, 255, 106, 0.16),
+                0 26px 80px rgba(0, 0, 0, 0.85);
+            overflow: hidden;
+            /* 只用 transform / opacity 做开机动画：filter 残留会让内部滚动层的裁剪失效 */
+            animation: powerOn 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* CRT 开机：先压成一条亮线，再展开 */
+        @keyframes powerOn {
+            0% {
                 opacity: 0;
-                transform: scale(0.95);
+                transform: scale(0.82, 0.004);
             }
-            to {
+            35% {
+                opacity: 0.85;
+                transform: scale(0.98, 0.02);
+            }
+            70% {
                 opacity: 1;
-                transform: scale(1);
+                transform: scale(1, 1.01);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1, 1);
             }
         }
 
+        /* 顶部标题栏 */
         .terminal-header {
-            background-color: #1a1a1a;
-            padding: 12px 20px;
-            border-bottom: 1px solid #00ff00;
             display: flex;
             align-items: center;
+            gap: clamp(8px, 2vw, 12px);
+            padding: clamp(10px, 2vw, 13px) clamp(14px, 2.5vw, 20px);
+            /* 必须是实色底：滚动区顶端被裁切的那行字不会透过标题栏 */
+            background:
+                linear-gradient(180deg, #071c0f 0%, #061609 100%);
+            border-bottom: 1px solid var(--line);
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.5), 0 0 24px rgba(0, 255, 106, 0.08);
+            flex: 0 0 auto;
+            position: relative;
+            z-index: 5;
+        }
+
+        .dots {
+            display: flex;
+            gap: 6px;
+            flex: 0 0 auto;
+        }
+
+        .dots i {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--fg);
+            opacity: 0.35;
+            box-shadow: 0 0 6px rgba(0, 255, 106, 0.45);
+        }
+
+        .dots i:nth-child(1) {
+            opacity: 0.9;
+            animation: led 2.6s ease-in-out infinite;
+        }
+
+        .dots i:nth-child(2) {
+            opacity: 0.65;
+        }
+
+        @keyframes led {
+            0%,
+            100% {
+                box-shadow: 0 0 6px rgba(0, 255, 106, 0.35);
+                opacity: 0.85;
+            }
+            50% {
+                box-shadow: 0 0 14px rgba(0, 255, 106, 0.85);
+                opacity: 1;
+            }
         }
 
         .terminal-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #00ff00;
-            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+            flex: 1 1 auto;
+            min-width: 0;
+            font-size: clamp(11px, 2.7vw, 13.5px);
+            line-height: 1.35;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            color: var(--fg-soft);
+            text-shadow: 0 0 12px rgba(0, 255, 106, 0.5);
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
 
+        /* 输出区 */
         .terminal-body {
-            padding: 20px;
-            min-height: 300px;
-            max-height: 60vh;
-            overflow-y: auto;
             position: relative;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            padding: clamp(15px, 2.8vw, 24px);
+            background-image:
+                radial-gradient(120% 70% at 50% 0%, rgba(0, 255, 106, 0.045), transparent 72%);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 255, 106, 0.5) transparent;
         }
 
-        #terminal-content {
-            font-size: 18px;
-            line-height: 1.6;
+        /* 顶部渐隐用独立渐变层实现（不依赖 mask，避免滚动层渲染错位） */
+        .body-fade {
+            flex: 0 0 0;
+            height: 0;
+            position: relative;
+            z-index: 5;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .body-fade::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 42px;
+            background: linear-gradient(
+                180deg,
+                #071c0f 0%,
+                #071c0f 16%,
+                rgba(7, 28, 15, 0) 100%
+            );
+        }
+
+        .terminal.is-scrolled .body-fade {
+            opacity: 1;
+        }
+
+        .terminal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .terminal-body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .terminal-body::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 106, 0.5);
+            border-radius: 99px;
+        }
+
+        .terminal-body::-webkit-scrollbar-thumb:hover {
+            background: var(--fg);
+        }
+
+        .text-flow {
+            font-size: clamp(12.2px, 3.1vw, 16.5px);
+            line-height: 1.75;
+            color: var(--fg);
             white-space: pre-wrap;
-            word-wrap: break-word;
-            color: #00ff00;
-            text-shadow: 0 0 3px rgba(0, 255, 0, 0.3);
+            overflow-wrap: anywhere;
+            text-shadow: 0 0 5px rgba(0, 255, 106, 0.24);
         }
 
-        .cursor {
+        /* 光标 */
+        .caret {
             display: inline-block;
-            width: 10px;
-            height: 20px;
-            background-color: #00ff00;
-            animation: blink 1s infinite;
-            vertical-align: middle;
+            width: 0.58em;
+            height: 1.12em;
             margin-left: 2px;
+            vertical-align: -0.14em;
+            background: var(--fg);
+            border-radius: 1px;
+            box-shadow: 0 0 14px var(--glow), 0 0 4px var(--fg);
+            animation: blink 1.05s steps(1, end) infinite;
+            transition: opacity 0.28s ease;
+        }
+
+        .caret.done {
+            opacity: 0;
+            animation: none;
         }
 
         @keyframes blink {
-            0%, 50% {
+            0%,
+            49% {
                 opacity: 1;
             }
-            51%, 100% {
+            50%,
+            100% {
                 opacity: 0;
             }
         }
 
-        .options-container {
-            padding: 20px;
-            border-top: 1px solid #00ff00;
-            background-color: #0f0f0f;
-            animation: optionsSlide 0.5s ease-out;
+        /* 缓慢下扫的光带 */
+        .beam {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: -40%;
+            height: 40%;
+            pointer-events: none;
+            z-index: 4;
+            opacity: 0.5;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 255, 106, 0) 0%,
+                rgba(0, 255, 106, 0.07) 50%,
+                rgba(0, 255, 106, 0) 100%
+            );
+            animation: beam 9s linear infinite;
+            will-change: transform;
         }
 
-        @keyframes optionsSlide {
+        @keyframes beam {
             from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
                 transform: translateY(0);
             }
+            to {
+                transform: translateY(350%);
+            }
         }
 
-        .options-container.hidden {
+        /* ================= 选项区 ================= */
+        .options {
+            flex: 0 0 auto;
+            display: grid;
+            gap: clamp(8px, 1.4vw, 10px);
+            padding: clamp(12px, 2.4vw, 18px) clamp(14px, 2.8vw, 22px);
+            border-top: 1px solid var(--line);
+            background: linear-gradient(180deg, #06170c 0%, #020a05 100%);
+            position: relative;
+            z-index: 6;
+            pointer-events: auto;
+            isolation: isolate;
+        }
+
+        .options[hidden] {
             display: none;
         }
 
         .option-item {
-            padding: 15px 20px;
-            margin: 10px 0;
-            background-color: #1a1a1a;
-            border: 1px solid #00ff00;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
+            gap: 0.9em;
+            width: 100%;
+            padding: clamp(10px, 2vw, 14px) clamp(13px, 2.4vw, 18px);
+            border: 1px solid rgba(0, 255, 106, 0.26);
+            border-left: 3px solid var(--fg);
+            border-radius: 10px;
+            background: rgba(0, 255, 106, 0.05);
+            color: var(--fg);
+            font-family: inherit;
+            font-size: clamp(12.5px, 3.1vw, 15.5px);
+            text-align: left;
+            cursor: pointer;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+            transition:
+                background 0.2s ease,
+                color 0.2s ease,
+                box-shadow 0.2s ease,
+                transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.2s ease;
+            animation: rise 0.44s cubic-bezier(0.22, 1, 0.36, 1) both;
+            will-change: transform;
         }
 
-        .option-item:hover {
-            background-color: #00ff00;
-            color: #000000;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
-            transform: translateX(10px);
+        .option-item:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .option-item:nth-child(2) {
+            animation-delay: 0.11s;
+        }
+
+        .option-item:nth-child(3) {
+            animation-delay: 0.17s;
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @media (hover: hover) {
+            .option-item:hover {
+                background: rgba(0, 255, 106, 0.88);
+                border-color: rgba(0, 255, 106, 0.95);
+                color: #00190a;
+                box-shadow:
+                    0 0 20px rgba(0, 255, 106, 0.3),
+                    0 0 0 1px rgba(255, 255, 255, 0.28) inset;
+                transform: translateX(6px);
+                text-shadow: none;
+            }
+        }
+
+        .option-item:focus-visible {
+            background: rgba(0, 255, 106, 0.88);
+            border-color: rgba(0, 255, 106, 0.95);
+            color: #00190a;
+            outline: 2px solid var(--fg-bright);
+            outline-offset: 3px;
+            box-shadow: 0 0 18px rgba(0, 255, 106, 0.3);
+            text-shadow: none;
+        }
+
+        .option-item:active {
+            background: var(--fg);
+            color: #00190a;
+            transform: scale(0.985);
         }
 
         .option-number {
-            font-weight: bold;
-            font-size: 20px;
-            margin-right: 15px;
+            flex: 0 0 auto;
+            font-weight: 700;
+            font-size: 1.08em;
         }
 
         .option-text {
-            font-size: 16px;
+            flex: 1 1 auto;
+            min-width: 0;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
         }
 
         #countdown {
-            color: #00ff00;
-            font-weight: bold;
-            margin-left: 10px;
-            animation: countdownBlink 1s infinite;
+            font-weight: 700;
         }
 
-        @keyframes countdownBlink {
-            0%, 50% {
-                opacity: 1;
-            }
-            51%, 100% {
-                opacity: 0.5;
-            }
-        }
-
-        /* 滚动条样式 */
-        .terminal-body::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .terminal-body::-webkit-scrollbar-track {
-            background: #0a0a0a;
-        }
-
-        .terminal-body::-webkit-scrollbar-thumb {
-            background: #00ff00;
-            border-radius: 4px;
-        }
-
-        .terminal-body::-webkit-scrollbar-thumb:hover {
-            background: #00cc00;
-        }
-
-        /* H5移动端适配 */
+        /* ================= 响应式 ================= */
         @media screen and (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 8px;
+                padding-bottom: calc(8px + env(safe-area-inset-bottom));
             }
-            
-            .terminal-container {
+
+            .terminal {
                 width: 100%;
-                max-width: 100%;
-                border-radius: 4px;
+                height: 100%;
+                max-height: 100%;
+                border-radius: 12px;
             }
-            
-            .terminal-header {
-                padding: 10px 15px;
-            }
-            
-            .terminal-title {
-                font-size: 12px;
-            }
-            
+
             .terminal-body {
-                padding: 15px;
-                min-height: 250px;
-                max-height: 50vh;
+                padding: 13px 14px 16px;
             }
-            
-            #terminal-content {
-                font-size: 14px;
-                line-height: 1.4;
+
+            .options {
+                padding: 11px 12px calc(11px + env(safe-area-inset-bottom));
+                gap: 8px;
             }
-            
-            .cursor {
-                width: 8px;
-                height: 16px;
-            }
-            
-            .options-container {
-                padding: 15px;
-            }
-            
+
             .option-item {
-                padding: 12px 15px;
-                margin: 8px 0;
-            }
-            
-            .option-item:hover {
-                transform: translateX(5px);
-            }
-            
-            .option-number {
-                font-size: 16px;
-                margin-right: 10px;
-            }
-            
-            .option-text {
-                font-size: 13px;
+                padding: 11px 13px;
+                border-radius: 9px;
             }
         }
 
-        @media screen and (max-width: 480px) {
+        @media screen and (max-width: 420px) {
             .terminal-body {
-                padding: 10px;
+                padding: 11px 11px 14px;
             }
-            
-            #terminal-content {
-                font-size: 12px;
+
+            .text-flow {
+                font-size: 12.2px;
+                line-height: 1.7;
             }
-            
-            .option-text {
+
+            .option-item {
                 font-size: 12px;
+                gap: 0.7em;
+            }
+
+            .options {
+                padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
             }
         }
 
-        /* 触摸设备优化 */
-        @media (hover: none) and (pointer: coarse) {
-            .option-item:active {
-                background-color: #00ff00;
-                color: #000000;
+        /* 超窄屏：让标题独占一行 */
+        @media screen and (max-width: 360px) {
+            .dots {
+                display: none;
+            }
+        }
+
+        /* 矮屏（横屏手机 / 小窗） */
+        @media screen and (max-height: 480px) {
+            body {
+                padding: 6px;
+            }
+
+            .terminal {
+                max-height: 100%;
+            }
+
+            .terminal-header {
+                padding: 7px 12px;
+            }
+
+            .terminal-body {
+                padding: 10px 12px;
+            }
+
+            .text-flow {
+                font-size: 12px;
+                line-height: 1.6;
+            }
+
+            .options {
+                padding: 8px 10px;
+                gap: 6px;
+            }
+
+            .option-item {
+                padding: 8px 11px;
+            }
+        }
+
+        /* 无障碍：减少动效 */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+            }
+
+            .caret {
+                animation: none;
+                opacity: 1;
+            }
+
+            .beam {
+                display: none;
             }
         }
     </style>
 </head>
+
 <body>
-    <div class="terminal-container">
+    <canvas id="matrix" aria-hidden="true"></canvas>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <main class="terminal" role="dialog" aria-label="终端会话">
+        <div class="beam" aria-hidden="true"></div>
+
         <div class="terminal-header">
-            <span class="terminal-title">root@system:~#SCP基金会信息安全管理部门</span>
+            <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="terminal-title">root@system:~#SCP基金会信息安全管理部门</div>
         </div>
-        <div class="terminal-body">
-            <div id="terminal-content"></div>
-            <div class="cursor"></div>
+
+        <div class="body-fade" aria-hidden="true"></div>
+
+        <div class="terminal-body" id="scroller">
+            <div class="text-flow"><span id="terminal-content"></span><span class="caret" id="caret"></span></div>
         </div>
-        <div id="options-container" class="options-container hidden">
-    <div class="option-item" id="official-site">
-        <span class="option-number">[1]</span>
-        <span class="option-text">进入本网站</span>
-    </div>
-    <div class="option-item" id="unofficial-site">
-        <span class="option-number">[2]</span>
-        <span class="option-text">自动前往
+
+        <div id="options-container" class="options" hidden role="group" aria-label="操作选项">
+            <button type="button" class="option-item" id="official-site">
+                <span class="option-number">[1]</span>
+                <span class="option-text">进入本网站</span>
+            </button>
+            <button type="button" class="option-item" id="unofficial-site">
+                <span class="option-number">[2]</span>
+                <span class="option-text">自动前往
 SCP社区 <span id="countdown"></span></span>
-    </div>
-    <div class="option-item" id="yzl-site">
-        <span class="option-number">[3]</span>
-        <span class="option-text">前往Vsinger官网 (vsinger.com)</span>
-    </div>
-</div>
-    </div>
+            </button>
+            <button type="button" class="option-item" id="yzl-site">
+                <span class="option-number">[3]</span>
+                <span class="option-text">前往Vsinger官网 (vsinger.com)</span>
+            </button>
+        </div>
+    </main>
 
     <script>
-        /**
-         * 黑客风格页面交互脚本
-         * 实现命令行打字效果和页面跳转功能
-         */
+        /* ==========================================================
+           1. 背景：Matrix 代码雨（低透明度，不抢正文）
+           ========================================================== */
+        (function matrixRain() {
+            const canvas = document.getElementById('matrix');
+            if (!canvas || !canvas.getContext) return;
+            const ctx = canvas.getContext('2d', { alpha: true });
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const GLYPHS = (
+                'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン' +
+                '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*+=<>/'
+            ).split('');
+            const FONT = getComputedStyle(document.body).fontFamily;
 
-        // 要显示的文本内容
-        const hackText = `[████████████████████████████] 100% 基金会已锁定访问人员
+            let W = 0,
+                H = 0,
+                size = 16,
+                cols = 0,
+                drops = [],
+                raf = null,
+                last = 0,
+                frameGap = 55;
+
+            function resize() {
+                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                W = window.innerWidth;
+                H = window.innerHeight;
+                canvas.width = Math.floor(W * dpr);
+                canvas.height = Math.floor(H * dpr);
+                canvas.style.width = W + 'px';
+                canvas.style.height = H + 'px';
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                size = Math.max(13, Math.min(19, Math.round(W / 66)));
+                cols = Math.ceil(W / size);
+                drops = new Array(cols).fill(0).map(() => Math.random() * -H / size);
+                ctx.font = size + 'px ' + FONT;
+                // 小屏降帧，省电
+                frameGap = W < 700 ? 80 : 55;
+            }
+
+            function column(i, bright) {
+                const y = drops[i] * size;
+                if (y < -size || y > H + size) return;
+                ctx.fillStyle = bright
+                    ? 'rgba(200,255,222,0.9)'
+                    : 'rgba(0,255,106,0.5)';
+                ctx.fillText(GLYPHS[(Math.random() * GLYPHS.length) | 0], i * size, y);
+            }
+
+            function frame(ts) {
+                raf = requestAnimationFrame(frame);
+                if (ts - last < frameGap) return;
+                last = ts;
+                ctx.fillStyle = 'rgba(0,0,0,0.12)';
+                ctx.fillRect(0, 0, W, H);
+                for (let i = 0; i < cols; i++) {
+                    column(i, Math.random() < 0.04);
+                    if (drops[i] * size > H && Math.random() > 0.975) {
+                        drops[i] = Math.random() * -12;
+                    } else {
+                        drops[i]++;
+                    }
+                }
+            }
+
+            function start() {
+                if (reduce) {
+                    for (let i = 0; i < cols; i++) column(i, Math.random() < 0.06);
+                    return;
+                }
+                if (!raf) raf = requestAnimationFrame(frame);
+            }
+
+            function stop() {
+                if (raf) cancelAnimationFrame(raf);
+                raf = null;
+            }
+
+            resize();
+            start();
+
+            let rt = null;
+            window.addEventListener('resize', function () {
+                clearTimeout(rt);
+                rt = setTimeout(function () {
+                    resize();
+                    ctx.clearRect(0, 0, W, H);
+                    if (reduce) start();
+                }, 120);
+            }, { passive: true });
+
+            document.addEventListener('visibilitychange', function () {
+                if (document.hidden) stop();
+                else start();
+            });
+        })();
+
+        /* ==========================================================
+           2. 终端：打字机 + 选项 + 跳转
+           ========================================================== */
+        (function terminal() {
+            /* 文案保持原样，不要修改 */
+            const hackText = `[████████████████████████████] 100% 基金会已锁定访问人员
 
 SCP-LS-001
 
@@ -340,267 +728,276 @@ SCP-LS-001
 欢迎，已获授权的人员。 
 请选择您的下一步操作：`;
 
-        // 打字速度配置（毫秒）
-        const TYPING_SPEED = 15; // 每个字符的打字速度
-        const LINE_DELAY = 50; // 每行之间的延迟
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const TYPE_SPEED = reduce ? 0 : 15;   // 每字符
+            const LINE_DELAY = reduce ? 0 : 50;   // 换行
+            const BAR_DELAY = reduce ? 0 : 20;    // 方块字符
+            const COUNTDOWN_SECONDS = 10;
 
-        // DOM元素
-        let terminalContent;
-        let optionsContainer;
-        let cursorElement;
-        let countdownElement;
+            const el = {
+                terminal: document.querySelector('.terminal'),
+                content: document.getElementById('terminal-content'),
+                scroller: document.getElementById('scroller'),
+                caret: document.getElementById('caret'),
+                options: document.getElementById('options-container'),
+                countdown: document.getElementById('countdown')
+            };
 
-        // 当前打字状态
-        let currentIndex = 0;
-        let isTyping = false;
+            let index = 0;
+            let typing = true;
+            let navigating = false;
+            let audioCtx = null;
 
-        // 倒计时相关
-        let countdownTimer = null;
-        let countdownSeconds = 10;
+            /* ---------- 返回本站后的状态恢复 ---------- */
+            const RETURN_KEY = 'scp-terminal-returned';
 
-        /**
-         * 初始化函数
-         */
-        function init() {
-            terminalContent = document.getElementById('terminal-content');
-            optionsContainer = document.getElementById('options-container');
-            cursorElement = document.querySelector('.cursor');
-            countdownElement = document.getElementById('countdown');
-            
-            // 绑定选项点击事件
+            function hasReturned() {
+                try {
+                    return sessionStorage.getItem(RETURN_KEY) === '1';
+                } catch (e) {
+                    return false; /* 无痕/禁用存储时按首次访问处理 */
+                }
+            }
+
+            function markReturned() {
+                try {
+                    sessionStorage.setItem(RETURN_KEY, '1');
+                } catch (e) {
+                    /* 忽略 */
+                }
+            }
+
+            /* ---------- 输出区滚动 ---------- */
+            function scrollToEnd() {
+                el.scroller.scrollTop = el.scroller.scrollHeight;
+                syncMask();
+            }
+
+            function syncMask() {
+                el.terminal.classList.toggle('is-scrolled', el.scroller.scrollTop > 6);
+            }
+
+            el.scroller.addEventListener('scroll', syncMask, { passive: true });
+
+            /* ---------- 打字 ---------- */
+            function typeNext() {
+                if (!typing) return;
+                if (index >= hackText.length) {
+                    finishTyping();
+                    return;
+                }
+                const ch = hackText.charAt(index++);
+                el.content.textContent += ch;
+                scrollToEnd();
+
+                let delay = TYPE_SPEED;
+                if (ch === '\n') delay = LINE_DELAY;
+                if (ch === '█' || ch === '░' || ch === '▓' || ch === '▒') delay = BAR_DELAY;
+
+                setTimeout(typeNext, delay);
+            }
+
+            /* 点击 / 回车可跳过打字 */
+            function skipTyping() {
+                if (!typing) return;
+                typing = false;
+                index = hackText.length;
+                el.content.textContent = hackText;
+                el.caret.classList.add('done');
+                scrollToEnd();
+                showOptions();
+            }
+
+            function finishTyping() {
+                typing = false;
+                el.caret.classList.add('done');
+                setTimeout(showOptions, reduce ? 0 : 320);
+            }
+
+            function showOptions() {
+                el.options.hidden = false;
+                scrollToEnd();
+                setTimeout(scrollToEnd, 120);
+                beep();
+                startCountdown();
+            }
+
+            /**
+             * 直接进入“已解锁”终态：全文 + 选项可点
+             * 返回本站时使用，不重新打字、不重新倒计时
+             */
+            function showFinalState(opts) {
+                const o = opts || {};
+                typing = false;
+                navigating = false;
+                index = hackText.length;
+                stopCountdown();
+
+                el.content.textContent = hackText;
+                el.caret.classList.add('done');
+                el.options.hidden = false;
+
+                if (o.withCountdown) {
+                    startCountdown();
+                } else {
+                    el.countdown.textContent = '';
+                }
+
+                scrollToEnd();
+                setTimeout(scrollToEnd, 120);
+                if (o.beep) beep();
+            }
+
+            el.scroller.addEventListener('click', skipTyping);
+            el.scroller.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    skipTyping();
+                }
+            });
+
+            /* ---------- 跳转 ---------- */
+            function goToOfficialSite() {
+                transition('正在进入网站...', 'home.html');
+            }
+
+            function goToUnofficialSite() {
+                transition('正在前往SCP维基...', 'https://scp-wiki-cn.wikidot.com');
+            }
+
+            function goToYzlSite() {
+                transition('正在跳转到Vsinger官网...', 'https://vsinger.com');
+            }
+
+            /* ---------- 倒计时（切到后台自动暂停） ---------- */
+            let cdLeft = COUNTDOWN_SECONDS;
+            let cdTimer = null;
+            let cdActive = false;
+
+            function startCountdown() {
+                cdLeft = COUNTDOWN_SECONDS;
+                cdActive = true;
+                renderCountdown(cdLeft);
+                clearInterval(cdTimer);
+                cdTimer = setInterval(stepCountdown, 1000);
+            }
+
+            function stepCountdown() {
+                cdLeft--;
+                if (cdLeft <= 0) {
+                    stopCountdown();
+                    renderCountdown(0);
+                    goToUnofficialSite();
+                    return;
+                }
+                renderCountdown(cdLeft);
+            }
+
+            function renderCountdown(s) {
+                el.countdown.textContent = '(' + s + '秒后自动跳转)';
+            }
+
+            function stopCountdown() {
+                cdActive = false;
+                clearInterval(cdTimer);
+                cdTimer = null;
+            }
+
+            document.addEventListener('visibilitychange', function () {
+                if (!cdActive) return;
+                if (document.hidden) {
+                    clearInterval(cdTimer);
+                    cdTimer = null;
+                } else if (!cdTimer) {
+                    cdTimer = setInterval(stepCountdown, 1000);
+                }
+            });
+
+            /* ---------- 过渡提示 ---------- */
+            /**
+             * 选项保持可见可点：即使浏览器/内嵌容器拦截了跳转，
+             * 也不会留下一个“按钮消失、点不动”的死页面。
+             */
+            function transition(message, href) {
+                if (navigating) return;
+                navigating = true;
+                stopCountdown();
+                markReturned(); /* 记下“已离开过”，回来时不再倒数 */
+
+                el.content.textContent = hackText + '\n\n' + message;
+                el.caret.classList.remove('done');
+                scrollToEnd();
+
+                setTimeout(function () {
+                    try {
+                        window.location.href = href;
+                    } catch (err) {
+                        /* 被拦截则保持可点 */
+                    }
+                }, reduce ? 0 : 1400);
+
+                // 保底：4 秒后仍停留在本页，说明跳转未成功，恢复可再次点击
+                setTimeout(function () {
+                    navigating = false;
+                    el.caret.classList.add('done');
+                }, 4000);
+            }
+
+            /* ---------- 提示音 ---------- */
+            function beep() {
+                try {
+                    const Ctx = window.AudioContext || window.webkitAudioContext;
+                    if (!Ctx) return;
+                    audioCtx = audioCtx || new Ctx();
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    const t = audioCtx.currentTime;
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(880, t);
+                    osc.frequency.exponentialRampToValueAtTime(1320, t + 0.06);
+                    gain.gain.setValueAtTime(0.0001, t);
+                    gain.gain.exponentialRampToValueAtTime(0.06, t + 0.01);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
+                    osc.connect(gain).connect(audioCtx.destination);
+                    osc.start(t);
+                    osc.stop(t + 0.14);
+                } catch (e) {
+                    /* 音频不可用时静默 */
+                }
+            }
+
+            /* ---------- 事件 ---------- */
             document.getElementById('official-site').addEventListener('click', goToOfficialSite);
             document.getElementById('unofficial-site').addEventListener('click', goToUnofficialSite);
             document.getElementById('yzl-site').addEventListener('click', goToYzlSite);
-            
-            // 开始打字效果
-            setTimeout(() => {
-                startTyping();
-            }, 500);
-        }
 
-        /**
-         * 打字效果主函数
-         */
-        function startTyping() {
-            if (isTyping) return;
-            isTyping = true;
-            
-            typeText(hackText, 0);
-        }
+            document.addEventListener('keydown', function (e) {
+                if (typing) {
+                    if (e.key === 'Enter' || e.key === ' ') skipTyping();
+                    return;
+                }
+                if (el.options.hidden || navigating) return;
+                if (e.key === '1') { e.preventDefault(); goToOfficialSite(); }
+                else if (e.key === '2') { e.preventDefault(); goToUnofficialSite(); }
+                else if (e.key === '3') { e.preventDefault(); goToYzlSite(); }
+            });
 
-        /**
-         * 递归打字函数
-         * @param {string} text - 要打印的文本
-         * @param {number} index - 当前字符索引
-         */
-        function typeText(text, index) {
-            if (index < text.length) {
-                const char = text[index];
-                
-                // 添加字符到终端
-                terminalContent.textContent += char;
-                
-                // 自动滚动到底部
-                terminalContent.parentElement.scrollTop = terminalContent.parentElement.scrollHeight;
-                
-                // 根据字符类型调整延迟
-                let delay = TYPING_SPEED;
-                
-                // 换行符后增加延迟
-                if (char === '\n') {
-                    delay = LINE_DELAY;
-                }
-                
-                // 特殊字符（如进度条符号）打得快一些
-                if (char === '█' || char === '░' || char === '▓' || char === '▒') {
-                    delay = 20;
-                }
-                
-                // 继续打下一个字符
-                setTimeout(() => {
-                    typeText(text, index + 1);
-                }, delay);
+            // 浏览器前进/后退命中页面缓存时：恢复成可点击状态，不再倒数
+            window.addEventListener('pageshow', function (e) {
+                if (!e.persisted) return; /* 首次加载走正常流程 */
+                markReturned();
+                showFinalState({});
+            });
+
+            // 启动：首次访问才播打字与倒计时；返回本站直接给终态
+            if (hasReturned()) {
+                showFinalState({});
             } else {
-                // 打字完成，显示选项
-                isTyping = false;
-                showOptions();
+                setTimeout(typeNext, reduce ? 0 : 420);
             }
-        }
-
-        /**
-         * 显示选项菜单
-         */
-        function showOptions() {
-            // 隐藏光标
-            cursorElement.style.display = 'none';
-            
-            // 短暂延迟后显示选项
-            setTimeout(() => {
-                optionsContainer.classList.remove('hidden');
-                
-                // 添加选项出现的音效提示（可选）
-                playBeep();
-                
-                // 启动倒计时
-                startCountdown();
-            }, 500);
-        }
-
-        /**
-        * 个人主页*/
-        function goToOfficialSite() {
-        // 清除倒计时
-        stopCountdown();
-    
-        showTransition('正在进入网站...',() => {
-            // 跳转到同目录下的 home.html
-            window.location.href = 'home.html';
-            });
-        }
-
-        /**
-         * 前往Vsinger官网
-         */
-        function goToYzlSite() {
-            stopCountdown();
-            showTransition('正在跳转到Vsinger官网...', () => {
-                window.location.href = 'https://vsinger.com';
-            });
-        }
-
-        /**
-         * 前往SCP社区（首页）
-         */
-        function goToUnofficialSite() {
-            // 清除倒计时
-            if (countdownTimer) {
-                clearInterval(countdownTimer);
-            }
-            
-            showTransition('正在前往SCP维基...', () => {
-                window.location.href = 'https://scp-wiki-cn.wikidot.com';
-            });
-        }
-
-        /**
-         * 启动倒计时
-         */
-        function startCountdown() {
-            let seconds = countdownSeconds;
-            
-            // 更新倒计时显示
-            function updateCountdown() {
-                countdownElement.textContent = `(${seconds}秒后自动跳转)`;
-                countdownElement.style.color = '#00ff00';
-                countdownElement.style.fontWeight = 'bold';
-                
-                if (seconds <= 0) {
-                    clearInterval(countdownTimer);
-                    // 自动跳转到SCP社区
-                    goToUnofficialSite();
-                }
-                
-                seconds--;
-            }
-            
-            // 立即显示初始倒计时
-            updateCountdown();
-            
-            // 每秒更新一次
-            countdownTimer = setInterval(updateCountdown, 1000);
-        }
-
-        /**
-         * 停止倒计时
-         */
-        function stopCountdown() {
-            if (countdownTimer) {
-                clearInterval(countdownTimer);
-                countdownTimer = null;
-            }
-        }
-
-        /**
-         * 显示跳转过渡效果
-         * @param {string} message - 跳转提示信息
-         * @param {Function} callback - 跳转回调函数
-         */
-        function showTransition(message, callback) {
-            // 隐藏选项
-            optionsContainer.style.opacity = '0';
-            
-            // 显示跳转信息
-            setTimeout(() => {
-                terminalContent.textContent += '\n\n' + message;
-                terminalContent.parentElement.scrollTop = terminalContent.parentElement.scrollHeight;
-                
-                // 显示光标闪烁
-                cursorElement.style.display = 'inline-block';
-                
-                // 延迟跳转
-                setTimeout(callback, 1500);
-            }, 300);
-        }
-
-        /**
-         * 播放提示音效（简单的实现）
-         */
-        function playBeep() {
-            // 使用Web Audio API创建简单的提示音
-            try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.frequency.value = 800;
-                oscillator.type = 'sine';
-                
-                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-                
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.1);
-            } catch (e) {
-                // 如果音频API不可用，静默失败
-                console.log('Audio API not available');
-            }
-        }
-
-        /**
-         * 键盘快捷键支持
-         */
-        document.addEventListener('keydown', (e) => {
-            if (!isTyping && !optionsContainer.classList.contains('hidden')) {
-                if (e.key === '1') {
-                    stopCountdown();
-                    goToOfficialSite();
-                } else if (e.key === '2') {
-                    stopCountdown();
-                    goToUnofficialSite();
-                }
-            }
-        });
-
-        /**
-         * 防止页面刷新时的确认
-         */
-        window.addEventListener('beforeunload', (e) => {
-            if (isTyping) {
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        });
-
-        // 页面加载完成后初始化
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
+        })();
     </script>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"0656c346772f424ca931eea5ce76d686","r":1,"spa":2}' crossorigin="anonymous"></script>
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"0656c346772f424ca931eea5ce76d686","r":1,"spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
